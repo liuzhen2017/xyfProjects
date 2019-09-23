@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改向用户转账')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-ebankTransfer-edit" th:object="${ebankTransfer}">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">转账订单编号，其它服务的订单编号：</label>
+				<div class="col-sm-8">
+					<input id="orderNo" name="orderNo" th:field="*{orderNo}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">合并后的订单编号，合并订单是的订单编号：</label>
+				<div class="col-sm-8">
+					<input id="mergeOrderNo" name="mergeOrderNo" th:field="*{mergeOrderNo}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资金转出用户：</label>
+				<div class="col-sm-8">
+					<input id="sourceUserNo" name="sourceUserNo" th:field="*{sourceUserNo}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">转出用户类型：</label>
+				<div class="col-sm-8">
+					<input id="sourceAccountType" name="sourceAccountType" th:field="*{sourceAccountType}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资金转入用户：</label>
+				<div class="col-sm-8">
+					<input id="receiveUserNo" name="receiveUserNo" th:field="*{receiveUserNo}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">转入用户类型：</label>
+				<div class="col-sm-8">
+					<input id="receiveAccountType" name="receiveAccountType" th:field="*{receiveAccountType}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">付款金额：</label>
+				<div class="col-sm-8">
+					<input id="amount" name="amount" th:field="*{amount}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">是否已关闭：</label>
+				<div class="col-sm-8">
+					<input id="closed" name="closed" th:field="*{closed}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">发起支付请求的服务：</label>
+				<div class="col-sm-8">
+					<input id="serverName" name="serverName" th:field="*{serverName}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">乐观锁：</label>
+				<div class="col-sm-8">
+					<input id="version" name="version" th:field="*{version}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">创建时间：</label>
+				<div class="col-sm-8">
+					<input id="createTime" name="createTime" th:field="*{createTime}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">最后修改时间：</label>
+				<div class="col-sm-8">
+					<input id="lastModifyTime" name="lastModifyTime" th:field="*{lastModifyTime}" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "ruoyi/ebankTransfer";
+		$("#form-ebankTransfer-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-ebankTransfer-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

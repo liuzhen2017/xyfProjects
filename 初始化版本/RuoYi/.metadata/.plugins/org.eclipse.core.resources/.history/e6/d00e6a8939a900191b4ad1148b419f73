@@ -1,0 +1,19 @@
+package com.example.aop;
+
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+
+@Configuration
+@AutoConfigureOrder(787876521)
+@EnableAspectJAutoProxy
+public class SpringLogConfig {
+
+	
+	
+	@Bean
+	public SpringAopConfig getLogAop() {
+		return new SpringAopConfig();
+	}
+}

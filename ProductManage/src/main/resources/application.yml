@@ -1,0 +1,97 @@
+---
+spring:
+  application:
+    #微服务名
+    name: ProductManageX
+  profiles:
+    #默认环境
+    active: dev
+  redis:
+    password: root321!
+    database: 6
+    port: 6379
+    jedis:
+      pool:
+        max-idle: 10
+        min-idle: 0
+        max-active: -1
+        max-wait: -1
+    host: 120.79.247.111
+    ssl: false
+    timeout: 600
+#        max-wait: -1
+#    ssl: false
+#    timeout: 600
+#    database: 15
+#    host: 120.79.247.111
+#    password: ENC(gmyc0w5G9juDFphYmJc/1F1DTg//s+dA)
+#    port: 6379
+
+#
+#  rabbitmq:
+#      #非集群模式下，填写MQ服务器的地址和端口
+#      addresses: 120.79.247.111:5672,119.23.31.3:5672
+#      connection-timeout: 15000
+#      listener:
+#        simple:
+#          acknowledge-mode: manual
+#          concurrency: 1
+#          max-concurrency: 5
+#          prefetch: 1
+#      # rabbitmq的用户名和密码
+#      username: admin
+#      password:  ENC(s96SQqGVBurvS+tvPIKleVYmDUpwCtGm)
+#      publisher-confirms: true
+#      publisher-returns: true
+#      template:
+#        mandatory: true
+
+#注册中心配置    
+eureka:
+  instance:
+    lease-expiration-duration-in-seconds: 15
+    lease-renewal-interval-in-seconds: 5
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipaddress}:${server.port}
+  client:
+    registry-fetch-interval-seconds: 5
+feign:
+  hystrix:
+    enabled: true
+ribbon:
+  ReadTimeout: 3000
+  ConnectTimeout: 3000
+  MaxAutoRetries: 1 #同一台实例最大重试次数,不包括首次调用
+  MaxAutoRetriesNextServer: 1 #重试负载均衡其他的实例最大重试次数,不包括首次调用
+  OkToRetryOnAllOperations: false  #是否所有操作都重试
+
+
+#mybatis-plus配置
+mybatis:
+  #  typeAliasesPackage: com.xinyunfu.product
+  # 配置mapper的扫描，找到所有的mapper.xml映射文件
+  mapperLocations: classpath:mapper/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
+#logging:
+
+logging:
+  level.org.springframework.web.servlet.DispatcherServlet: DEBUG
+  level.org.springframework: INFO
+  level.com.xinyunfu.product.mapper: DEBUG
+#
+jasypt:
+  encryptor:
+    password: EbfYkitulv73I2p0mXI50JMXoaxZTKJ7
+
+#server:
+#  port: 8088
+#sftp:
+#  host: 119.23.31.3
+#  password: ENC(0shM4ewRFx4BmRLtrBo/q8B07p6djZQ0)
+#  port: 22
+#  rootPath: /data/sftp/sftp/upload
+#  username: sftp
+
+# 秒杀时间间隔
+product.application.times: 2

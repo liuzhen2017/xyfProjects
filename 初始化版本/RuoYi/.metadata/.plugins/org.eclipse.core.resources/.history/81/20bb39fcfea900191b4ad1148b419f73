@@ -1,0 +1,14 @@
+package com.xinyunfu;
+
+import org.springframework.boot.SpringApplication;
+import com.rnmg.jace.annotion.Microservice;
+
+
+@Microservice
+public class Runner {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Runner.class, args);
+	}
+
+}

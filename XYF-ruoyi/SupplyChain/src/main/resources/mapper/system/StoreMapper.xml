@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.StoreMapper">
+    
+    <resultMap type="Store" id="StoreResult">
+        <result property="storeId"    column="store_id"    />
+        <result property="storeName"    column="store_name"    />
+        <result property="ownerId"    column="owner_id"    />
+        <result property="status"    column="status"    />
+        <result property="tel"    column="tel"    />
+        <result property="storeType"    column="store_type"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+    </resultMap>
+	
+	<sql id="selectStoreVo">
+        select store_id, store_name, owner_id, status, tel, store_type, remarks, created_time, created_by, updated_time, updated_by from store
+    </sql>
+	
+    <select id="selectStoreList" parameterType="Store" resultMap="StoreResult">
+        <include refid="selectStoreVo"/>
+        <where>  
+            <if test="storeId != null "> and store_id = #{storeId}</if>
+             <if test="storeName != null  and storeName != '' "> and store_name = #{storeName}</if>
+             <if test="ownerId != null "> and owner_id = #{ownerId}</if>
+             <if test="status != null "> and status = #{status}</if>
+             <if test="tel != null  and tel != '' "> and tel = #{tel}</if>
+             <if test="storeType != null "> and store_type = #{storeType}</if>
+             <if test="remarks != null  and remarks != '' "> and remarks = #{remarks}</if>
+             <if test="createdTime!= null "> and created_time = #{createdTime}</if>
+             <if test="createdBy != null  and createdBy != '' "> and created_by = #{createdBy}</if>
+             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+             <if test="updatedBy != null  and updatedBy != '' "> and updated_by = #{updatedBy}</if>
+         </where>
+    </select>
+    
+    <select id="selectStoreById" parameterType="Long" resultMap="StoreResult">
+        <include refid="selectStoreVo"/>
+        where store_id = #{storeId}
+    </select>
+        
+    <insert id="insertStore" parameterType="Store" useGeneratedKeys="true" keyProperty="storeId">
+        insert into store
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="storeName != null  and storeName != ''  ">store_name,</if>
+			<if test="ownerId != null  ">owner_id,</if>
+			<if test="status != null  ">status,</if>
+			<if test="tel != null  and tel != ''  ">tel,</if>
+			<if test="storeType != null  ">store_type,</if>
+			<if test="remarks != null  and remarks != ''  ">remarks,</if>
+			<if test="createdTime!= null  ">created_time,</if>
+			<if test="createdBy != null  and createdBy != ''  ">created_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">updated_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="storeName != null  and storeName != ''  ">#{storeName},</if>
+			<if test="ownerId != null  ">#{ownerId},</if>
+			<if test="status != null  ">#{status},</if>
+			<if test="tel != null  and tel != ''  ">#{tel},</if>
+			<if test="storeType != null  ">#{storeType},</if>
+			<if test="remarks != null  and remarks != ''  ">#{remarks},</if>
+			<if test="createdTime!= null  ">#{createdTime},</if>
+			<if test="createdBy != null  and createdBy != ''  ">#{createdBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">#{updatedBy},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateStore" parameterType="Store">
+        update store
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="storeName != null  and storeName != ''  ">store_name = #{storeName},</if>
+            <if test="ownerId != null  ">owner_id = #{ownerId},</if>
+            <if test="status != null  ">status = #{status},</if>
+            <if test="tel != null  and tel != ''  ">tel = #{tel},</if>
+            <if test="storeType != null  ">store_type = #{storeType},</if>
+            <if test="remarks != null  and remarks != ''  ">remarks = #{remarks},</if>
+            <if test="createdTime!= null  ">created_time = #{createdTime},</if>
+            <if test="createdBy != null  and createdBy != ''  ">created_by = #{createdBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="updatedBy != null  and updatedBy != ''  ">updated_by = #{updatedBy},</if>
+        </trim>
+        where store_id = #{storeId}
+    </update>
+
+	<delete id="deleteStoreById" parameterType="Long">
+        delete from store where store_id = #{storeId}
+    </delete>
+	
+    <delete id="deleteStoreByIds" parameterType="String">
+        delete from store where store_id in 
+        <foreach item="storeId" collection="array" open="(" separator="," close=")">
+            #{storeId}
+        </foreach>
+    </delete>
+    
+</mapper>

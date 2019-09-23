@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>答题规则</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .content {
+            font-size: 0.3rem;
+            color: #333;
+            padding: 0.3rem;
+        }
+        .row {
+            margin-bottom: 0.2rem;
+        }
+        .logo {
+            display: block;
+            width: 2.69rem;
+            height: 2.69rem;
+            margin: 0.8rem auto 0 auto;
+        }
+        .title {
+            text-align: center;
+            font-size: 0.36rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <img class="logo" src="./image/logo.png" alt="">
+        <div class="title">星云福商城</div>
+        <div class="row" style="margin-top:0.6rem"> 1. 万能券答题，可以激活京券，1张万能券=3张50元无门槛京券；</div>
+        <div class="row"> 2. 邀请二个以上好友注册成功，答题激活6张万能券，一轮答题额外奖励18元；</div>
+        <div class="row"> 3. 奖励次数不限，每一轮答题激活万能券，都可以获得额外18元奖励；</div>
+        <div class="row"> 4. 奖励金额和优惠券转让收益，一起结算；</div>
+        <div class="row"> 5. 答题完毕，可以获得各类现金、优惠券、积分、物品奖励。每个答题区的奖励看具体答题区说明；</div>
+            
+    </div>
+</body>
+<script>
+(function (doc, win) {
+  var docEl = doc.documentElement,
+    resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+    recalc = function () {
+      var clientWidth = docEl.clientWidth;
+      if (!clientWidth) return;
+      if(clientWidth>=750){
+        docEl.style.fontSize = '100px';
+      }else{
+        docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+      }
+    };
+  if (!doc.addEventListener) return;
+  win.addEventListener(resizeEvt, recalc, false);
+  doc.addEventListener('DOMContentLoaded', recalc, false);
+})(document, window);
+</script>
+</html>

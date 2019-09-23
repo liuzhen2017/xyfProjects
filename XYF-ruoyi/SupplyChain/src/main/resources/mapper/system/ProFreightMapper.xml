@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.ProFreightMapper">
+    
+    <resultMap type="ProFreight" id="ProFreightResult">
+        <result property="freightId"    column="freight_id"    />
+        <result property="freightName"    column="freight_name"    />
+        <result property="storeId"    column="store_id"    />
+        <result property="type"    column="type"    />
+        <result property="conditions"    column="conditions"    />
+        <result property="modes"    column="modes"    />
+        <result property="defaultPostage"    column="default_postage"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="status"    column="status"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+    </resultMap>
+	
+	<sql id="selectProFreightVo">
+        select freight_id, freight_name, store_id, type, conditions, modes, default_postage, remarks, status, created_time, created_by, updated_time, updated_by from pro_freight
+    </sql>
+	
+    <select id="selectProFreightList" parameterType="ProFreight" resultMap="ProFreightResult">
+        <include refid="selectProFreightVo"/>
+        <where>  
+            <if test="freightId != null "> and freight_id = #{freightId}</if>
+             <if test="freightName != null  and freightName != '' "> and freight_name = #{freightName}</if>
+             <if test="storeId != null "> and store_id = #{storeId}</if>
+             <if test="type != null "> and type = #{type}</if>
+             <if test="conditions != null  and conditions != '' "> and conditions = #{conditions}</if>
+             <if test="modes != null  and modes != '' "> and modes = #{modes}</if>
+             <if test="defaultPostage != null "> and default_postage = #{defaultPostage}</if>
+             <if test="remarks != null  and remarks != '' "> and remarks = #{remarks}</if>
+             <if test="status != null "> and status = #{status}</if>
+             <if test="createdTime != null "> and created_time = #{createdTime}</if>
+             <if test="createdBy != null  and createdBy != '' "> and created_by = #{createdBy}</if>
+             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+             <if test="updatedBy != null  and updatedBy != '' "> and updated_by = #{updatedBy}</if>
+         </where>
+    </select>
+    
+    <select id="selectProFreightById" parameterType="Long" resultMap="ProFreightResult">
+        <include refid="selectProFreightVo"/>
+        where freight_id = #{freightId}
+    </select>
+        
+    <insert id="insertProFreight" parameterType="ProFreight" useGeneratedKeys="true" keyProperty="freightId">
+        insert into pro_freight
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="freightName != null  and freightName != ''  ">freight_name,</if>
+			<if test="storeId != null  ">store_id,</if>
+			<if test="type != null  ">type,</if>
+			<if test="conditions != null  and conditions != ''  ">conditions,</if>
+			<if test="modes != null  and modes != ''  ">modes,</if>
+			<if test="defaultPostage != null  ">default_postage,</if>
+			<if test="remarks != null  and remarks != ''  ">remarks,</if>
+			<if test="status != null  ">status,</if>
+			<if test="createdTime != null  ">created_time,</if>
+			<if test="createdBy != null  and createdBy != ''  ">created_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">updated_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="freightName != null  and freightName != ''  ">#{freightName},</if>
+			<if test="storeId != null  ">#{storeId},</if>
+			<if test="type != null  ">#{type},</if>
+			<if test="conditions != null  and conditions != ''  ">#{conditions},</if>
+			<if test="modes != null  and modes != ''  ">#{modes},</if>
+			<if test="defaultPostage != null  ">#{defaultPostage},</if>
+			<if test="remarks != null  and remarks != ''  ">#{remarks},</if>
+			<if test="status != null  ">#{status},</if>
+			<if test="createdTime != null  ">#{createdTime},</if>
+			<if test="createdBy != null  and createdBy != ''  ">#{createdBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">#{updatedBy},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateProFreight" parameterType="ProFreight">
+        update pro_freight
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="freightName != null  and freightName != ''  ">freight_name = #{freightName},</if>
+            <if test="storeId != null  ">store_id = #{storeId},</if>
+            <if test="type != null  ">type = #{type},</if>
+            <if test="conditions != null  and conditions != ''  ">conditions = #{conditions},</if>
+            <if test="modes != null  and modes != ''  ">modes = #{modes},</if>
+            <if test="defaultPostage != null  ">default_postage = #{defaultPostage},</if>
+            <if test="remarks != null  and remarks != ''  ">remarks = #{remarks},</if>
+            <if test="status != null  ">status = #{status},</if>
+            <if test="createdTime != null  ">created_time = #{createdTime},</if>
+            <if test="createdBy != null  and createdBy != ''  ">created_by = #{createdBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="updatedBy != null  and updatedBy != ''  ">updated_by = #{updatedBy},</if>
+        </trim>
+        where freight_id = #{freightId}
+    </update>
+
+	<delete id="deleteProFreightById" parameterType="Long">
+        delete from pro_freight where freight_id = #{freightId}
+    </delete>
+	
+    <delete id="deleteProFreightByIds" parameterType="String">
+        delete from pro_freight where freight_id in 
+        <foreach item="freightId" collection="array" open="(" separator="," close=")">
+            #{freightId}
+        </foreach>
+    </delete>
+    
+</mapper>

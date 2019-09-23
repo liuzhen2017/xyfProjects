@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改栏目')" />
+	<link rel="stylesheet" href="../../../layui/css/layui.css"  media="all">
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+	<form class="form-horizontal m" id="form-proChannel-edit" autocomplete="off">
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>栏目ID：</label>
+			<div class="col-sm-8">
+				<input type="hidden" name="id" th:value="${proChannel.id}">
+				<input name="channelId" class="form-control" type="text" required th:value="${proChannel.channelId}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>栏目名称：</label>
+			<div class="col-sm-8">
+				<input id="channelName" name="channelName" class="form-control" th:value="${proChannel.channelName}" type="text" required placeholder="请输入栏目名称">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>上级栏目：</label>
+			<div class="col-sm-8">
+				<div class="input-group">
+					<input name="fatherName" th:value="${proChannel.fatherName}" onclick="selectChannelTree(0)" id="treeName0" type="text" placeholder="请选择上级栏目" class="form-control" required>
+					<input name="fatherId" type="hidden" th:value="${proChannel.fatherId}" id="treeId0">
+					<span class="input-group-addon"><i class="fa fa-search"></i></span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">栏目类型：</label>
+			<div class="col-sm-8">
+				<input type="hidden" id="typeId" th:value="${proChannel.channelTypeId}">
+				<select id="channelType" name="channelTypeId" class="form-control" required >
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">栏目跳转的方式：</label>
+			<div class="col-sm-8">
+				<select id="forwardType"  name="forwardType" class="form-control" th:field="*{proChannel.forwardType}" required>
+					<option  value="0">无操作</option>
+					<option  value="1">跳转链接</option>
+					<option  value="2">活动分类</option>
+					<option  value="3">商品分类</option>
+					<option  value="4">商品详情</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group" id="forwardType1">
+			<label class="col-sm-3 control-label">栏目跳转的路径：</label>
+			<div class="col-sm-8">
+				<input id="linkUrl" name="linkUrl" class="form-control linkUrl1" type="text" th:value="${proChannel.linkUrl}" placeholder="请输入栏目跳转的路径">
+			</div>
+		</div>
+		<div class="form-group" id="forwardType2">
+			<label class="col-sm-3 control-label">选择活动分类：</label>
+			<div class="col-sm-8">
+				<div class="input-group">
+					<input  onclick="selectChannelTreeNew(1,2)" id="treeName1" type="text" th:value="${proChannel.linkUrl}" placeholder="请选择活动分类" class="form-control" required>
+					<input  type="hidden" id="treeId1" class="linkUrl2" th:value="${proChannel.linkUrl}">
+					<span class="input-group-addon"><i class="fa fa-search"></i></span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group" id="forwardType3">
+			<label class="col-sm-3 control-label">选择商品分类：</label>
+			<div class="col-sm-8">
+				<div class="input-group">
+					<input  onclick="selectChannelTreeNew(2,0)" id="treeName2" type="text" th:value="${proChannel.linkUrl}" placeholder="请选择商品分类" class="form-control" required>
+					<input  type="hidden" id="treeId2" class="linkUrl3" th:value="${proChannel.linkUrl}">
+					<span class="input-group-addon"><i class="fa fa-search"></i></span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group" id="forwardType4">
+			<label class="col-sm-3 control-label">选择商品：</label>
+			<div class="col-sm-8">
+				<div class="input-group">
+					<input id="proNames" onclick="$.modal.open('选择商品', '/system/proChannel/selectGoods', 800, 650)" th:value="${proChannel.linkUrl}"  type="text" placeholder="请选择一款商品" class="form-control" required>
+					<input id="proIds"  type="hidden" class="linkUrl4" th:value="${proChannel.linkUrl}">
+					<span class="input-group-addon"><i class="fa fa-search"></i></span>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-3 control-label">栏目展示的图片：</label>
+			<div class="col-sm-8">
+				<input  name="imageUrl" id="imageUrl"  class="form-control" type="hidden" th:value="${proChannel.imageUrl}" >
+				<div class="layui-upload-drag" id="upImg" >
+					<i class="layui-icon"></i>
+					<p>点击上传，或将文件拖拽到此处</p>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">背景颜色：</label>
+			<div class="col-sm-8">
+				<input  name="color" class="form-control" type="text" th:value="${proChannel.color}" placeholder="请输入展示图片的背景颜色">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">是否可用：</label>
+			<div class="col-sm-9">
+				<label class="radio-box"><div><input type="radio" value="0" name="status" th:field="*{proChannel.status}"/></div>可用</label>
+				<label class="radio-box"><div><input type="radio" value="1" name="status" th:field="*{proChannel.status}"/></div>禁用</label>
+				<label class="radio-box"><div><input type="radio" value="2" name="status" th:field="*{proChannel.status}"/></div>删除</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">备注：</label>
+			<div class="col-sm-8">
+				<input id="remarks" name="remarks" th:value="${proChannel.remarks}" class="form-control" type="text">
+			</div>
+		</div>
+	</form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript" src="../../../util.js"></script>
+<script src="../../../layui/layui.js" charset="utf-8"></script>
+
+<script type="text/javascript">
+    var prefix = ctx + "system/proChannel"
+    $("#form-proChannel-edit").validate({
+        rules:{
+            xxxx:{
+                required:true,
+            },
+        },
+        focusCleanup: true
+    });
+
+    //==============================初始化
+
+    $.getJSON(prefix+"/findAll",(data)=>{
+        let arr = [];
+        let $type = $('#typeId').val();
+		$.each(data.data,(v,i)=>{
+            arr.push(`<option `+($type == i.channelTypeId ? "selected":"")+` value="`+(i.channelTypeId+";"+i.channelTypeName)+`">`+i.channelTypeName+`</option>`)
+        })
+        $("#channelType").empty().append(arr.join());
+
+
+        layui.use(['upload'], function(){
+            var $ = layui.jquery,upload = layui.upload;
+
+            //==================上传图片
+            upload.render({
+                elem: '#upImg',
+                url: getRootPath() + "/../common/uploadToOSS",
+                data:{
+                    fileType: 'jpg',
+                    updateType: 1
+                },
+                done: function(res){
+                    if (res.code == web_status.SUCCESS) {
+                        $("#imageUrl").val(res.msg); //赋值
+                        $('#upImg').css({
+                            backgroundImage:"url("+res.msg+")",
+                            backgroundSize: "100% 100%"
+                        }).children().css({opacity:'0'});
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                }
+            });
+
+            //====================设置图片回显
+			let img = $('#imageUrl').val();
+			if(img){
+                $('#upImg').css({
+                    backgroundImage:"url("+img+")",
+                    backgroundSize: "100% 100%"
+                }).children().css({opacity:'0'});
+			}
+        });
+    })
+
+    //============================================ 表单提交
+    function submitHandler() {
+        if ($.validate.form()) {
+            let no = $("#forwardType").val()
+            if(no == 2 || no == 3 || no == 4){
+                $("#linkUrl").val($(".linkUrl"+no).val());
+            }
+            $.operate.save(prefix + "/edit", $('#form-proChannel-edit').serialize());
+        }
+    }
+
+    selectShow([[${proChannel.forwardType}]]);
+
+    /**
+     * 跳转类型选择事件
+     */
+    $("#forwardType").on("change",(e)=>{
+        let no = e.target.value;
+        selectShow(no);
+    });
+
+    /**
+     * 展示指定的 编号
+     * @param no
+     */
+    function selectShow(no){
+        for (let i = 1; i <= 4; i++) {
+            $("#forwardType"+i).hide();
+        }
+        if(no != "0") $("#forwardType"+no).show();
+    }
+
+
+    // function submitHandler() {
+    //
+    //     // ================保存分类图标
+    //     if($("#fileX").val()){
+    //         url =uploadFile("fileX",5);
+    //         if(!url){
+    //             return false;
+    //         }
+    //         $("#imageUrl").val(url);
+    //     }
+    //
+    //     if ($.validate.form()) {
+    //
+    //         //=====================获取图片列 banner_img
+    // 		var skuImgFile="";
+    // 		var i=0;
+    // 		$("input[name='file']").each(function(){
+    // 			if(this.value){
+    // 				if(skuImgFile){
+    //                     skuImgFile+=";";
+    // 				}
+    // 				skuImgFile+=uploadFileByFile(this.files[0],this.value.substring(this.value.lastIndexOf(".")).toLowerCase()+";",1);
+    // 			}
+    // 			i++;
+    // 		});
+    // 		$("#bannerImg").val(skuImgFile);
+    //
+    //         //=====================获取所有转发类型 forward_type
+    //         let forwardTypes = [];
+    //         $(".forwardType").each(function(){
+    //             if(this.value.length > 0){
+    //                 forwardTypes.push(this.value);
+    // 			}
+    //         })
+    //         $("#forwardType").val(forwardTypes.join(';'));
+    //
+    //
+    //
+    //
+    //         //=====================获取所有的 	link_url
+    //         let linkUrls = [];
+    //         $(".linkUrl").each(function(){
+    //             if(this.value.length > 0) {
+    //                 linkUrls.push(this.value);
+    //             }
+    //         })
+    //         $("#linkUrl").val(linkUrls.join(';'));
+    //
+    // 		console.log($("#linkUrl").val());
+    //         $.operate.save(prefix + "/add", $('#form-proChannel-edit').serialize());
+    //     }
+    // }
+    //
+    // function addPicRow(){
+    //
+    // 	var tables = $('#picDiv');
+    // 	var index = $('#picDiv div').length+24;
+    //
+    // 	var addtr = $('<hr><div>'
+    // 			+'<div class="form-group">'
+    // 			+'		<label class="col-sm-3 control-label"><span style="color: red; ">*</span>图片上传：</label>'
+    // 			+'<div class="col-sm-8">'
+    // 			+'<input id="bannerImg'+index+'" class="form-control" type="hidden" >'
+    // 			+'<input id="file'+index+'" name="file" class="form-control" type="file" required placeholder="请上传图片">'
+    // 			+	'</div>'
+    // 			+'</div>'
+    // 			+'</div>'
+    // 			+'<div class="form-group">'
+    // 			+'<label class="col-sm-3 control-label">跳转类型：</label>'
+    // 			+'<div class="col-sm-8">'
+    // 			+'<select  id="forwardType'+index+'" class="forwardType" onchange="forwardTypeChange('+index+')">'
+    // 			+'<option value="1">第三方路径</option>'
+    // 			+'<option value="2">专题页</option>'
+    // 			+'<option value="3">分类页</option>'
+    // 			+'<option value="4">商品页</option>'
+    // 			+'</select>'
+    // 			+'</div>'
+    // 			+'</div>'
+    // 			+'<div class="form-group" id="bannerDiv'+index+'" hidden="hidden">'
+    // 			+'<label class="col-sm-3 control-label"><span style="color: red; ">*</span>请选择分类：</label>'
+    // 			+'<div class="col-sm-8">'
+    // 			+'<div class="input-group">'
+    // 			+'<input  onclick="selectChannelTree('+index+')" id="treeName'+index+'" type="text" placeholder="请选择分类" class="form-control" >'
+    // 			+'<input onchange="chegeUrl()"  class="linkUrl" type="hidden" id="treeId'+index+'">'
+    // 			+'<span class="input-group-addon"><i class="fa fa-search"></i></span>'
+    // 			+'</div>'
+    // 			+'</div>'
+    // 			+'</div> '
+    // 			+'<div class="form-group" hidden="hidden" id="productDiv'+index+'">'
+    // 			+'<label class="col-sm-3 control-label"><span style="color: red; ">*</span>商品id：</label>'
+    // 			+'<div class="col-sm-8">'
+    // 			+'<a href="javascript:;" onclick=showPro("'+index+'")>点击选择商品 </a>'
+    // 			+'<input name="proName" id="proName'+index+'" class="form-control">'
+    // 			+'<input id="proId'+index+'" name="proIds" type="hidden" class="linkUrl form-control">'
+    // 			+'</div>'
+    // 			+'</div>'
+    // 			+'<div class="form-group" id="linkUrlDiv'+index+'">'
+    // 			+'<label class="col-sm-3 control-label">请输入第三方路径：</label>'
+    // 			+'<div class="col-sm-8">'
+    // 			+'<input id="linkUrl'+index+'"  class="linkUrl form-control" type="text">'
+    // 			+'</div>'
+    //             +'</div>'
+    // 			+'</div>');
+    // 	addtr.appendTo(tables);
+    // }
+    // function delPicRow(){
+    // 	var divList =$("#picDiv").children("div");
+    // 	if(divList.length <=1){
+    // 		$.modal.alertError("至少保留一个");
+    // 		return false;
+    // 	}
+    // 	//删除最后一个
+    // 	$("#picDiv>div:last").remove();
+    // 	//删除最后一个
+    // 	$("#picDiv>div:last").remove();
+    // 	//删除最后一个
+    // 	$("#picDiv>div:last").remove();
+    // 	//删除最后一个
+    // 	$("#picDiv>div:last").remove();
+    // }
+    // function showPro(index) {
+    // 	var width="";
+    // 	var hight="";
+    // 	if (!hight) {
+    // 		width = 700;
+    // 	}
+    // 	if (!hight) {
+    // 		hight = 600;
+    // 	}
+    // 	$.modal.open("选择商品", "/system/product/selectProduct?index="+index, width, hight);
+    // }
+    // function forwardTypeChange(index) {
+    // 	if (!index) {
+    // 		index = 0;
+    // 	}
+    // 	var objS = document.getElementById("forwardType" + index);
+    // 	var proType = objS.options[objS.selectedIndex].value;
+    // 	//专题页
+    // 	$("#bannerDiv" + index).hide();
+    // 	$("#productDiv" + index).hide();
+    // 	$("#linkUrlDiv" + index).hide();
+    // 	if (proType == 2) {
+    // 		$("#bannerDiv" + index).show();
+    // 	} else if (proType == 3) {
+    // 		//分类页
+    // 		$("#bannerDiv" + index).show();
+    // 	} else if (proType == 4) {
+    // 		//商品
+    // 		$("#productDiv" + index).show();
+    //
+    // 	} else if (proType == 1) {
+    // 		$("#linkUrlDiv" + index).show();
+    // 	}
+    //
+    // }
+</script>
+</body>
+</html>

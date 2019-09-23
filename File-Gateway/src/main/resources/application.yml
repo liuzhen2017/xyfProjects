@@ -1,0 +1,39 @@
+spring.application.name: File-Gateway
+spring.http.multipart.max-file-size: 10Mb
+spring.http.multipart.max-request-size: 12Mb 
+
+server:
+  port: 8080
+  tomcat: 
+     max-connections: 300
+     max-threads: 150
+     min-spare-threads: 40
+     accept-count: 30000      
+
+
+eureka:
+  client:
+    service-url.defaultZone: http://xingyunfu.eureka.com:8761/eureka,http://xingyunfu.eureka.com:8762/eureka,http://xingyunfu.eureka.com:8763/eureka
+
+zuul:
+  host:
+    connect-timeout-millis: 30000 #HTTP连接超时要比Hystrix的大
+    socket-timeout-millis: 30000   #socket超时
+
+handler.auth.md5.key: xyf1.0.0
+xyf.api.version: 1.0.0
+#redis 哨兵模式配置
+spring.redis.host: xingyunfu.redis.com
+# 启用SSL支持。
+spring.redis.port: 6379
+spring.redis.password: xyfRedis
+spring.redis.database: 0
+
+oss.application.repalce: images.xyf823.com
+oss.application.endpoint: oss-cn-shenzhen-internal.aliyuncs.com
+oss.application.accessKeyId: LTAIVgPTngg9CemW
+oss.application.accessKeySecret: CLsYpujPEce3sSGWUhidbKeENEFgoW
+oss.application.bucketName: xyf888
+oss.application.vliadHours: 240000
+upload.avatar.count: 5
+upload.idcard.count: 2

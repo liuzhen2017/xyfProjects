@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingyunfu.ebank.mapper.account.EbankAccountMapper">
+    <select id="findByUserNo" parameterType="java.lang.Long" resultType="com.xingyunfu.ebank.domain.account.EbankAccountDTO">
+        select * from ebank_account where user_no = #{userNo}
+    </select>
+    <select id="findByAccountNo" parameterType="java.lang.String" resultType="com.xingyunfu.ebank.domain.account.EbankAccountDTO">
+        select * from ebank_account where account_no = #{accountNo}
+    </select>
+    <select id="pageQuery" parameterType="com.xingyunfu.ebank.dto.account.AccountPageQueryDTO"
+            resultType="com.xingyunfu.ebank.domain.account.EbankAccountDTO">
+        select * from ebank_account where unix_timestamp(create_time) between #{startTime} and #{endTime}
+                order by id desc limit #{pageNo}, #{pageSize}
+    </select>
+    <select id="pageQueryCount" parameterType="com.xingyunfu.ebank.dto.account.AccountPageQueryDTO"
+            resultType="java.lang.Long">
+        select count(id) from ebank_account where unix_timestamp(create_time) between #{startTime} and #{endTime}
+    </select>
+    <select id="listAccount" parameterType="java.util.Map" resultType="com.xingyunfu.ebank.domain.account.EbankAccountDTO">
+        select * from ebank_account where account_no in 
+        <foreach collection="accountNoList" item="accountNo" open="(" close=")" separator=",">#{accountNo}</foreach>
+    </select>
+    <update id="updateAmount" parameterType="java.util.Map">
+        update ebank_account set balance = balance+#{balance} where account_no = #{accountNo};
+    </update>
+    <insert id="insert" parameterType="com.xingyunfu.ebank.domain.account.EbankAccountDTO">
+        insert into ebank_account (id, user_no, user_name, phone, id_card_no, account_no, account_name, account_type,
+                        bank_card_no, bank_name, bank_no, branch_name, branch_no, province_name, city_name,
+                        balance,frozen_balance, available_balance, business_status, enable,
+                        create_time, last_modify_time)
+            values (#{id}, #{userNo}, #{userName}, #{phone}, #{idCardNo}, #{accountNo}, #{accountName}, #{accountType},
+                #{bankCardNo}, #{bankName}, #{bankNo}, #{branchName}, #{branchNo}, #{provinceName}, #{cityName},
+                #{balance}, #{frozenBalance}, #{availableBalance}, #{businessStatus}, #{enable},
+                #{createTime}, #{lastModifyTime});
+    </insert>
+    <update id="update" parameterType="com.xingyunfu.ebank.domain.account.EbankAccountDTO">
+        update ebank_account
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id != null">id = #{id},</if>
+            <if test="userNo != null">user_no = #{userNo},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="idCardNo != null">id_card_no = #{idCardNo},</if>
+            <if test="accountNo != null">account_no = #{accountNo},</if>
+            <if test="accountName != null">account_name = #{accountName},</if>
+            <if test="accountType != null">account_type = #{accountType},</if>
+            <if test="bankCardNo != null">bank_card_no = #{bankCardNo},</if>
+            <if test="bankName != null">bank_name = #{bankName},</if>
+            <if test="bankNo != null">bank_no = #{bankNo},</if>
+            <if test="branchName != null">branch_name = #{branchName},</if>
+            <if test="branchNo != null">branch_no = #{branchNo},</if>
+            <if test="provinceName != null">province_name = #{provinceName},</if>
+            <if test="cityName != null">city_name = #{cityName},</if>
+<!--            <if test="balance != null">balance = #{balance},</if>-->
+<!--            <if test="frozenBalance != null">frozen_balance = #{frozenBalance},</if>-->
+<!--            <if test="availableBalance != null">available_balance = #{availableBalance},</if>-->
+            <if test="businessStatus != null">business_status = #{businessStatus},</if>
+            <if test="enable != null">enable = #{enable},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="lastModifyTime != null">last_modify_time = #{lastModifyTime},</if>
+        </trim>
+        where user_no = #{userNo}
+    </update>
+</mapper>

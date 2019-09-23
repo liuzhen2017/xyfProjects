@@ -1,0 +1,10 @@
+package com.microservice.config.copy;
+
+import org.springframework.cloud.netflix.ribbon.RibbonClient;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@RibbonClient(name="AppUser",configuration=AppCustomerConfig.class)
+public class RibbonConfig {
+
+}

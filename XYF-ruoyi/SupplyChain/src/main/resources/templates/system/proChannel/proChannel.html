@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('栏目列表')"/>
+	<link rel="stylesheet" href="../../../layui/css/layui.css"  media="all">
+	<style>
+		.channelName{
+			font-weight: bold;
+			/*text-decoration: underline;*/
+			cursor: pointer;
+		}
+		.channelName:hover{
+			color: rgb(30,159,255);
+		}
+	</style>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+	<div class="row">
+		<div class="col-sm-12 search-collapse">
+			<form id="formId" autocomplete="off">
+				<input type="hidden" name="fatherId" th:value="${id}">
+				<div class="select-list">
+					<ul>
+						<li>
+							是否下搜索所有分类
+							<select name="selectAll">
+								<option value="false">当前</option>
+								<option value="true">所有</option>
+							</select>
+						</li>
+						<li>
+							栏目名称：<input type="text" name="channelName"/>
+						</li>
+						<li>
+							上级栏目名称：<input type="text" name="fatherName"/>
+						</li>
+						<li>
+							状态
+							<select name="status">
+								<option value="">全部</option>
+								<option value="0">启用</option>
+								<option value="1">禁用</option>
+							</select>
+						</li>
+						<li>
+							<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+							<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+
+		<div class="btn-group-sm" id="toolbar" role="group">
+			<a class="btn btn-success" onclick="openPage('添加分类','/system/proChannel/add',1000,800)" shiro:hasPermission="system:proChannel:add">
+				<i class="fa fa-plus"></i> 添加
+			</a>
+		</div>
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table" data-mobile-responsive="true"></table>
+		</div>
+	</div>
+</div>
+<div th:include="include :: footer"></div>
+<script type="text/javascript" src="../../../util.js"></script>
+<script type="text/javascript" src="../../../ruoyi/js/common.js"></script>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:proChannel:edit')}]];
+    var prefix = ctx + "system/proChannel";
+
+
+    //=============================重写打开图片
+    /**
+     *  打开图片
+     * @param src img的URL
+     */
+    function previewImg(src) {
+        var img = new Image();
+        img.src = src;
+        var height = img.height + 50; //获取图片高度
+        var width = img.width; 		  //获取图片宽度
+        height = height > 800 ? 800:height; //限制 最高
+        width = width > 1400 ? 1400:width; //限制 最宽
+        var imgHtml = "<img height='"+(height-50)+"' width='"+width+"' src='" + src+ "' />";
+        //弹出层
+        layer.open({
+            type: 1,
+            shade: 0.8,
+            offset: 'auto',
+            area: [width + 'px',height+'px'],
+            shadeClose:true,//点击外围关闭弹窗
+            scrollbar: false,//不现实滚动条
+            title: "图片预览", //不显示标题
+            content: imgHtml //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+        });
+    }
+
+    //========================= 栏目名称点击事件 （打开新窗口）
+    /**
+	 *  栏目名称点击事件
+     * @param id 当前栏目的ID
+     * @param name 当前栏目的名称
+     */
+	function findChildren(id,name){
+        createMenuItemNew("system/proChannel?id="+id,name+"的子级");
+	}
+
+	//======================== 位置点击事件
+
+    /**
+	 * 位置点击事件
+     * @param type  位置类型  置顶/上移/下移/置底
+	 * @param channelId   栏目ID
+     */
+	function position(type,channelId,fatherId,sortNumber){
+	    $.getJSON(prefix+'/sort','channelId='+channelId+'&fatherId='+fatherId+'&sortNumber='+sortNumber+'&mode='+type,(res)=>{
+	        if(res.code == "0000"){
+                $.table.search();
+			}else{
+	            $.modal.alertWarning(res.msg);
+			}
+		});
+	}
+
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            updateUrl: prefix + "/edit/{id}",
+            modalName: "类目",
+            showExport: true,
+            columns: [
+                {
+                    field: 'id',
+                    title: 'ID',
+                    sortable: true
+                },
+                {
+                    field: 'channelId',
+                    title: '栏目ID',
+                    sortable: true
+                },
+                {
+                    field: 'channelName',
+                    title: '栏目名称',
+                    sortable: true, formatter: function (value, row, index) {
+                        return ` <span onclick="findChildren('`+row.channelId+`','`+(row.channelName)+`')" class="channelName">`+value+`  <span class="layui-badge ">`+(!row.amount ? "0":row.amount)+`</span></span>`;
+                    }
+                },
+                {
+                    field: 'fatherId',
+                    title: '上级栏目ID',
+                    sortable: true
+                },
+                {
+                    field: 'fatherName',
+                    title: '上级栏目名称',
+                    sortable: true, formatter: function (value, row, index) {
+                       return value ? value:"-";
+                    }
+                },
+                {
+                    field: 'sortNumber',
+                    title: '排序号',
+                    sortable: true,formatter:function(value){
+                        return `<span class="layui-badge layui-bg-gray">`+value+`</span>`;
+                    }
+                },
+                {
+                    field: 'channelTypeName',
+                    title: '栏目类型',
+                    sortable: true
+                },
+                {
+                    field: 'imageUrl',
+                    title: '栏目展示的图片',
+                    sortable:true, formatter: function (value, row, index) {
+                        if(value == "不需要"){
+                            value = false;
+						}
+                        return value ? `<a href="javascript:;" onclick="previewImg('` + value + `')"><img height="50"  src="` + value + `"/></a>`:"-";
+                    }
+                },
+                {
+                    field: 'forwardType',
+                    title: '栏目跳转的类型',
+                    sortable: true,formatter:function(value){
+                        switch (value) {
+							case "1": return `<span class="layui-badge-rim">跳转连接</span>`;
+							case "2": return `<span class="layui-badge-rim">活动分类</span>`;
+							case "3": return `<span class="layui-badge-rim">商品分类</span>`;
+							case "4": return `<span class="layui-badge-rim">商品详情</span>`;
+							default:return "-";
+                        }
+                    }
+                },
+                {
+                    field: 'color',
+                    title: '背景颜色',
+                    sortable: true
+                },
+                {
+                    field: 'linkUrl',
+                    title: '栏目跳转的位置',
+                    sortable: true,formatter:function(value){
+                        return value ? value:"-";
+                    }
+                },
+                {
+                    field: 'status',
+                    title: '状态',
+                    sortable:true,formatter: function (value, row, index) {
+                        return value == "0" ? `<button type="button" class="layui-btn layui-btn layui-btn-xs">可用</button>`:`<button type="button" class="layui-btn layui-btn-disabled layui-btn-xs">禁用</button>`;
+                    }
+                },
+                {
+                    field: 'remarks',
+                    title: '备注',
+                    sortable: true,formatter:function(value){
+                        return value ? value:"-";
+                    }
+                },
+                {
+                    field: 'createdTime',
+                    title: '创建时间',
+                    sortable: true
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+					width:230,
+                    formatter: function (value, row, index) {
+						return `<div class="layui-btn-group">
+									<button type="button" onclick="position(0,'`+row.channelId+`','`+row.fatherId+`','`+row.sortNumber+`')" class="layui-btn layui-btn-primary  layui-btn-sm"><i class="glyphicon glyphicon-fast-backward"></i></button>
+									<button type="button" onclick="position(1,'`+row.channelId+`','`+row.fatherId+`','`+row.sortNumber+`')" class="layui-btn layui-btn-primary  layui-btn-sm"><i class="glyphicon glyphicon-backward"></i></button>
+									<button type="button" onclick="position(2,'`+row.channelId+`','`+row.fatherId+`','`+row.sortNumber+`')" class="layui-btn layui-btn-primary  layui-btn-sm"><i class="glyphicon glyphicon-forward"></i></button>
+									<button type="button" onclick="position(3,'`+row.channelId+`','`+row.fatherId+`','`+row.sortNumber+`')" class="layui-btn layui-btn-primary  layui-btn-sm"><i class="glyphicon glyphicon-fast-forward"></i></button>
+									<button type="button"  class="layui-btn layui-btn-normal  layui-btn-sm" onclick="$.operate.edit('` + row.id + `')"><i class="glyphicon glyphicon-edit"></i></button>
+								</div>`;
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>

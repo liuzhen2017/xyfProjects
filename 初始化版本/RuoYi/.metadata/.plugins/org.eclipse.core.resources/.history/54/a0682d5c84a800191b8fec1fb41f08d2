@@ -1,0 +1,26 @@
+package com.xinyunfu.sao;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.alibaba.fastjson.JSONObject;
+
+import feign.Param;
+import feign.RequestLine;
+
+@FeignClient(value="CustomerManage2")
+public interface CustomerManageSao {
+
+	
+	/**
+	 * 获取推荐关系表
+	 * @param json
+	 * @return
+	 */
+    @RequestLine("GET /customer/inner/user/referral")
+	public String getPushLinked(@RequestParam("userNo")String userNo) ;
+	
+}

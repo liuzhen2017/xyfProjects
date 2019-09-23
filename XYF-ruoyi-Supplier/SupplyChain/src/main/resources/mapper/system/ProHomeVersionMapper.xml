@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.ProHomeVersionMapper">
+    
+    <resultMap type="ProHomeVersion" id="ProHomeVersionResult">
+        <result property="versionId"    column="version_id"    />
+        <result property="version"    column="version"    />
+        <result property="style"    column="style"    />
+        <result property="status"    column="status"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+    </resultMap>
+	
+	<sql id="selectProHomeVersionVo">
+        select version_id, version, style, status, created_time, created_by, updated_time, updated_by from pro_home_version
+    </sql>
+	
+    <select id="selectProHomeVersionList" parameterType="ProHomeVersion" resultMap="ProHomeVersionResult">
+        <include refid="selectProHomeVersionVo"/>
+        <where>  
+            <if test="versionId != null "> and version_id = #{versionId}</if>
+             <if test="version != null  and version != '' "> and version = #{version}</if>
+             <if test="style != null  and style != '' "> and style = #{style}</if>
+             <if test="status != null "> and status = #{status}</if>
+             <if test="createdTime!= null "> and created_time = #{createdTime}</if>
+             <if test="createdBy != null  and createdBy != '' "> and created_by = #{createdBy}</if>
+             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+             <if test="updatedBy != null  and updatedBy != '' "> and updated_by = #{updatedBy}</if>
+         </where>
+    </select>
+    
+    <select id="selectProHomeVersionById" parameterType="Integer" resultMap="ProHomeVersionResult">
+        <include refid="selectProHomeVersionVo"/>
+        where version_id = #{versionId}
+    </select>
+        
+    <insert id="insertProHomeVersion" parameterType="ProHomeVersion" useGeneratedKeys="true" keyProperty="versionId">
+        insert into pro_home_version
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="version != null  and version != ''  ">version,</if>
+			<if test="style != null  and style != ''  ">style,</if>
+			<if test="status != null  ">status,</if>
+			<if test="createdTime!= null  ">created_time,</if>
+			<if test="createdBy != null  and createdBy != ''  ">created_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">updated_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="version != null  and version != ''  ">#{version},</if>
+			<if test="style != null  and style != ''  ">#{style},</if>
+			<if test="status != null  ">#{status},</if>
+			<if test="createdTime!= null  ">#{createdTime},</if>
+			<if test="createdBy != null  and createdBy != ''  ">#{createdBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">#{updatedBy},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateProHomeVersion" parameterType="ProHomeVersion">
+        update pro_home_version
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="version != null  and version != ''  ">version = #{version},</if>
+            <if test="style != null  and style != ''  ">style = #{style},</if>
+            <if test="status != null  ">status = #{status},</if>
+            <if test="createdTime!= null  ">created_time = #{createdTime},</if>
+            <if test="createdBy != null  and createdBy != ''  ">created_by = #{createdBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="updatedBy != null  and updatedBy != ''  ">updated_by = #{updatedBy},</if>
+        </trim>
+        where version_id = #{versionId}
+    </update>
+
+	<delete id="deleteProHomeVersionById" parameterType="Integer">
+        delete from pro_home_version where version_id = #{versionId}
+    </delete>
+	
+    <delete id="deleteProHomeVersionByIds" parameterType="String">
+        delete from pro_home_version where version_id in 
+        <foreach item="versionId" collection="array" open="(" separator="," close=")">
+            #{versionId}
+        </foreach>
+    </delete>
+    
+</mapper>

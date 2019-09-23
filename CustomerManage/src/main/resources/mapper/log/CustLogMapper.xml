@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyunfu.customer.repository.log.CustLogMapper">
+
+    <select id="findByUserNoAndLogType" resultType="com.xinyunfu.customer.domain.log.CustLogDTO"
+            parameterType="com.xinyunfu.customer.domain.log.CustLogDTO">
+        select * from cust_log where user_no=#{userNo} and log_type=#{logType} limit 0,10;
+    </select>
+    <insert id="insert" parameterType="com.xinyunfu.customer.domain.log.CustLogDTO">
+        insert into cust_log (id, user_no, log_type, user_ip,
+                    details, create_time)
+            values (#{id},#{userNo},#{logType},#{userIp},
+                    #{details},#{createTime});
+    </insert>
+    <delete id="deleteByUserNoAndLogType" parameterType="com.xinyunfu.customer.domain.log.CustLogDTO">
+        delete from cust_log where user_no=#{userNo} and log_type=#{logType}
+    </delete>
+</mapper>

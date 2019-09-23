@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('店铺邮费模板列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								店铺id：<input type="text" name="storeId"/>
+							</li>
+
+							<li>
+								是否包邮,0包邮,1不包邮,2按地区包邮,3按金额包邮,4按件数包邮,：<input type="text" name="type"/>
+							</li>
+
+							<li>
+								包邮条件：<input type="text" name="conditions"/>
+							</li>
+
+							<li>
+								计算邮费,json格式保存：<input type="text" name="modes"/>
+							</li>
+
+							<li>
+								默认邮费：<input type="text" name="defaultPostage"/>
+							</li>
+
+							<li>
+								备注：<input type="text" name="remarks"/>
+							</li>
+
+							<li>
+								状态,0启用,1禁用,2删除：<input type="text" name="status"/>
+							</li>
+
+							<li>
+								创建时间：<input type="text" name="createdTime"/>
+							</li>
+
+							<li>
+								创建人：<input type="text" name="createdBy"/>
+							</li>
+
+							<li>
+								修改时间：<input type="text" name="updatedTime"/>
+							</li>
+
+							<li>
+								修改人：<input type="text" name="updatedBy"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:proFreight:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:proFreight:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:proFreight:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:proFreight:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:proFreight:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:proFreight:remove')}]];
+        var prefix = ctx + "system/proFreight";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "店铺邮费模板",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'freightId', 
+					title : '邮费模板id',
+					visible: false
+				},
+				{
+					field : 'storeId', 
+					title : '店铺id',
+					sortable: true
+				},
+				{
+					field : 'type', 
+					title : '是否包邮,0包邮,1不包邮,2按地区包邮,3按金额包邮,4按件数包邮,',
+					sortable: true
+				},
+				{
+					field : 'conditions', 
+					title : '包邮条件',
+					sortable: true
+				},
+				{
+					field : 'modes', 
+					title : '计算邮费,json格式保存',
+					sortable: true
+				},
+				{
+					field : 'defaultPostage', 
+					title : '默认邮费',
+					sortable: true
+				},
+				{
+					field : 'remarks', 
+					title : '备注',
+					sortable: true
+				},
+				{
+					field : 'status', 
+					title : '状态,0启用,1禁用,2删除',
+					sortable: true
+				},
+				{
+					field : 'createdTime',
+					title : '创建时间',
+					sortable: true
+				},
+				{
+					field : 'createdBy',
+					title : '创建人',
+					sortable: true
+				},
+				{
+					field : 'updatedTime',
+					title : '修改时间',
+					sortable: true
+				},
+				{
+					field : 'updatedBy',
+					title : '修改人',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.freightId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.freightId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

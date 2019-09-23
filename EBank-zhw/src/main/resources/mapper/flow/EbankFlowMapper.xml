@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingyunfu.ebank.mapper.flow.EbankFlowMapper">
+    <select id="pageQuery" parameterType="com.xingyunfu.ebank.dto.flow.FlowPageQueryDTO"
+            resultType="com.xingyunfu.ebank.domain.flow.EbankFlowDTO">
+        select * from ebank_flow where unix_timestamp(create_time) between #{startTime} and #{endTime}
+            <if test="ebankOrderNo != null">and ebank_order_no = #{ebankOrderNo}</if>
+            <if test="sysOrderNo != null">and sys_order_no = #{sysOrderNo}</if>
+            <if test="accountType != null">and account_type = #{accountType}</if>
+            <if test="flowType != null">and flow_type = #{flowType}</if>
+            <if test="amount != null">and amount >= #{amount}</if>
+            <if test="status != null">and status = #{status}</if>
+            order by id limit #{pageNo}, #{pageSize}
+    </select>
+    <select id="pageQueryCount" parameterType="com.xingyunfu.ebank.dto.flow.FlowPageQueryDTO"
+            resultType="java.lang.Long">
+        select count(id) from ebank_flow where unix_timestamp(create_time) between #{startTime} and #{endTime}
+        <if test="ebankOrderNo != null">and ebank_order_no = #{ebankOrderNo}</if>
+        <if test="sysOrderNo != null">and sys_order_no = #{sysOrderNo}</if>
+        <if test="accountType != null">and account_type = #{accountType}</if>
+        <if test="flowType != null">and flow_type = #{flowType}</if>
+        <if test="amount != null">and amount >= #{amount}</if>
+        <if test="status != null">and status = #{status}</if>
+    </select>
+    <insert id="insert" parameterType="com.xingyunfu.ebank.domain.flow.EbankFlowDTO">
+        insert into ebank_flow (id, ebank_order_no, sys_order_no, voucher, account_no, account_type,
+                    flow_type, flow_source, amount, status,
+                    create_time, last_modify_time)
+            values (#{id}, #{ebankOrderNo}, #{sysOrderNo}, #{voucher}, #{accountNo}, #{accountType},
+                    #{flowType}, #{flowSource}, #{amount}, #{status},
+                    #{createTime}, #{lastModifyTime});
+    </insert>
+    <update id="update" parameterType="com.xingyunfu.ebank.domain.flow.EbankFlowDTO">
+        update ebank_flow
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id != null">id = #{id},</if>
+            <if test="ebankOrderNo != null">ebank_order_no = #{ebankOrderNo},</if>
+            <if test="sysOrderNo != null">sys_order_no = #{sysOrderNo},</if>
+            <if test="voucher != null">voucher = #{voucher},</if>
+            <if test="accountNo != null">account_no = #{accountNo},</if>
+            <if test="accountType != null">account_type = #{accountType},</if>
+            <if test="flowType != null">flow_type = #{flowType},</if>
+            <if test="flowSource != null">flow_source = #{flowSource},</if>
+<!--            <if test="amount != null">amount = #{amount},</if>-->
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="lastModifyTime != null">last_modify_time = #{lastModifyTime},</if>
+        </trim>
+        where ebank_order_no=#{ebankOrderNo}
+    </update>
+</mapper>

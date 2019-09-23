@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('用户列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								手机号：<input type="text" name="phone"/>
+							</li>
+
+							<li>
+								密码：<input type="text" name="password"/>
+							</li>
+
+							<li>
+								：<input type="text" name="payPassword"/>
+							</li>
+
+							<li>
+								当前用户的推荐码，用于分享给别人，忽略大小写：<input type="text" name="userCode"/>
+							</li>
+
+							<li>
+								昵称：<input type="text" name="nickName"/>
+							</li>
+
+							<li>
+								真实姓名：<input type="text" name="name"/>
+							</li>
+
+							<li>
+								性别, 0女，1男：<input type="text" name="sex"/>
+							</li>
+
+							<li>
+								用户头像：<input type="text" name="photoUrl"/>
+							</li>
+
+							<li>
+								用户状态，0未激活，1已激活，2已注销，3已封锁：<input type="text" name="status"/>
+							</li>
+
+							<li>
+								用户级别：<input type="text" name="level"/>
+							</li>
+
+							<li>
+								推荐人的推荐码：<input type="text" name="referralCode"/>
+							</li>
+
+							<li>
+								证件号：<input type="text" name="cardNo"/>
+							</li>
+
+							<li>
+								证件类型：<input type="text" name="cardType"/>
+							</li>
+
+							<li>
+								：<input type="text" name="authStatus"/>
+							</li>
+
+							<li>
+								：<input type="text" name="authTime"/>
+							</li>
+
+							<li>
+								微信号码：<input type="text" name="wechat"/>
+							</li>
+
+							<li>
+								对接微信等第三方登陆：<input type="text" name="openId"/>
+							</li>
+
+							<li>
+								：<input type="text" name="unionId"/>
+							</li>
+
+							<li>
+								用户来源：<input type="text" name="dataSource"/>
+							</li>
+
+							<li>
+								备注信息：<input type="text" name="remark"/>
+							</li>
+
+							<li>
+								创建时间：<input type="text" name="createTime"/>
+							</li>
+
+							<li>
+								最后修改时间：<input type="text" name="lastModifyTime"/>
+							</li>
+
+							<li>
+								：<input type="text" name="userNo"/>
+							</li>
+
+							<li>
+								：<input type="text" name="referrerNo"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="xinyunfu:custUser:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="xinyunfu:custUser:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="xinyunfu:custUser:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="xinyunfu:custUser:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('xinyunfu:custUser:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('xinyunfu:custUser:remove')}]];
+        var prefix = ctx + "xinyunfu/custUser";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "用户",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : '',
+					visible: false
+				},
+				{
+					field : 'phone', 
+					title : '手机号',
+					sortable: true
+				},
+				{
+					field : 'password', 
+					title : '密码',
+					sortable: true
+				},
+				{
+					field : 'payPassword', 
+					title : '',
+					sortable: true
+				},
+				{
+					field : 'userCode', 
+					title : '当前用户的推荐码，用于分享给别人，忽略大小写',
+					sortable: true
+				},
+				{
+					field : 'nickName', 
+					title : '昵称',
+					sortable: true
+				},
+				{
+					field : 'name', 
+					title : '真实姓名',
+					sortable: true
+				},
+				{
+					field : 'sex', 
+					title : '性别, 0女，1男',
+					sortable: true
+				},
+				{
+					field : 'photoUrl', 
+					title : '用户头像',
+					sortable: true
+				},
+				{
+					field : 'status', 
+					title : '用户状态，0未激活，1已激活，2已注销，3已封锁',
+					sortable: true
+				},
+				{
+					field : 'level', 
+					title : '用户级别',
+					sortable: true
+				},
+				{
+					field : 'referralCode', 
+					title : '推荐人的推荐码',
+					sortable: true
+				},
+				{
+					field : 'cardNo', 
+					title : '证件号',
+					sortable: true
+				},
+				{
+					field : 'cardType', 
+					title : '证件类型',
+					sortable: true
+				},
+				{
+					field : 'authStatus', 
+					title : '',
+					sortable: true
+				},
+				{
+					field : 'authTime', 
+					title : '',
+					sortable: true
+				},
+				{
+					field : 'wechat', 
+					title : '微信号码',
+					sortable: true
+				},
+				{
+					field : 'openId', 
+					title : '对接微信等第三方登陆',
+					sortable: true
+				},
+				{
+					field : 'unionId', 
+					title : '',
+					sortable: true
+				},
+				{
+					field : 'dataSource', 
+					title : '用户来源',
+					sortable: true
+				},
+				{
+					field : 'remark', 
+					title : '备注信息',
+					sortable: true
+				},
+				{
+					field : 'createTime', 
+					title : '创建时间',
+					sortable: true
+				},
+				{
+					field : 'lastModifyTime', 
+					title : '最后修改时间',
+					sortable: true
+				},
+				{
+					field : 'userNo', 
+					title : '',
+					sortable: true
+				},
+				{
+					field : 'referrerNo', 
+					title : '',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

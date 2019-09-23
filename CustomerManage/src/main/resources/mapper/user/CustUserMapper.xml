@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyunfu.customer.repository.user.CustUserMapper">
+    <select id="findByUserNo" resultType="com.xinyunfu.customer.domain.user.CustUserDTO" parameterType="java.lang.Long">
+        select * from cust_user where user_no = #{userNo}
+    </select>
+    <select id="findByPhone" resultType="com.xinyunfu.customer.domain.user.CustUserDTO" parameterType="java.lang.String">
+        select * from cust_user where phone = #{phone}
+    </select>
+    <select id="findByPhoneList" parameterType="com.xinyunfu.customer.dto.user.UserPhoneListDTO"
+            resultType="com.xinyunfu.customer.domain.user.CustUserDTO">
+        select * from cust_user where phone in
+            <foreach collection="phone" item="p" open="(" close=")" separator=","> #{p} </foreach>
+    </select>
+    <select id="findByUserCode" resultType="com.xinyunfu.customer.domain.user.CustUserDTO" parameterType="java.lang.String">
+        select * from cust_user where user_code = #{userCode}
+    </select>
+    <select id="findIdByReferrerNo" resultType="java.lang.Long" parameterType="java.lang.Long">
+        select id from cust_user where referrer_no = #{referrerNo}
+    </select>
+    <select id="findUserNoByReferrerNo" resultType="java.lang.Long" parameterType="java.util.Map">
+        select user_no from cust_user where referrer_no = #{referrerNo} order by id desc limit #{pageNo}, #{pageSize}
+    </select>
+    <select id="findReferrerTotal" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select count(id) from cust_user where referrer_no = #{referrerNo}
+    </select>
+    <select id="findUserNoPage" parameterType="com.xinyunfu.customer.dto.user.UserPageQueryDTO"
+            resultType="java.lang.Long">
+        select user_no from cust_user where unix_timestamp(create_time) between #{startTime} and #{endTime}
+            <if test="userNo != null and userNo != ''">and user_no=#{userNo}</if>
+            <if test="userCode != null and userNo != ''">and user_code=#{userCode}</if>
+            <if test="phone != null and phone != ''">and phone=#{phone}</if>
+            <if test="sex != null">and sex=#{sex}</if>
+            <if test="level != null">and level=#{level}</if>
+            order by id desc limit #{pageNo}, #{pageSize}
+    </select>
+    <select id="totalPage" parameterType="com.xinyunfu.customer.dto.user.UserPageQueryDTO"
+            resultType="java.lang.Long">
+        select count(user_no) from cust_user where unix_timestamp(create_time) between #{startTime} and #{endTime}
+            <if test="userNo != null and userNo != ''">and user_no=#{userNo}</if>
+            <if test="userCode != null and userNo != ''">and user_code=#{userCode}</if>
+            <if test="phone != null and phone != ''">and phone=#{phone}</if>
+            <if test="sex != null">and sex=#{sex}</if>
+            <if test="level != null">and level=#{level}</if>
+    </select>
+    <insert id="add" parameterType="com.xinyunfu.customer.domain.user.CustUserDTO">
+        insert into cust_user (id, user_no, password, pay_password, user_code, nick_name, name, phone, sex,
+                                photo_url, status, level, referrer_no, referral_code,
+                                card_no, card_type, auth_status, auth_time, wechat, open_id,
+                                union_id, data_source, remark, create_time, last_modify_time)
+            values(#{id}, #{userNo}, #{password}, #{payPassword}, #{userCode}, #{nickName}, #{name}, #{phone}, #{sex},
+                    #{photoUrl}, #{status}, #{level}, #{referrerNo}, #{referralCode},
+                    #{cardNo}, #{cardType}, #{authStatus}, #{authTime}, #{wechat}, #{openId},
+                    #{unionId}, #{dataSource}, #{remark}, #{createTime}, #{lastModifyTime})
+    </insert>
+    <update id="update" parameterType="com.xinyunfu.customer.domain.user.CustUserDTO">
+        update cust_user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="password != null">password = #{password},</if>
+            <if test="payPassword != null">pay_password = #{payPassword},</if>
+            <if test="userCode != null">user_code = #{userCode},</if>
+            <if test="nickName != null">nick_name = #{nickName},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="photoUrl != null">photo_url = #{photoUrl},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="level != null">level = #{level},</if>
+            <if test="referrerNo != null">referrer_no = #{referrerNo},</if>
+            <if test="referralCode != null">referral_code = #{referralCode},</if>
+            <if test="cardNo != null">card_no = #{cardNo},</if>
+            <if test="cardType != null">card_type = #{cardType},</if>
+            <if test="authStatus != null">auth_status = #{authStatus},</if>
+            <if test="authTime != null">auth_time = #{authTime},</if>
+            <if test="wechat != null">wechat = #{wechat},</if>
+            <if test="openId != null">open_id = #{openId},</if>
+            <if test="unionId != null">union_id = #{unionId},</if>
+            <if test="dataSource != null">data_source = #{dataSource},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="lastModifyTime != null">last_modify_time = #{lastModifyTime},</if>
+        </trim>
+        where user_no = #{userNo}
+    </update>
+</mapper>

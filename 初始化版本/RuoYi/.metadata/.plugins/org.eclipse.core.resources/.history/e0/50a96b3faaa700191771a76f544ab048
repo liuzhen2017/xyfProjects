@@ -1,0 +1,5 @@
+package com.microservice.service;
+
+public class AppCustomerService {
+
+}

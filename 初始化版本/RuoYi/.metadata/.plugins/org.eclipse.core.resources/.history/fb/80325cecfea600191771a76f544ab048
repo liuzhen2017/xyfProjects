@@ -1,0 +1,57 @@
+package com.gateway.utils;
+
+import java.util.Date;
+
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+
+public class JwtUtils {
+
+	
+
+	 /**
+	 * @param userNo        用户id
+	 * @param encryVersion  加密版本号
+	 * @param seconds       token有效时间，秒
+	 * @return
+	 */
+	public static String getToken(String userNo,int seconds,String encryVersion) {
+	        Date start = new Date();
+	        long currentTime = System.currentTimeMillis() + seconds * 1000 * 3600;
+	        Date end = new Date(currentTime);
+	        String token = JWT.create().withAudience(userNo).withIssuedAt(start).withExpiresAt(end)
+	                .sign(Algorithm.HMAC256(encryVersion));
+	        return token;
+	 }
+	   
+	   
+	 public static String getUserNoByToken(String token) {
+		   return  JWT.decode(token).getAudience().get(0);
+	 }
+	
+	 
+	 public static boolean checkToken(String token,String encryVersion) throws BusinessException{
+		 boolean bool = false;
+		 try {
+			 JWTVerifier decryer = JWT.require(Algorithm.HMAC256(encryVersion)).build();
+			 decryer.verify(token);
+			 bool = true;
+		 } catch (Exception e) {
+		 	 throw new BusinessException("token解密失败");
+		 }
+		 return bool;
+	 }
+	 
+	 
+	 
+	 
+	 public static void main(String[] args) {
+		String userNo = "xyf000001";
+		String encryVersion = "en_1.0.0";
+		int seconds = 72;
+		String token = getToken(userNo, seconds, encryVersion);
+		System.out.println(token);
+	 }
+}

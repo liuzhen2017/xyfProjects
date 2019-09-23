@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增供应链')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-supplyChainManger-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>企业名称：</label>
+				<div class="col-sm-8">
+					<input id="custName" name="custName" required class="form-control" type="text" minlength="4"  placeholder="请输入企业名称">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>企业地址：</label>
+				<div class="col-sm-8">
+					<input id="custAdd" name="custAdd" class="form-control" type="text" required placeholder="请输入企业地址">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>联&nbsp; 系&nbsp;&nbsp; 人：</label>
+				<div class="col-sm-8">
+					<input id="contactName" name="contactName" class="form-control" type="text" required placeholder="请输入企业联系人">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>联系电话：</label>
+				<div class="col-sm-8">
+					<input id="contactTel" name="contactTel" class="form-control" type="text" required placeholder="请输入联系电话">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>信用代码：</label>
+				<div class="col-sm-8">
+					<input id="creditCode" name="creditCode" class="form-control" type="text" required placeholder="请输入信用代码">
+				</div>
+			</div>
+
+			<div class="form-group">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>结算周期：(天)</label>
+				<div class="col-sm-8">
+					<input id="settlementCycle" name="settlementCycle" class="form-control" type="number" required placeholder="请输入结算周期" value="0" min="0">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">营业执照：</label>
+				<div class="col-sm-8">
+					<input id="businessLicenseImg" name="businessLicenseImg" class="form-control" type="hidden">
+					<input id="file" name="file" class="form-control" type="file"  placeholder="请上传营业执照">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 箱：</label>
+				<div class="col-sm-8">
+					<input id="email" name="email" class="form-control" type="email"  placeholder="请输入邮箱">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">传&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   真：</label>
+				<div class="col-sm-8">
+					<input id="fax" name="fax" class="form-control"  type="text" required placeholder="请输入企业传真">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+	<script type="text/javascript" src="../../../util.js"></script>
+    <script type="text/javascript">
+		var prefix = ctx + "system/supplyChainManger"
+		$("#form-supplyChainManger-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+			var file =$("#file").val();
+			var url;
+			if(file){
+				//如果有文件,则上传
+				url =uploadFile();
+				//如果上传文件失败,返回文件
+				if(!url){
+					return false;
+				}
+				$("#businessLicenseImg").val(url);
+			}
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-supplyChainManger-add').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

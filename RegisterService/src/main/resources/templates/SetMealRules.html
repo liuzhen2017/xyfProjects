@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>套餐规则</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .content {
+            font-size: 0.3rem;
+            color: #333;
+            padding: 0.3rem;
+        }
+        .row {
+            margin-bottom: 0.2rem;
+        }
+        .logo {
+            display: block;
+            width: 2.69rem;
+            height: 2.69rem;
+            margin: 0.8rem auto 0 auto;
+        }
+        .title {
+            text-align: center;
+            font-size: 0.36rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <img class="logo" src="./image/logo.png" alt="">
+        <div class="title">星云福商城</div>
+        <div class="row" style="margin-top:0.6rem"> 1. 买任意一个套餐，包含3张无门槛50元优惠券，6张万能券;</div>
+        <div class="row"> 2. 6张万能券，答题即可解激活成18张50元无门槛券;</div>
+        <div class="row"> 3. 18张无门槛券可在淘金圈转让，赚取现金，累计收益约540元；</div>
+        <div class="row"> 4. 超级福利，每个ID限购一个套餐，18张券转让完毕，才有资格再次购买套餐；</div>
+        <div class="row"> 5. 套餐产品为非盈利产品，只能换货，不支持退货；</div>
+            
+    </div>
+</body>
+<script>
+(function (doc, win) {
+  var docEl = doc.documentElement,
+    resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+    recalc = function () {
+      var clientWidth = docEl.clientWidth;
+      if (!clientWidth) return;
+      if(clientWidth>=750){
+        docEl.style.fontSize = '100px';
+      }else{
+        docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+      }
+    };
+  if (!doc.addEventListener) return;
+  win.addEventListener(resizeEvt, recalc, false);
+  doc.addEventListener('DOMContentLoaded', recalc, false);
+})(document, window);</script>
+</html>

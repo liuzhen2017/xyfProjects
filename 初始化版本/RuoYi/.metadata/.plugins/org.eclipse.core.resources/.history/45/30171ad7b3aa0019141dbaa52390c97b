@@ -1,0 +1,14 @@
+package com.example.utils;
+
+public class ComparUtils {
+
+	
+	
+	
+	public static void main(String[] args) {
+		TestBean tb1 = new TestBean();
+		TestBean tb2 = new TestBean();
+		TestBean tb3 = new TestBean();
+		TestBean tb4 = new TestBean();
+	}
+}

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('版本列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								版本号：<input type="text" name="version"/>
+							</li>
+
+							<li>
+								版本样式,采取1st:channel_type_id,2nd:channel_type_id的形式：<input type="text" name="style"/>
+							</li>
+
+							<li>
+								状态，启用=0,禁用=1,删除=2：<input type="text" name="status"/>
+							</li>
+
+							<li>
+								创建时间：<input type="text" name="createdTime"/>
+							</li>
+
+							<li>
+								创建人：<input type="text" name="createdBy"/>
+							</li>
+
+							<li>
+								修改时间：<input type="text" name="updatedTime"/>
+							</li>
+
+							<li>
+								修改人：<input type="text" name="updatedBy"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:proHomeVersion:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:proHomeVersion:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:proHomeVersion:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:proHomeVersion:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:proHomeVersion:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:proHomeVersion:remove')}]];
+        var prefix = ctx + "system/proHomeVersion";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "版本",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'versionId', 
+					title : '主键id',
+					visible: false
+				},
+				{
+					field : 'version', 
+					title : '版本号',
+					sortable: true
+				},
+				{
+					field : 'style', 
+					title : '版本样式,采取1st:channel_type_id,2nd:channel_type_id的形式',
+					sortable: true
+				},
+				{
+					field : 'status', 
+					title : '状态，启用=0,禁用=1,删除=2',
+					sortable: true
+				},
+				{
+					field : 'createdTime',
+					title : '创建时间',
+					sortable: true
+				},
+				{
+					field : 'createdBy',
+					title : '创建人',
+					sortable: true
+				},
+				{
+					field : 'updatedTime',
+					title : '修改时间',
+					sortable: true
+				},
+				{
+					field : 'updatedBy',
+					title : '修改人',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.versionId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.versionId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

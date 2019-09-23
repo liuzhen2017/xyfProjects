@@ -1,0 +1,42 @@
+eureka:
+    client:
+        service-url:
+            defaultZone: http://119.23.31.3:8761/eureka,http://120.79.247.111:8761/eureka
+jasypt:
+    encryptor:
+        password: EbfYkitulv73I2p0mXI50JMXoaxZTKJ7
+server:
+    port: 8081
+spring:
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        password: ENC(gmyc0w5G9juDFphYmJc/1F1DTg//s+dA)
+        url: jdbc:mysql://120.79.247.111:3306/EBank?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+        username: root
+    redis:
+        database: 0
+        host: 120.79.247.111
+        password: ENC(gmyc0w5G9juDFphYmJc/1F1DTg//s+dA)
+        port: 6379
+        sentinel:
+            nodes: 120.79.247.111:26379,119.23.31.3:26379
+
+
+pay-manger:
+    baseUrl: http://120.24.63.144:18080/
+    #商户号
+    merchantNo: 20000166064
+    merchantkey: 354c35183e7c4e85bdf88fdfb079be2b
+    payPullKey: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC5WJqr2/EO+V4AfH8qfEXnQlCaXxRCZhOYbbTjEWbV6F7DT3COXZ/skiQk1Oa2dgwsQLgOcEfp3y/46rux/djPxfxUelDHthz7VocxQQH66ZRh3kGwxM1l6C0cXOYhBLNIgZ4zut4yItmIm669sqRUNEFIWQF9232azTRn7I4aXwIDAQAB
+    payPriKey: MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAMKA2qJK/WDExpwnd76KhHRUIFWE53PWV3Y6WpnRb7Lqh5XQToqgWp4SYjJVSxSl6AEDxpedLRqcqeb1SOhpk8v/2l/NFKxwCd5rjoIvo16cbqn0vK6fS3e4Jh4L7xV09W3CbK4DGSYABejd9a6aNTnE86tSA4BLSKNnGtFGDIeZAgMBAAECgYBYOBNyOusTogynNOuF+9O545JK154XFyfSUwNW8vxjvSZEGBgXnkWbnqD1TWRheCJzm1/O0pZrlJUnUSeBaqmCuDylj+wfCVcN4h3wQDUcZ+GZII+MBRIyVaj3waswtxsZ1jrduP2Nae44gyuQwTsdn0h2zMC600BaV5R5OV0t5QJBAP+lLDJvSG0Ic4jMTJMPRpRCdZgKZpr/779FlBMw/pT6zq031zxiiMfaPYXjCWkuh2MEB2HIyfuL6zczFMnzoocCQQDCxfVgHqbkBsFVmKbp3KoNnZf/BgFAwo7WX6t5/v8uE6P9LkJ07/frdtMp8d4aa4fX1C8IkCZMDua+5X+u92zfAkEA6tmkZpjQ4kl3Sd7VIexQnHcJbKlxZUdlykNzKsZBuj9Git7XvkOPAHo/NrZBuPzjp1TWK0C4PXxmk4k7ueM2FQJATRuDhbb8yP8noNRbF/BE3jkKiGp/Kn0bgSDEyPo7Walq3Xtn0dWCZ5RWCp/3FqyFTdtxd0lh7/BiRyaiAslvLwJBAP5QsqguncySlApFMTDDMJ/jFcea8aVBu1mcVnlJJFdYH4MnvUAW3Ty7yG3K6/EO8XZnGOfIShVdgu+sAdrglqA=
+    #统一下单->向平台支付
+    paymentUrl: gateway/payment
+    #查询向下单交易结果 ->向平台支付结果
+    queryPamentUrl: inquire/order/payment
+    #提交付款申请->平台代付给用户
+    remittanceUrl: gateway/remittance
+    #付款申请结果查询->平台代付给用户
+    queryRemittanceUrl:  inquire/order/remittance
+    notifyurlRemittanceurl: http://120.79.247.111:8080/api/callbackAccountEntry
+    notifyurlpaymentUrl: http://120.79.247.111:8080/api/callbackPayment
+

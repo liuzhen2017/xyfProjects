@@ -1,0 +1,45 @@
+package com.xinyunfu.service.impl;
+
+import com.xinyunfu.model.OrderTree;
+import com.xinyunfu.model.UserPush;
+import com.xinyunfu.mapper.OrderTreeMapper;
+import com.xinyunfu.service.IOrderTreeService;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.rnmg.jace.utils.ResponseInfo;
+
+import org.springframework.stereotype.Service;
+
+/**
+ * <p>
+ *  服务实现类
+ * </p>
+ *
+ * @author jace
+ * @since 2019-07-04
+ */
+@Service
+public class OrderTreeServiceImpl extends ServiceImpl<OrderTreeMapper, OrderTree> implements IOrderTreeService {
+
+	
+	
+	/**
+	 * @return
+	 */
+	public ResponseInfo<String> joinOrderTree(String orderNo,String userNo,String userType,String pusherNo){
+		
+		
+		return null;
+	}
+	
+	
+	
+	
+	
+	public UserPush findByPushNo(String userNo) {
+		return null;
+	}
+	
+	
+	
+}

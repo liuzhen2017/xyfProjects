@@ -1,0 +1,120 @@
+spring:
+  application:
+    name: EBank
+  redis:
+    database: 0
+    host: 120.79.247.111
+    password: ENC(gmyc0w5G9juDFphYmJc/1F1DTg//s+dA)
+    port: 6379
+    jedis:
+      pool:
+        max-idle: 10
+        min-idle: 0
+        max-active: -1
+        max-wait: -1
+    ssl: false
+    timeout: 600
+  http:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: ENC(1zL5dTMpDjpQn37RDXke44GTzmCZPqpA)
+    url: jdbc:mysql://127.0.0.1:3306/EBank?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true&useAffectedRows=true
+    username: root
+  rabbitmq:
+    #非集群模式下，填写MQ服务器的地址和端口
+    addresses: 120.79.247.111:5672,119.23.31.3:5672
+    connection-timeout: 15000
+    listener:
+      simple:
+        retry:
+          max-attempts: 3 # 重试次数
+          enabled: true # 是否开启消费者重试（为false时关闭消费者重试，这时消费端代码异常会一直重复收到消息）
+          initial-interval: 5000 #重试间隔时间（单位毫秒）
+        default-requeue-rejected: false #重试次数超过上面的设置之后是否丢弃（false不丢弃时需要写相应代码将该消息加入死信队列）
+    # rabbitmq的用户名和密码
+    username: admin
+    password:  ENC(s96SQqGVBurvS+tvPIKleVYmDUpwCtGm)
+    publisher-confirms: true
+    publisher-returns: true
+    template:
+      mandatory: true
+server:
+  port: 8081
+  tomcat:
+    uri-encoding: UTF-8
+eureka:
+  instance:
+    lease-expiration-duration-in-seconds: 15
+    lease-renewal-interval-in-seconds: 5
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipaddress}:${server.port}
+  client:
+    registry-fetch-interval-seconds: 5
+    service-url:
+      defaultZone: http://119.23.31.3:8761/eureka,http://120.79.247.111:8761/eureka
+feign:
+  hystrix:
+    enabled: true
+ribbon:
+  eureka:
+    enabled: true
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.xingyunfu.ebank.domain
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %level - %thread - %logger{50}.%M.%line - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %level - %thread - %logger{50}.%M.%line - %msg%n"
+  file:
+    max-history: 30
+    max-size: 500MB
+  level:
+    root: INFO
+    com:
+      xingyunfu:
+        ebank: INFO
+  path: "/logs/ebank"
+jasypt:
+  encryptor:
+    password: EbfYkitulv73I2p0mXI50JMXoaxZTKJ7
+ebank:
+  # 支付中心配置
+  pay-center:
+    # 是否是真实支付，false：将支付值设置为0.01元，true：正常支付
+    pay-right: false
+    # 商户号
+    merchantNo: 20000166064
+    # 支付私钥
+    pay-private-key: MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAMKA2qJK/WDExpwnd76KhHRUIFWE53PWV3Y6WpnRb7Lqh5XQToqgWp4SYjJVSxSl6AEDxpedLRqcqeb1SOhpk8v/2l/NFKxwCd5rjoIvo16cbqn0vK6fS3e4Jh4L7xV09W3CbK4DGSYABejd9a6aNTnE86tSA4BLSKNnGtFGDIeZAgMBAAECgYBYOBNyOusTogynNOuF+9O545JK154XFyfSUwNW8vxjvSZEGBgXnkWbnqD1TWRheCJzm1/O0pZrlJUnUSeBaqmCuDylj+wfCVcN4h3wQDUcZ+GZII+MBRIyVaj3waswtxsZ1jrduP2Nae44gyuQwTsdn0h2zMC600BaV5R5OV0t5QJBAP+lLDJvSG0Ic4jMTJMPRpRCdZgKZpr/779FlBMw/pT6zq031zxiiMfaPYXjCWkuh2MEB2HIyfuL6zczFMnzoocCQQDCxfVgHqbkBsFVmKbp3KoNnZf/BgFAwo7WX6t5/v8uE6P9LkJ07/frdtMp8d4aa4fX1C8IkCZMDua+5X+u92zfAkEA6tmkZpjQ4kl3Sd7VIexQnHcJbKlxZUdlykNzKsZBuj9Git7XvkOPAHo/NrZBuPzjp1TWK0C4PXxmk4k7ueM2FQJATRuDhbb8yP8noNRbF/BE3jkKiGp/Kn0bgSDEyPo7Walq3Xtn0dWCZ5RWCp/3FqyFTdtxd0lh7/BiRyaiAslvLwJBAP5QsqguncySlApFMTDDMJ/jFcea8aVBu1mcVnlJJFdYH4MnvUAW3Ty7yG3K6/EO8XZnGOfIShVdgu+sAdrglqA=
+    # 支付公钥
+    pay-public-key: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC5WJqr2/EO+V4AfH8qfEXnQlCaXxRCZhOYbbTjEWbV6F7DT3COXZ/skiQk1Oa2dgwsQLgOcEfp3y/46rux/djPxfxUelDHthz7VocxQQH66ZRh3kGwxM1l6C0cXOYhBLNIgZ4zut4yItmIm669sqRUNEFIWQF9232azTRn7I4aXwIDAQAB
+    # 统一下单支付申请地址
+    product-url: http://120.24.63.144:18080/gateway/payment
+    # 产品购买支付回调地址
+    product-notify-url: http://120.79.247.111:8080/api/callbackPayment
+    # 提交付款申请
+    transfer-url: http://120.24.63.144:18080/gateway/remittance
+    # 付款结果通知回调地址
+    transfer-notify-url: http://120.79.247.111:8080/api/callbackAccountEntry
+    # 单个订单支付状态查询地址
+    product-query-url: http://120.24.63.144:18080/inquire/order/payment
+    # 快捷支付申请授权码
+    fast-payment-apply: http://120.24.63.144:18080/gateway/sendauthcode
+    # 快捷支付使用授权码确认支付
+    fast-payment-confirm: http://120.24.63.144:18080/gateway/confirm
+    # 合并的代付款订单对账汇总地址
+    transfer-merge-summary-url: http://120.24.63.144:18080/bill/remittance/summary
+    # 付款订单对账明细
+    transfer-merge-detail-url: http://120.24.63.144:18080/bill/remittance/orderlist
+    # 普通用户单次转账上限，单位元
+    common-user-transfer-upper: 50000
+    # 定时转账配置，配置内容时小时数+分钟数，分钟数只能是10的倍数，0-50，时区东八区
+    start-transfer-hour: 10:30, 15:00, 18:00
+    # 是否开放所有用户自动转账，false仅开放普通用户，true开放所有用户
+    auto-transfer-all: true

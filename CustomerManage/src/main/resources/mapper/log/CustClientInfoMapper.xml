@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyunfu.customer.repository.log.CustClientInfoMapper">
+
+    <insert id="add" parameterType="com.xinyunfu.customer.domain.log.CustClientInfoDTO">
+        insert into cust_client_info (id, user_no, client_version, client_system,
+                                    source, server_version, create_time)
+            values (#{id}, #{userNo}, #{clientVersion}, #{clientSystem},
+                    #{source}, #{serverVersion}, #{createTime});
+    </insert>
+</mapper>

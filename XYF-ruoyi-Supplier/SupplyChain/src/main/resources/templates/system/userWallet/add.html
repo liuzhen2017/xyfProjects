@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增用户钱包')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-userWallet-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">用户编号：</label>
+				<div class="col-sm-8">
+					<input id="userNo" name="userNo" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">用户姓名：</label>
+				<div class="col-sm-8">
+					<input id="userName" name="userName" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">s_系统,u_用户,g_供应商：</label>
+				<div class="col-sm-8">
+					<input id="accountNo" name="accountNo" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">T00积分钱包,T01现金钱包,T02优惠券钱包：</label>
+				<div class="col-sm-8">
+					<input id="accountType" name="accountType" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">U00系统用户,U01 APP用户,U02 供应商：</label>
+				<div class="col-sm-8">
+					<input id="userType" name="userType" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">余额：</label>
+				<div class="col-sm-8">
+					<input id="balance" name="balance" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">冻结余额：</label>
+				<div class="col-sm-8">
+					<input id="frozenBalance" name="frozenBalance" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">可用余额：</label>
+				<div class="col-sm-8">
+					<input id="availableBalance" name="availableBalance" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">业务状态：</label>
+				<div class="col-sm-8">
+					<input id="businessStatus" name="businessStatus" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">是否可用（可用=1，禁用=0）：</label>
+				<div class="col-sm-8">
+					<input id="enable" name="enable" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">创建时间：</label>
+				<div class="col-sm-8">
+					<input id="createTime" name="createTime" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">最后修改时间：</label>
+				<div class="col-sm-8">
+					<input id="lastModifyTime" name="lastModifyTime" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "ruoyi/userWallet"
+		$("#form-userWallet-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-userWallet-add').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

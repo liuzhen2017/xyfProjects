@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.UserWalletMapper">
+    
+    <resultMap type="UserWallet" id="UserWalletResult">
+        <result property="id"    column="id"    />
+        <result property="userNo"    column="user_no"    />
+        <result property="userName"    column="user_name"    />
+        <result property="accountNo"    column="account_no"    />
+        <result property="accountType"    column="account_type"    />
+        <result property="userType"    column="user_type"    />
+        <result property="balance"    column="balance"    />
+        <result property="frozenBalance"    column="frozen_balance"    />
+        <result property="availableBalance"    column="available_balance"    />
+        <result property="businessStatus"    column="business_status"    />
+        <result property="enable"    column="enable"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="lastModifyTime"    column="last_modify_time"    />
+    </resultMap>
+	
+	<sql id="selectUserWalletVo">
+        select id, user_no, user_name, account_no, account_type, user_type, balance, frozen_balance, available_balance, business_status, enable, create_time, last_modify_time from user_wallet
+    </sql>
+	
+    <select id="selectUserWalletList" parameterType="UserWallet" resultMap="UserWalletResult">
+        <include refid="selectUserWalletVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="userNo != null  and userNo != '' "> and user_no = #{userNo}</if>
+             <if test="userName != null  and userName != '' "> and user_name = #{userName}</if>
+             <if test="accountNo != null  and accountNo != '' "> and account_no = #{accountNo}</if>
+             <if test="accountType != null  and accountType != '' "> and account_type = #{accountType}</if>
+             <if test="userType != null  and userType != '' "> and user_type = #{userType}</if>
+             <if test="balance != null "> and balance = #{balance}</if>
+             <if test="frozenBalance != null "> and frozen_balance = #{frozenBalance}</if>
+             <if test="availableBalance != null "> and available_balance = #{availableBalance}</if>
+             <if test="businessStatus != null  and businessStatus != '' "> and business_status = #{businessStatus}</if>
+             <if test="enable != null "> and enable = #{enable}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="lastModifyTime != null "> and last_modify_time = #{lastModifyTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectUserWalletById" parameterType="Long" resultMap="UserWalletResult">
+        <include refid="selectUserWalletVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertUserWallet" parameterType="UserWallet" useGeneratedKeys="true" keyProperty="id">
+        insert into user_wallet
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userNo != null  and userNo != ''  ">user_no,</if>
+			<if test="userName != null  and userName != ''  ">user_name,</if>
+			<if test="accountNo != null  and accountNo != ''  ">account_no,</if>
+			<if test="accountType != null  and accountType != ''  ">account_type,</if>
+			<if test="userType != null  and userType != ''  ">user_type,</if>
+			<if test="balance != null  ">balance,</if>
+			<if test="frozenBalance != null  ">frozen_balance,</if>
+			<if test="availableBalance != null  ">available_balance,</if>
+			<if test="businessStatus != null  and businessStatus != ''  ">business_status,</if>
+			<if test="enable != null  ">enable,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="lastModifyTime != null  ">last_modify_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userNo != null  and userNo != ''  ">#{userNo},</if>
+			<if test="userName != null  and userName != ''  ">#{userName},</if>
+			<if test="accountNo != null  and accountNo != ''  ">#{accountNo},</if>
+			<if test="accountType != null  and accountType != ''  ">#{accountType},</if>
+			<if test="userType != null  and userType != ''  ">#{userType},</if>
+			<if test="balance != null  ">#{balance},</if>
+			<if test="frozenBalance != null  ">#{frozenBalance},</if>
+			<if test="availableBalance != null  ">#{availableBalance},</if>
+			<if test="businessStatus != null  and businessStatus != ''  ">#{businessStatus},</if>
+			<if test="enable != null  ">#{enable},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="lastModifyTime != null  ">#{lastModifyTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateUserWallet" parameterType="UserWallet">
+        update user_wallet
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userNo != null  and userNo != ''  ">user_no = #{userNo},</if>
+            <if test="userName != null  and userName != ''  ">user_name = #{userName},</if>
+            <if test="accountNo != null  and accountNo != ''  ">account_no = #{accountNo},</if>
+            <if test="accountType != null  and accountType != ''  ">account_type = #{accountType},</if>
+            <if test="userType != null  and userType != ''  ">user_type = #{userType},</if>
+            <if test="balance != null  ">balance = #{balance},</if>
+            <if test="frozenBalance != null  ">frozen_balance = #{frozenBalance},</if>
+            <if test="availableBalance != null  ">available_balance = #{availableBalance},</if>
+            <if test="businessStatus != null  and businessStatus != ''  ">business_status = #{businessStatus},</if>
+            <if test="enable != null  ">enable = #{enable},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="lastModifyTime != null  ">last_modify_time = #{lastModifyTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteUserWalletById" parameterType="Long">
+        delete from user_wallet where id = #{id}
+    </delete>
+	
+    <delete id="deleteUserWalletByIds" parameterType="String">
+        delete from user_wallet where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

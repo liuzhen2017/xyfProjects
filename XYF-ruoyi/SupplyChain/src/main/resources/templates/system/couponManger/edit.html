@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改优惠券')" />
+</head>
+<link th:href="@{/ajax/libs/summernote/summernote.css}" rel="stylesheet"/>
+<link th:href="@{/ajax/libs/summernote/summernote-bs3.css}" rel="stylesheet"/>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-couponManger-edit" th:object="${couponManger}">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>标题：</label>
+				<div class="col-sm-8">
+					<input id="title" name="title" th:field="*{title}" class="form-control" type="text" required placeholder="请输入标题" >
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>描述：</label>
+				<div class="col-sm-8">
+					<input id="describes" th:field="*{describes}" name="describes" class="form-control" type="text" required placeholder="请输入描述">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>价值：</label>
+				<div class="col-sm-8">
+					<input id="valueAmount" name="valueAmount" th:field="*{valueAmount}" class="form-control" type="number"  required placeholder="请输入价值">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">售价：</label>
+				<div class="col-sm-8">
+					<input id="sellPrice" name="sellPrice" th:field="*{sellPrice}" class="form-control" type="number" required placeholder="请输入售价">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">优惠券类型：</label>
+				<div class="col-sm-8">
+					<select name="couponType" th:field="*{couponType}">
+						<option value="">请选择</option>
+						<option value="0">通用优惠券</option>
+						<option value="1">普通券</option>
+					</select>
+				</div>
+			</div>
+
+			<!--商品分类-->
+			<h4 class="form-header h4">商品分类</h4>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>分类id：</label>
+				<div class="col-sm-8">
+					<div class="input-group">
+						<input name="couponTypeName" th:field="*{couponTypeName}" onclick="selectChannelTree()" id="treeName" type="text" placeholder="请选择分类" class="form-control" required>
+						<input name="productType" onclick="selectChannelTree()" th:field="*{productType}" type="hidden" id="treeId">
+						<span class="input-group-addon"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">有效日期：</label>
+				<div class="col-sm-8">
+					<input id="effectiveTime" name="effectiveTime" th:field="*{effectiveTime}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">失效日期：</label>
+				<div class="col-sm-8">
+					<input id="invalidTime" name="invalidTime" th:field="*{invalidTime}" formnovalidate class="form-control" type="text">
+				</div>
+			</div>
+<!--			<div class="form-group">-->
+<!--				<label class="col-sm-3 control-label">优惠券类型：</label>-->
+<!--				<div class="col-sm-8">-->
+<!--					<input id="couponTypeName" name="couponTypeName"  th:field="*{couponTypeName}" class="form-control" type="text">-->
+<!--				</div>-->
+<!--			</div>-->
+			<div class="form-group">
+				<label class="col-sm-3 control-label">赠送规则</label>
+				<div class="col-sm-8">
+					<select name="couponNode" th:field="*{couponNode}">
+						<option value="">请选择</option>
+						<option value="regist">注册赠送</option>
+						<option value="recommend">推荐好友赠送</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>总数：</label>
+				<div class="col-sm-8">
+					<input id="totalNum" name="totalNum" th:field="*{totalNum}" class="form-control" type="number"  min="0">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">是否可以购买：</label>
+				<div class="col-sm-8">
+					<select name="isCanBuy"   th:field="*{isCanBuy}">
+						<option value="N">不可以</option>
+						<option value="Y">可以</option>
+					</select>
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">图片地址：</label>
+				<div class="col-sm-8">
+					<input id="picUrl" name="picUrl" class="form-control" type="hidden">
+					<input id="file" name="file" class="form-control" type="file"  placeholder="请上传图片">
+
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">使用规则：</label>
+				<div class="col-sm-8">
+					<input id="rules" name="rules" class="form-control"  th:field="*{rules}">
+<!--					<div id="editor" class="summernote"></div>-->
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+	<script type="text/javascript" src="../../../util.js"></script>
+	<script th:src="@{/ajax/libs/summernote/summernote.min.js}"></script>
+	<script th:src="@{/ajax/libs/summernote/summernote-zh-CN.js}"></script>
+    <script type="text/javascript">
+		$('#editor').summernote('code', $("#rules").val());
+		$('.summernote').summernote({
+			height : '220px',
+			lang : 'zh-CN',
+			callbacks: {
+			onImageUpload: function(files, editor, welEditable) {
+						var fileFormat =files[0].name;
+						if (!/.(gif|jpg|jpeg|png|GIF|JPG|png)$/.test(fileFormat)) {
+							$.modal.alertError("圖片必須是.gif,jpeg,jpg,png格式..");
+							return false;
+						}
+						var url =uploadFileByFile(files[0],fileFormat,5);
+						if(!url){
+							return false;
+						}
+						$(this).summernote('editor.insertImage', url);
+
+					}
+
+			},toolbar: [
+				// [groupName, [list of button]]
+				['style', ['style']],
+				['font', ['bold', 'underline', 'clear']],
+				['fontname', ['fontname']],
+				['color', ['color']],
+				['para', ['ul', 'ol', 'paragraph']],
+				['table', ['table']],
+				['insert', ['link', 'picture', 'video']],
+				['view', ['fullscreen', 'codeview', 'help']]
+			] , // popover
+			popover: {
+				image: [
+					['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
+					['float', ['floatLeft', 'floatRight', 'floatNone']],
+					['remove', ['removeMedia']]
+				],
+				link: [
+					['link', ['linkDialogShow', 'unlink']]
+				],
+				air: [
+					['color', ['color']],
+					['font', ['bold', 'underline', 'clear']],
+					['para', ['ul', 'paragraph']],
+					['table', ['table']],
+					['insert', ['link', 'picture']]
+				]
+			},
+		});
+		var content = $("#rules").val();
+		$('#editor').summernote('code', content);
+		layui.use('laydate', function() {
+			var laydate = layui.laydate;
+			var startDate = laydate.render({
+				elem: '#effectiveTime',
+				theme: 'molv',
+				trigger: 'click',
+				type : 'datetime',
+				done: function(value, date) {
+					// 结束时间大于开始时间
+					if (value !== '') {
+						endDate.config.min.year = date.year;
+						endDate.config.min.month = date.month - 1;
+						endDate.config.min.date = date.date;
+					} else {
+						endDate.config.min.year = '';
+						endDate.config.min.month = '';
+						endDate.config.min.date = '';
+					}
+				}
+			});
+			var endDate = laydate.render({
+				elem: '#invalidTime',
+				min: $('#effectiveTime').val(),
+				theme: 'molv',
+				trigger: 'click',
+				type : 'datetime',
+				done: function(value, date) {
+					// 开始时间小于结束时间
+					if (value !== '') {
+						startDate.config.max.year = date.year;
+						startDate.config.max.month = date.month - 1;
+						startDate.config.max.date = date.date;
+					} else {
+						startDate.config.max.year = '';
+						startDate.config.max.month = '';
+						startDate.config.max.date = '';
+					}
+				}
+			});
+		});
+
+		var prefix = ctx + "system/couponManger";
+		$("#form-couponManger-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+
+				//获取富文本
+				var sHTML = $('#editor').summernote('code');
+				$("#rules").val(sHTML);
+				var file =$("#file").val();
+				var url;
+				if(file){
+					//如果有文件,则上传
+					url =uploadFile("file",3);
+					//如果上传文件失败,返回文件
+					if(!url){
+						return false;
+					}
+					$("#picUrl").val(url);
+				}
+				var sHTML = $('.summernote').summernote('code');
+				if(sHTML){
+				  $("#rules").val(encodeURIComponent(sHTML));
+				}
+	            $.operate.save(prefix + "/edit", $('#form-couponManger-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

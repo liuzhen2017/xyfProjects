@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.CustUserMapper">
+    
+    <resultMap type="CustUser" id="CustUserResult">
+        <result property="id"    column="id"    />
+        <result property="phone"    column="phone"    />
+        <result property="password"    column="password"    />
+        <result property="payPassword"    column="pay_password"    />
+        <result property="userCode"    column="user_code"    />
+        <result property="nickName"    column="nick_name"    />
+        <result property="name"    column="name"    />
+        <result property="sex"    column="sex"    />
+        <result property="photoUrl"    column="photo_url"    />
+        <result property="status"    column="status"    />
+        <result property="level"    column="level"    />
+        <result property="referralCode"    column="referral_code"    />
+        <result property="cardNo"    column="card_no"    />
+        <result property="cardType"    column="card_type"    />
+        <result property="authStatus"    column="auth_status"    />
+        <result property="authTime"    column="auth_time"    />
+        <result property="wechat"    column="wechat"    />
+        <result property="openId"    column="open_id"    />
+        <result property="unionId"    column="union_id"    />
+        <result property="dataSource"    column="data_source"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="userNo"    column="user_no"    />
+        <result property="referrerNo"    column="referrer_no"    />
+    </resultMap>
+	
+	<sql id="selectCustUserVo">
+        select id, phone, password, pay_password, user_code, nick_name, name, sex, photo_url, status, level, referral_code, card_no, card_type, auth_status, auth_time, wechat, open_id, union_id, data_source, remarks, created_time, updated_time, user_no, referrer_no from cust_user
+    </sql>
+	
+    <select id="selectCustUserList" parameterType="CustUser" resultMap="CustUserResult">
+        <include refid="selectCustUserVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="phone != null  and phone != '' "> and phone = #{phone}</if>
+             <if test="password != null  and password != '' "> and password = #{password}</if>
+             <if test="payPassword != null  and payPassword != '' "> and pay_password = #{payPassword}</if>
+             <if test="userCode != null  and userCode != '' "> and user_code = #{userCode}</if>
+             <if test="nickName != null  and nickName != '' "> and nick_name = #{nickName}</if>
+             <if test="name != null  and name != '' "> and name = #{name}</if>
+             <if test="sex != null "> and sex = #{sex}</if>
+             <if test="photoUrl != null  and photoUrl != '' "> and photo_url = #{photoUrl}</if>
+             <if test="status != null "> and status = #{status}</if>
+             <if test="level != null "> and level = #{level}</if>
+             <if test="referralCode != null  and referralCode != '' "> and referral_code = #{referralCode}</if>
+             <if test="cardNo != null  and cardNo != '' "> and card_no = #{cardNo}</if>
+             <if test="cardType != null  and cardType != '' "> and card_type = #{cardType}</if>
+             <if test="authStatus != null "> and auth_status = #{authStatus}</if>
+             <if test="authTime != null "> and auth_time = #{authTime}</if>
+             <if test="wechat != null  and wechat != '' "> and wechat = #{wechat}</if>
+             <if test="openId != null  and openId != '' "> and open_id = #{openId}</if>
+             <if test="unionId != null  and unionId != '' "> and union_id = #{unionId}</if>
+             <if test="dataSource != null  and dataSource != '' "> and data_source = #{dataSource}</if>
+             <if test="remarks != null  and remarks != '' "> and remarks = #{remarks}</if>
+             <if test="createdTime != null "> and created_time = #{createdTime}</if>
+             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+             <if test="userNo != null "> and user_no = #{userNo}</if>
+             <if test="referrerNo != null "> and referrer_no = #{referrerNo}</if>
+         </where>
+    </select>
+    
+    <select id="selectCustUserById" parameterType="Integer" resultMap="CustUserResult">
+        <include refid="selectCustUserVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCustUser" parameterType="CustUser" useGeneratedKeys="true" keyProperty="id">
+        insert into cust_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="phone != null  and phone != ''  ">phone,</if>
+			<if test="password != null  and password != ''  ">password,</if>
+			<if test="payPassword != null  and payPassword != ''  ">pay_password,</if>
+			<if test="userCode != null  and userCode != ''  ">user_code,</if>
+			<if test="nickName != null  and nickName != ''  ">nick_name,</if>
+			<if test="name != null  and name != ''  ">name,</if>
+			<if test="sex != null  ">sex,</if>
+			<if test="photoUrl != null  and photoUrl != ''  ">photo_url,</if>
+			<if test="status != null  ">status,</if>
+			<if test="level != null  ">level,</if>
+			<if test="referralCode != null  and referralCode != ''  ">referral_code,</if>
+			<if test="cardNo != null  and cardNo != ''  ">card_no,</if>
+			<if test="cardType != null  and cardType != ''  ">card_type,</if>
+			<if test="authStatus != null  ">auth_status,</if>
+			<if test="authTime != null  ">auth_time,</if>
+			<if test="wechat != null  and wechat != ''  ">wechat,</if>
+			<if test="openId != null  and openId != ''  ">open_id,</if>
+			<if test="unionId != null  and unionId != ''  ">union_id,</if>
+			<if test="dataSource != null  and dataSource != ''  ">data_source,</if>
+			<if test="remarks != null  and remarks != ''  ">remarks,</if>
+			<if test="createdTime != null  ">created_time,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+			<if test="userNo != null  ">user_no,</if>
+			<if test="referrerNo != null  ">referrer_no,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="phone != null  and phone != ''  ">#{phone},</if>
+			<if test="password != null  and password != ''  ">#{password},</if>
+			<if test="payPassword != null  and payPassword != ''  ">#{payPassword},</if>
+			<if test="userCode != null  and userCode != ''  ">#{userCode},</if>
+			<if test="nickName != null  and nickName != ''  ">#{nickName},</if>
+			<if test="name != null  and name != ''  ">#{name},</if>
+			<if test="sex != null  ">#{sex},</if>
+			<if test="photoUrl != null  and photoUrl != ''  ">#{photoUrl},</if>
+			<if test="status != null  ">#{status},</if>
+			<if test="level != null  ">#{level},</if>
+			<if test="referralCode != null  and referralCode != ''  ">#{referralCode},</if>
+			<if test="cardNo != null  and cardNo != ''  ">#{cardNo},</if>
+			<if test="cardType != null  and cardType != ''  ">#{cardType},</if>
+			<if test="authStatus != null  ">#{authStatus},</if>
+			<if test="authTime != null  ">#{authTime},</if>
+			<if test="wechat != null  and wechat != ''  ">#{wechat},</if>
+			<if test="openId != null  and openId != ''  ">#{openId},</if>
+			<if test="unionId != null  and unionId != ''  ">#{unionId},</if>
+			<if test="dataSource != null  and dataSource != ''  ">#{dataSource},</if>
+			<if test="remarks != null  and remarks != ''  ">#{remarks},</if>
+			<if test="createdTime != null  ">#{createdTime},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+			<if test="userNo != null  ">#{userNo},</if>
+			<if test="referrerNo != null  ">#{referrerNo},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateCustUser" parameterType="CustUser">
+        update cust_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="phone != null  and phone != ''  ">phone = #{phone},</if>
+            <if test="password != null  and password != ''  ">password = #{password},</if>
+            <if test="payPassword != null  and payPassword != ''  ">pay_password = #{payPassword},</if>
+            <if test="userCode != null  and userCode != ''  ">user_code = #{userCode},</if>
+            <if test="nickName != null  and nickName != ''  ">nick_name = #{nickName},</if>
+            <if test="name != null  and name != ''  ">name = #{name},</if>
+            <if test="sex != null  ">sex = #{sex},</if>
+            <if test="photoUrl != null  and photoUrl != ''  ">photo_url = #{photoUrl},</if>
+            <if test="status != null  ">status = #{status},</if>
+            <if test="level != null  ">level = #{level},</if>
+            <if test="referralCode != null  and referralCode != ''  ">referral_code = #{referralCode},</if>
+            <if test="cardNo != null  and cardNo != ''  ">card_no = #{cardNo},</if>
+            <if test="cardType != null  and cardType != ''  ">card_type = #{cardType},</if>
+            <if test="authStatus != null  ">auth_status = #{authStatus},</if>
+            <if test="authTime != null  ">auth_time = #{authTime},</if>
+            <if test="wechat != null  and wechat != ''  ">wechat = #{wechat},</if>
+            <if test="openId != null  and openId != ''  ">open_id = #{openId},</if>
+            <if test="unionId != null  and unionId != ''  ">union_id = #{unionId},</if>
+            <if test="dataSource != null  and dataSource != ''  ">data_source = #{dataSource},</if>
+            <if test="remarks != null  and remarks != ''  ">remarks = #{remarks},</if>
+            <if test="createdTime != null  ">created_time = #{createdTime},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="userNo != null  ">user_no = #{userNo},</if>
+            <if test="referrerNo != null  ">referrer_no = #{referrerNo},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteCustUserById" parameterType="Integer">
+        delete from cust_user where id = #{id}
+    </delete>
+	
+    <delete id="deleteCustUserByIds" parameterType="String">
+        delete from cust_user where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>关于星云福</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .logo {
+            display: block;
+            width: 2.69rem;
+            height: 2.69rem;
+            margin: 0.8rem auto 0 auto;
+        }
+        .title {
+            text-align: center;
+            font-size: 0.36rem;
+            font-weight: bold;
+        }
+        .content {
+            width: 6.28rem;
+            padding: 0.46rem 0.27rem;
+            font-size: 0.28rem;
+            margin: 0 auto;
+            border: 1px solid #E8E8E8;
+            color: #333333;
+            margin-top: 0.94rem;
+        }
+        .bottom {
+            position: fixed;
+            bottom: 0.56rem;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 0.2rem;
+            color: #999999;
+        }
+    </style>
+</head>
+<body>
+    <div class="">
+        <img class="logo" src="./image/logo.png" alt="">
+        <div class="title">星云福商城</div>
+
+        <div class="content">
+            星云福致力于成为知识社交电商的引导者，为社会、消费者提供一个拓展知识财富和超值购物体验的平台品质社交电商，一线大牌商品品质，京东、怡亚通等大牌供应商，剔除品牌溢价，精选全球好货，满足用户不同需求，引进人脸识别、人工智能等高科技技术，传播好玩、有趣和正直知识财富的购物体验。
+        </div>
+        <div class="bottom">Copyright @ 2018-2020深圳瑞诺明格科技有限公司</div>
+    </div>
+</body>
+<script>
+(function (doc, win) {
+  var docEl = doc.documentElement,
+    resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+    recalc = function () {
+      var clientWidth = docEl.clientWidth;
+      if (!clientWidth) return;
+      if(clientWidth>=750){
+        docEl.style.fontSize = '100px';
+      }else{
+        docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+      }
+    };
+  if (!doc.addEventListener) return;
+  win.addEventListener(resizeEvt, recalc, false);
+  doc.addEventListener('DOMContentLoaded', recalc, false);
+})(document, window);</script>
+</html>

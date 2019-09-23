@@ -1,0 +1,19 @@
+package com.microservice.exception;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.rnmg.jace.utils.ResponseInfo;
+
+@Controller
+@ControllerAdvice
+@ResponseBody
+public class BusinessExceptionHandler {
+
+	@ExceptionHandler(value=BusinessException.class)
+	public ResponseInfo handler() {
+		return null;
+	}
+}

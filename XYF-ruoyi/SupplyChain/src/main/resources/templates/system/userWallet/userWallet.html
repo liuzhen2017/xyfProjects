@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('用户钱包列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+	<div class="row">
+		<div class="col-sm-12 search-collapse">
+			<form id="formId" autocomplete="off">
+				<div class="select-list">
+					<ul>
+						<li>
+							用户编号：<input type="text" name="userNo"/>
+						</li>
+
+						<li>
+							用户姓名：<input type="text" name="userName"/>
+						</li>
+
+						<li>
+							账户编号：<input type="text" name="accountNo"/>
+							<!--<select name="accountNo">-->
+								<!--<option value="s">系统</option>-->
+								<!--<option value="u">用户</option>-->
+								<!--<option value="g">供应商 </option>-->
+							<!--</select>-->
+						</li>
+
+						<li>
+							<!--T00积分钱包,T01现金钱包,T02优惠券钱包-->钱包类型：<!--<input type="text" name="accountType"/>-->
+							<select name="accountType">
+								<option value="">请选择钱包类型</option>
+								<option value="T00">积分钱包</option>
+								<option value="T01">现金钱包</option>
+								<option value="T02">优惠券钱包 </option>
+							</select>
+						</li>
+
+						<li>
+							<!--U00系统用户,U01 APP用户,U02 供应商-->用户类型：<!--<input type="text" name="userType"/>-->
+							<select name="userType">
+								<option value="">请选择用户类型</option>
+								<option value="U00">系统用户</option>
+								<option value="U01">APP用户</option>
+								<option value="U02">供应商 </option>
+							</select>
+						</li>
+						<li>
+							<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+									class="fa fa-search"></i>&nbsp;搜索</a>
+							<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+									class="fa fa-refresh"></i>&nbsp;重置</a>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+
+		<div class="btn-group-sm" id="toolbar" role="group">
+			<!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="ruoyi:userWallet:add">
+			<i class="fa fa-plus"></i> 充值
+			</a>-->
+			<a class="btn btn-primary single disabled" onclick="checkOpen('钱包充值','/system/userWallet/recharge',800,700)" shiro:hasPermission="ruoyi:userWallet:edit">
+			<i class="fa fa-edit"></i> 充值
+			</a>
+			<!--<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="ruoyi:userWallet:remove">-->
+			<!--<i class="fa fa-remove"></i> 删除-->
+			<!--</a>-->
+			<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="ruoyi:userWallet:export">
+				<i class="fa fa-download"></i> 导出
+			</a>
+		</div>
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table" data-mobile-responsive="true"></table>
+		</div>
+	</div>
+</div>
+<div th:include="include :: footer"></div>
+<script type="text/javascript" src="../../../util.js"></script>
+<script th:inline="javascript">
+	//调用打开页面的方法
+
+    var editFlag = [[${@permission.hasPermi('ruoyi:userWallet:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('ruoyi:userWallet:remove')}]];
+    var prefix = ctx + "system/userWallet";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "用户钱包",
+            showExport: true,
+            columns: [{
+                checkbox: true
+            },
+              /*  {
+                    field: 'id',
+                    title: '序号',
+                    visible: false
+                },*/
+                {
+                    field: 'userNo',
+                    title: '用户编号',
+                    sortable: true
+                },
+                {
+                    field: 'userName',
+                    title: '用户姓名',
+                    sortable: true
+                },
+                {
+                    field: 'accountNo',
+                    title: '账户编号',
+                    sortable: true
+                },/*
+                T00积分钱包,T01现金钱包,T02优惠券钱包*/
+                {
+                    field: 'accountType',
+                    title: '钱包类型',
+                    sortable: true, formatter: function (value, row, index) {
+                        if (row.accountType == "T00") {
+                            return `<span class='badge badge-primary'>积分钱包</span>`;
+                        }
+                        else if (row.accountType == "T01") {
+                            return `<span class='badge badge-warning'>现金钱包</span>`;
+                        }
+                        else if (row.accountType == "T02") {
+                            return `<span class='badge badge-danger'>优惠券钱包</span>`;
+                        }
+                    }
+                },
+                {
+                    field: 'userType',
+                    title: '用户类型',
+                    sortable: true, formatter: function (value, row, index) {
+                        if (row.userType == "U00") {
+                            return `<span class='badge badge-primary'>系统用户</span>`;
+                        }
+                        else if (row.accountType == "U01") {
+                            return `<span class='badge badge-warning'>APP用户</span>`;
+                        }
+                        else if (row.accountType == "U02") {
+                            return `<span class='badge badge-danger'>供应商用户</span>`;
+                        }
+                    }
+                },
+                {
+                    field: 'balance',
+                    title: '余额',
+                    sortable: true
+                },
+                {
+                    field: 'frozenBalance',
+                    title: '冻结余额',
+                    sortable: true
+                },
+                {
+                    field: 'availableBalance',
+                    title: '可用余额',
+                    sortable: true
+                },
+                {
+                    field: 'businessStatus',
+                    title: '业务状态',
+                    sortable: true
+                },
+                {
+                    field: 'enable',
+                    title: '是否可用',
+                    sortable: true, formatter: function  (value, row, index) {
+                         if(value == 1){
+                             return "可用";
+						 }
+                            return "禁用";
+						}
+
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间',
+                    sortable: true, formatter: function  (value, row, index) {
+                        return value.split(".")[0].replace("T"," ");
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>

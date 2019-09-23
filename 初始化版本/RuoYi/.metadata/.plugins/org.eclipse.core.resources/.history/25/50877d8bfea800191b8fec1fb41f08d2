@@ -1,0 +1,13 @@
+package com.example.demo.ioc;
+
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class Demo01Config {
+
+	
+	
+	public BeanA bean() {
+		return new BeanA();
+	}
+}

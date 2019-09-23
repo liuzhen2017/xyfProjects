@@ -1,0 +1,12 @@
+package com.example.demo.ioc;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class Bean {
+
+	private String name;
+	private Integer id;
+	
+	
+}

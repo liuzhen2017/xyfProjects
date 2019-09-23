@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.GoodsSynclogMapper">
+    
+    <resultMap type="GoodsSynclog" id="GoodsSynclogResult">
+        <result property="id"    column="id"    />
+        <result property="description"    column="description"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="runTime"    column="run_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+	
+	<sql id="selectGoodsSynclogVo">
+        select id, description, start_time, end_time, run_time, remark from goods_synclog
+    </sql>
+	
+    <select id="selectGoodsSynclogList" parameterType="GoodsSynclog" resultMap="GoodsSynclogResult">
+        <include refid="selectGoodsSynclogVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="description != null  and description != '' "> and description = #{description}</if>
+             <if test="startTime != null  and startTime != '' "> and start_time = #{startTime}</if>
+             <if test="endTime != null  and endTime != '' "> and end_time = #{endTime}</if>
+             <if test="runTime != null "> and run_time = #{runTime}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+         </where>
+    </select>
+    
+    <select id="selectGoodsSynclogById" parameterType="Integer" resultMap="GoodsSynclogResult">
+        <include refid="selectGoodsSynclogVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertGoodsSynclog" parameterType="GoodsSynclog" useGeneratedKeys="true" keyProperty="id">
+        insert into goods_synclog
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="description != null  and description != ''  ">description,</if>
+			<if test="startTime != null  and startTime != ''  ">start_time,</if>
+			<if test="endTime != null  and endTime != ''  ">end_time,</if>
+			<if test="runTime != null  ">run_time,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="description != null  and description != ''  ">#{description},</if>
+			<if test="startTime != null  and startTime != ''  ">#{startTime},</if>
+			<if test="endTime != null  and endTime != ''  ">#{endTime},</if>
+			<if test="runTime != null  ">#{runTime},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateGoodsSynclog" parameterType="GoodsSynclog">
+        update goods_synclog
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="description != null  and description != ''  ">description = #{description},</if>
+            <if test="startTime != null  and startTime != ''  ">start_time = #{startTime},</if>
+            <if test="endTime != null  and endTime != ''  ">end_time = #{endTime},</if>
+            <if test="runTime != null  ">run_time = #{runTime},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteGoodsSynclogById" parameterType="Integer">
+        delete from goods_synclog where id = #{id}
+    </delete>
+	
+    <delete id="deleteGoodsSynclogByIds" parameterType="String">
+        delete from goods_synclog where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyunfu.customer.repository.feedback.CustFeedbackMapper">
+
+    <select id="findTodayFeedBack" parameterType="java.util.Map" resultType="java.lang.Long">
+        select id from cust_feedback where user_no = #{userNo} and unix_timestamp(create_time) &gt;= #{startTime}
+    </select>
+    <insert id="insert" parameterType="com.xinyunfu.customer.domain.feedback.CustFeedbackDTO">
+        insert into cust_feedback (id, user_no, content, content_type, contact, contact_type,
+                first_image, second_image, third_image, fourth_image, fifth_image, sixth_image, create_time)
+            values (#{id}, #{userNo}, #{content}, #{contentType}, #{contact}, #{contactType},
+                #{firstImage}, #{secondImage}, #{thirdImage}, #{fourthImage}, #{fifthImage}, #{sixthImage}, #{createTime});
+    </insert>
+</mapper>

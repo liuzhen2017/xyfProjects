@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.ProductMapper">
+    
+    <resultMap type="Product" id="ProductResult">
+        <result property="proId"    column="pro_id"    />
+        <result property="proNo"    column="pro_no"    />
+        <result property="proName"    column="pro_name"    />
+        <result property="proTitle"    column="pro_title"    />
+        <result property="freightId"    column="freight_id"    />
+        <result property="storeId"    column="store_id"    />
+        <result property="killStatus"    column="kill_status"    />
+        <result property="status"    column="status"    />
+        <result property="unit"    column="unit"    />
+        <result property="weight"    column="weight"    />
+        <result property="source"    column="source"    />
+        <result property="payType"    column="pay_type"    />
+        <result property="couponType"    column="coupon_type"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+    </resultMap>
+	
+	<sql id="selectProductVo">
+        select pro_id, pro_no, pro_name, pro_title, freight_id, store_id, kill_status, status, unit, weight, source, pay_type, coupon_type, remarks, created_time,created_by,updated_time,updated_by from product
+    </sql>
+	
+    <select id="selectProductList" parameterType="Product" resultMap="ProductResult">
+        <include refid="selectProductVo"/>
+        <where>  
+            <if test="proId != null "> and pro_id = #{proId}</if>
+             <if test="proNo != null  and proNo != '' "> and pro_no = #{proNo}</if>
+             <if test="proName != null  and proName != '' "> and pro_name = #{proName}</if>
+             <if test="proTitle != null  and proTitle != '' "> and pro_title = #{proTitle}</if>
+             <if test="freightId != null "> and freight_id = #{freightId}</if>
+             <if test="storeId != null "> and store_id = #{storeId}</if>
+             <if test="killStatus != null "> and kill_status = #{killStatus}</if>
+             <if test="status != null "> and status = #{status}</if>
+             <if test="unit != null  and unit != '' "> and unit = #{unit}</if>
+             <if test="weight != null "> and weight = #{weight}</if>
+             <if test="source != null "> and source = #{source}</if>
+             <if test="payType != null  and payType != '' "> and pay_type = #{payType}</if>
+             <if test="couponType != null  and couponType != '' "> and coupon_type = #{couponType}</if>
+             <if test="remarks != null  and remarks != '' "> and remarks = #{remarks}</if>
+             <if test="createdTime!= null "> and created_time = #{createdTime}</if>
+             <if test="createdBy != null  and createdBy != '' "> and created_by = #{createdBy}</if>
+             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+             <if test="updatedBy != null  and updatedBy != '' "> and updated_by = #{updatedBy}</if>
+         </where> order by created_time desc
+    </select>
+
+    <select id="selectProductById" parameterType="Long" resultMap="ProductResult">
+        <include refid="selectProductVo"/>
+        where pro_id = #{proId}
+    </select>
+        
+    <insert id="insertProduct" parameterType="Product" useGeneratedKeys="true" keyProperty="proId">
+        insert into product
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="proNo != null  and proNo != ''  ">pro_no,</if>
+			<if test="proName != null  and proName != ''  ">pro_name,</if>
+			<if test="proTitle != null  and proTitle != ''  ">pro_title,</if>
+			<if test="freightId != null  ">freight_id,</if>
+			<if test="storeId != null  ">store_id,</if>
+			<if test="killStatus != null  ">kill_status,</if>
+			<if test="status != null  ">status,</if>
+			<if test="unit != null  and unit != ''  ">unit,</if>
+			<if test="weight != null  ">weight,</if>
+			<if test="source != null  ">source,</if>
+			<if test="payType != null  and payType != ''  ">pay_type,</if>
+			<if test="couponType != null  and couponType != ''  ">coupon_type,</if>
+			<if test="remarks != null  and remarks != ''  ">remarks,</if>
+			<if test="createdTime!= null  ">created_time,</if>
+			<if test="createdBy != null  and createdBy != ''  ">created_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">updated_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="proNo != null  and proNo != ''  ">#{proNo},</if>
+			<if test="proName != null  and proName != ''  ">#{proName},</if>
+			<if test="proTitle != null  and proTitle != ''  ">#{proTitle},</if>
+			<if test="freightId != null  ">#{freightId},</if>
+			<if test="storeId != null  ">#{storeId},</if>
+			<if test="killStatus != null  ">#{killStatus},</if>
+			<if test="status != null  ">#{status},</if>
+			<if test="unit != null  and unit != ''  ">#{unit},</if>
+			<if test="weight != null  ">#{weight},</if>
+			<if test="source != null  ">#{source},</if>
+			<if test="payType != null  and payType != ''  ">#{payType},</if>
+			<if test="couponType != null  and couponType != ''  ">#{couponType},</if>
+			<if test="remarks != null  and remarks != ''  ">#{remarks},</if>
+			<if test="createdTime!= null  ">#{createdTime},</if>
+			<if test="createdBy != null  and createdBy != ''  ">#{createdBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">#{updatedBy},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateProduct" parameterType="Product">
+        update product
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="proNo != null  and proNo != ''  ">pro_no = #{proNo},</if>
+            <if test="proName != null  and proName != ''  ">pro_name = #{proName},</if>
+            <if test="proTitle != null  and proTitle != ''  ">pro_title = #{proTitle},</if>
+            <if test="freightId != null  ">freight_id = #{freightId},</if>
+            <if test="storeId != null  ">store_id = #{storeId},</if>
+            <if test="killStatus != null  ">kill_status = #{killStatus},</if>
+            <if test="status != null  ">status = #{status},</if>
+            <if test="unit != null  and unit != ''  ">unit = #{unit},</if>
+            <if test="weight != null  ">weight = #{weight},</if>
+            <if test="source != null  ">source = #{source},</if>
+            <if test="payType != null  and payType != ''  ">pay_type = #{payType},</if>
+            <if test="couponType != null  and couponType != ''  ">coupon_type = #{couponType},</if>
+            <if test="remarks != null  and remarks != ''  ">remarks = #{remarks},</if>
+            <if test="createdTime!= null  ">created_time = #{createdTime},</if>
+            <if test="createdBy != null  and createdBy != ''  ">created_by = #{createdBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="updatedBy != null  and updatedBy != ''  ">updated_by = #{updatedBy},</if>
+        </trim>
+        where pro_id = #{proId}
+    </update>
+
+	<delete id="deleteProductById" parameterType="Long">
+        delete from product where pro_id = #{proId}
+    </delete>
+	
+    <delete id="deleteProductByIds" parameterType="String">
+        delete from product where pro_id in 
+        <foreach item="proId" collection="array" open="(" separator="," close=")">
+            #{proId}
+        </foreach>
+    </delete>
+    
+</mapper>

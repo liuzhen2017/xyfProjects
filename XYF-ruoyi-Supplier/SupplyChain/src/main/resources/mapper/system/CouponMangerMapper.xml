@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.CouponMangerMapper">
+    
+    <resultMap type="CouponManger" id="CouponMangerResult">
+        <result property="id"    column="id"    />
+        <result property="couponType"    column="coupon_type"    />
+        <result property="couponTypeName"    column="coupon_type_name"    />
+        <result property="couponNode"    column="coupon_node"    />
+        <result property="title"    column="title"    />
+        <result property="describes"    column="describes"    />
+        <result property="picUrl"    column="pic_url"    />
+        <result property="rules"    column="rules"    />
+        <result property="valueAmount"    column="value_amount"    />
+        <result property="effectiveTime"    column="effective_time"    />
+        <result property="invalidTime"    column="invalid_time"    />
+        <result property="totalNum"    column="total_num"    />
+        <result property="canNum"    column="can_num"    />
+        <result property="usedNum"    column="used_num"    />
+        <result property="couponStatus"    column="coupon_status"    />
+        <result property="createdDate"    column="created_date"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedDate"    column="updated_date"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="isCanBuy"    column="is_can_buy"    />
+        <result property="sellPrice"    column="sell_price"    />
+        <result property="productType"    column="product_type"    />
+    </resultMap>
+	
+	<sql id="selectCouponMangerVo">
+        select id, coupon_type, coupon_type_name, coupon_node, title, describes, pic_url, rules, value_amount, effective_time, invalid_time, total_num, can_num, used_num, coupon_status, created_date, created_by, updated_date, updated_by, is_can_buy, sell_price, product_type from coupon_manger
+    </sql>
+	
+    <select id="selectCouponMangerList" parameterType="CouponManger" resultMap="CouponMangerResult">
+        <include refid="selectCouponMangerVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="couponType != null "> and coupon_type = #{couponType}</if>
+             <if test="couponTypeName != null  and couponTypeName != '' "> and coupon_type_name = #{couponTypeName}</if>
+             <if test="couponNode != null  and couponNode != '' "> and coupon_node = #{couponNode}</if>
+             <if test="title != null  and title != '' "> and title = #{title}</if>
+             <if test="describes != null  and describes != '' "> and describes = #{describes}</if>
+             <if test="picUrl != null  and picUrl != '' "> and pic_url = #{picUrl}</if>
+             <if test="rules != null  and rules != '' "> and rules = #{rules}</if>
+             <if test="valueAmount != null "> and value_amount = #{valueAmount}</if>
+             <if test="effectiveTime != null "> and effective_time = #{effectiveTime}</if>
+             <if test="invalidTime != null "> and invalid_time = #{invalidTime}</if>
+             <if test="totalNum != null "> and total_num = #{totalNum}</if>
+             <if test="canNum != null "> and can_num = #{canNum}</if>
+             <if test="usedNum != null "> and used_num = #{usedNum}</if>
+             <if test="couponStatus != null  and couponStatus != '' "> and coupon_status = #{couponStatus}</if>
+             <if test="createdDate != null "> and created_date = #{createdDate}</if>
+             <if test="createdBy != null  and createdBy != '' "> and created_by = #{createdBy}</if>
+             <if test="updatedDate != null "> and updated_date = #{updatedDate}</if>
+             <if test="updatedBy != null  and updatedBy != '' "> and updated_by = #{updatedBy}</if>
+             <if test="isCanBuy != null  and isCanBuy != '' "> and is_can_buy = #{isCanBuy}</if>
+             <if test="sellPrice != null "> and sell_price = #{sellPrice}</if>
+             <if test="productType != null  and productType != '' "> and product_type = #{productType}</if>
+         </where>
+    </select>
+    
+    <select id="selectCouponMangerById" parameterType="Long" resultMap="CouponMangerResult">
+        <include refid="selectCouponMangerVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCouponManger" parameterType="CouponManger">
+        insert into coupon_manger
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="couponType != null  ">coupon_type,</if>
+			<if test="couponTypeName != null  and couponTypeName != ''  ">coupon_type_name,</if>
+			<if test="couponNode != null  and couponNode != ''  ">coupon_node,</if>
+			<if test="title != null  and title != ''  ">title,</if>
+			<if test="describes != null  and describes != ''  ">describes,</if>
+			<if test="picUrl != null  and picUrl != ''  ">pic_url,</if>
+			<if test="rules != null  and rules != ''  ">rules,</if>
+			<if test="valueAmount != null  ">value_amount,</if>
+			<if test="effectiveTime != null  ">effective_time,</if>
+			<if test="invalidTime != null  ">invalid_time,</if>
+			<if test="totalNum != null  ">total_num,</if>
+			<if test="canNum != null  ">can_num,</if>
+			<if test="usedNum != null  ">used_num,</if>
+			<if test="couponStatus != null  and couponStatus != ''  ">coupon_status,</if>
+			<if test="createdDate != null  ">created_date,</if>
+			<if test="createdBy != null  and createdBy != ''  ">created_by,</if>
+			<if test="updatedDate != null  ">updated_date,</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">updated_by,</if>
+			<if test="isCanBuy != null  and isCanBuy != ''  ">is_can_buy,</if>
+			<if test="sellPrice != null  ">sell_price,</if>
+			<if test="productType != null  and productType != ''  ">product_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="couponType != null  ">#{couponType},</if>
+			<if test="couponTypeName != null  and couponTypeName != ''  ">#{couponTypeName},</if>
+			<if test="couponNode != null  and couponNode != ''  ">#{couponNode},</if>
+			<if test="title != null  and title != ''  ">#{title},</if>
+			<if test="describes != null  and describes != ''  ">#{describes},</if>
+			<if test="picUrl != null  and picUrl != ''  ">#{picUrl},</if>
+			<if test="rules != null  and rules != ''  ">#{rules},</if>
+			<if test="valueAmount != null  ">#{valueAmount},</if>
+			<if test="effectiveTime != null  ">#{effectiveTime},</if>
+			<if test="invalidTime != null  ">#{invalidTime},</if>
+			<if test="totalNum != null  ">#{totalNum},</if>
+			<if test="canNum != null  ">#{canNum},</if>
+			<if test="usedNum != null  ">#{usedNum},</if>
+			<if test="couponStatus != null  and couponStatus != ''  ">#{couponStatus},</if>
+			<if test="createdDate != null  ">#{createdDate},</if>
+			<if test="createdBy != null  and createdBy != ''  ">#{createdBy},</if>
+			<if test="updatedDate != null  ">#{updatedDate},</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">#{updatedBy},</if>
+			<if test="isCanBuy != null  and isCanBuy != ''  ">#{isCanBuy},</if>
+			<if test="sellPrice != null  ">#{sellPrice},</if>
+			<if test="productType != null  and productType != ''  ">#{productType},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateCouponManger" parameterType="CouponManger">
+        update coupon_manger
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="couponType != null  ">coupon_type = #{couponType},</if>
+            <if test="couponTypeName != null  and couponTypeName != ''  ">coupon_type_name = #{couponTypeName},</if>
+            <if test="couponNode != null  and couponNode != ''  ">coupon_node = #{couponNode},</if>
+            <if test="title != null  and title != ''  ">title = #{title},</if>
+            <if test="describes != null  and describes != ''  ">describes = #{describes},</if>
+            <if test="picUrl != null  and picUrl != ''  ">pic_url = #{picUrl},</if>
+            <if test="rules != null  and rules != ''  ">rules = #{rules},</if>
+            <if test="valueAmount != null  ">value_amount = #{valueAmount},</if>
+            <if test="effectiveTime != null  ">effective_time = #{effectiveTime},</if>
+            <if test="invalidTime != null  ">invalid_time = #{invalidTime},</if>
+            <if test="totalNum != null  ">total_num = #{totalNum},</if>
+            <if test="canNum != null  ">can_num = #{canNum},</if>
+            <if test="usedNum != null  ">used_num = #{usedNum},</if>
+            <if test="couponStatus != null  and couponStatus != ''  ">coupon_status = #{couponStatus},</if>
+            <if test="createdDate != null  ">created_date = #{createdDate},</if>
+            <if test="createdBy != null  and createdBy != ''  ">created_by = #{createdBy},</if>
+            <if test="updatedDate != null  ">updated_date = #{updatedDate},</if>
+            <if test="updatedBy != null  and updatedBy != ''  ">updated_by = #{updatedBy},</if>
+            <if test="isCanBuy != null  and isCanBuy != ''  ">is_can_buy = #{isCanBuy},</if>
+            <if test="sellPrice != null  ">sell_price = #{sellPrice},</if>
+            <if test="productType != null  and productType != ''  ">product_type = #{productType},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteCouponMangerById" parameterType="Long">
+        delete from coupon_manger where id = #{id}
+    </delete>
+	
+    <delete id="deleteCouponMangerByIds" parameterType="String">
+        delete from coupon_manger where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,25 @@
+package com.example.aop;
+
+import lombok.Data;
+
+@Data
+public class RequestBean {
+
+	
+	
+	private String threadId;
+	
+	
+	private String url ;
+	
+	
+	private String requestString;
+	
+	
+	private Object[] obj;
+	
+	
+	public String getRequestString() {
+		return null;
+	}
+}

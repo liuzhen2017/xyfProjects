@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改供应链账户')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-supplyChainAcc-edit" th:object="${supplyChainAcc}">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">：</label>
+				<div class="col-sm-8">
+					<input id="custId" name="custId" th:field="*{custId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">账号：</label>
+				<div class="col-sm-8">
+					<input id="accNo" name="accNo" th:field="*{accNo}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">账号名：</label>
+				<div class="col-sm-8">
+					<input id="accName" name="accName" th:field="*{accName}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">银行名称：</label>
+				<div class="col-sm-8">
+					<input id="bankName" name="bankName" th:field="*{bankName}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">银行编号：</label>
+				<div class="col-sm-8">
+					<input id="bankNo" name="bankNo" th:field="*{bankNo}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">余额：</label>
+				<div class="col-sm-8">
+					<input id="balance" name="balance" th:field="*{balance}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">账户类型：</label>
+				<div class="col-sm-8">
+					<input id="accType" name="accType" th:field="*{accType}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">业务状态：</label>
+				<div class="col-sm-8">
+					<input id="busiStatus" name="busiStatus" th:field="*{busiStatus}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">创建时间：</label>
+				<div class="col-sm-8">
+					<input id="createdTime" name="createdTime" th:field="*{createdTime}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">创建人：</label>
+				<div class="col-sm-8">
+					<input id="createdBy" name="createdBy" th:field="*{createdBy}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">最后修改时间：</label>
+				<div class="col-sm-8">
+					<input id="updatedTime" name="updatedTime" th:field="*{updatedTime}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">最后修改人：</label>
+				<div class="col-sm-8">
+					<input id="updatedBy" name="updatedBy" th:field="*{updatedBy}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">是否可用（可用=1，禁用=0）：</label>
+				<div class="col-sm-8">
+					<input id="enable" name="enable" th:field="*{enable}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">身份证号码：</label>
+				<div class="col-sm-8">
+					<input id="idCardNo" name="idCardNo" th:field="*{idCardNo}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">分行名称：</label>
+				<div class="col-sm-8">
+					<input id="branchName" name="branchName" th:field="*{branchName}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">分行行号：</label>
+				<div class="col-sm-8">
+					<input id="branchNo" name="branchNo" th:field="*{branchNo}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">省份：</label>
+				<div class="col-sm-8">
+					<input id="provinceName" name="provinceName" th:field="*{provinceName}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">城市：</label>
+				<div class="col-sm-8">
+					<input id="cityName" name="cityName" th:field="*{cityName}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">用户姓名：</label>
+				<div class="col-sm-8">
+					<input id="userName" name="userName" th:field="*{userName}" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/supplyChainAcc";
+		$("#form-supplyChainAcc-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-supplyChainAcc-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

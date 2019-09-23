@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--360浏览器优先以webkit内核解析-->
+    <title>星云福首页</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/animate.min.css" th:href="@{/css/main/animate.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/style.min862f.css" th:href="@{/css/main/style.min862f.css}" rel="stylesheet"/>
+</head>
+
+<body class="gray-bg">
+    <div class="row  border-bottom white-bg dashboard-header">
+        <nav class="page-tabs menuTabs">
+            <!--			<div class="page-tabs-content">-->
+            <!--				<a href="javascript:;" class="active menuTab" data-id="/system/main">首页</a>-->
+            <!--			</div>-->
+            <div class="select-list">
+                <li style="margin-left:20px;">
+                    <select onclick="changeTableType()" name="tableType" style="width: auto;">
+                        <option value="0">用户注册量</option>
+                        <option value="1">订单购买量</option>
+                        <option value="2">粉丝推荐</option>
+                        <option value="3">入账出账金额</option>
+                    </select>
+                </li>
+            </div>
+            <div class="select-list">
+
+            </div>
+        </nav>
+            <span class="fa arrow"></span></a>
+            <ul class="nav nav-third-level">
+
+                <div  id="user-regist-line" style="margin:0px,100px; width:1400px;height:300px"></div>
+
+                <div id="order-buy-line" style="display:none;margin:0px,100px; width:1400px;height:300px"></div>
+
+                <div  id="transfer-line" style="display:none;margin:0px,100px; width:1400px;height:300px"></div>
+
+                <div id="fansrefer-bar" style="display:none;margin:0px,100px; width:1400px;height:600px"></div>
+
+
+                <div class="container-div">
+                    <div class="row">
+                        <div class="col-sm-12 select-table table-striped">
+                            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+                        </div>
+                    </div>
+                </div>
+                <div th:include="include :: footer"></div>
+            </ul>
+
+        </div>
+    </div>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+    <script th:src="@{/js/report-echart.js}"></script>
+    <script th:src="@{/ajax/libs/report/echarts/echarts-all.js}"></script>
+    <script th:src="@{/ajax/libs/bootstrap-table/bootstrap-table.min.js}"></script>
+    <script th:src="@{/ruoyi/js/ry-ui.js?v=3.4.0}"></script>
+    <script type="text/javascript">
+	    $('#pay-qrcode').click(function(){
+	        var html=$(this).html();
+	        parent.layer.open({
+	            title: false,
+	            type: 1,
+	            closeBtn:false,
+	            shadeClose:true,
+	            area: ['600px', 'auto'],
+	            content: html
+	        });
+	    });
+        var prefix = ctx + "proxyService";
+        $(function() {
+            layui.use('laydate', function() {
+                var laydate = layui.laydate;
+                //执行一个laydate实例
+                laydate.render({
+                    elem: '#createTime' ,//指定元素
+                    range:'~',
+                    value: '2019-08-31 ~ 2019-09-06'
+                });
+            });
+            var userRegistoptions = {
+                url: prefix + "/queryUserRegistPage",
+                modalName: "用户注册量列表",
+                showExport: true,
+                columns: [{
+                    field : 'createTime',
+                    title : '日期'
+                    // visible: false
+                },
+                    {
+                        field : 'registNum',
+                        title : '用户注册量',
+                        sortable: true
+                    },
+                ]
+            };
+            $.table.init(userRegistoptions);
+        });
+    </script>
+</body>
+</html>

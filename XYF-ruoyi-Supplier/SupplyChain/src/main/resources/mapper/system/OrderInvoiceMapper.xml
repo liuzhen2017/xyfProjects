@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.OrderInvoiceMapper">
+    
+    <resultMap type="OrderInvoice" id="OrderInvoiceResult">
+        <result property="id"    column="id"    />
+        <result property="type"    column="type"    />
+        <result property="payable"    column="payable"    />
+        <result property="email"    column="email"    />
+        <result property="unitName"    column="unit_name"    />
+        <result property="taxpayerNumber"    column="taxpayer_number"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="enable"    column="enable"    />
+    </resultMap>
+	
+	<sql id="selectOrderInvoiceVo">
+        select id, type, payable, email, unit_name, taxpayer_number, created_by, created_time, updated_by, updated_time, enable from order_invoice
+    </sql>
+	
+    <select id="selectOrderInvoiceList" parameterType="OrderInvoice" resultMap="OrderInvoiceResult">
+        <include refid="selectOrderInvoiceVo"/>
+        <where>  
+            <if test="id != null  and id != '' "> and id = #{id}</if>
+             <if test="type != null "> and type = #{type}</if>
+             <if test="payable != null "> and payable = #{payable}</if>
+             <if test="email != null  and email != '' "> and email = #{email}</if>
+             <if test="unitName != null  and unitName != '' "> and unit_name = #{unitName}</if>
+             <if test="taxpayerNumber != null  and taxpayerNumber != '' "> and taxpayer_number = #{taxpayerNumber}</if>
+             <if test="createdBy != null  and createdBy != '' "> and created_by = #{createdBy}</if>
+             <if test="createdTime != null "> and created_time = #{createdTime}</if>
+             <if test="updatedBy != null  and updatedBy != '' "> and updated_by = #{updatedBy}</if>
+             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+             <if test="enable != null "> and enable = #{enable}</if>
+         </where>
+    </select>
+    
+    <select id="selectOrderInvoiceById" parameterType="String" resultMap="OrderInvoiceResult">
+        <include refid="selectOrderInvoiceVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertOrderInvoice" parameterType="OrderInvoice">
+        insert into order_invoice
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  and id != ''  ">id,</if>
+			<if test="type != null  ">type,</if>
+			<if test="payable != null  ">payable,</if>
+			<if test="email != null  and email != ''  ">email,</if>
+			<if test="unitName != null  and unitName != ''  ">unit_name,</if>
+			<if test="taxpayerNumber != null  and taxpayerNumber != ''  ">taxpayer_number,</if>
+			<if test="createdBy != null  and createdBy != ''  ">created_by,</if>
+			<if test="createdTime != null  ">created_time,</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">updated_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+			<if test="enable != null  ">enable,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  and id != ''  ">#{id},</if>
+			<if test="type != null  ">#{type},</if>
+			<if test="payable != null  ">#{payable},</if>
+			<if test="email != null  and email != ''  ">#{email},</if>
+			<if test="unitName != null  and unitName != ''  ">#{unitName},</if>
+			<if test="taxpayerNumber != null  and taxpayerNumber != ''  ">#{taxpayerNumber},</if>
+			<if test="createdBy != null  and createdBy != ''  ">#{createdBy},</if>
+			<if test="createdTime != null  ">#{createdTime},</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">#{updatedBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+			<if test="enable != null  ">#{enable},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateOrderInvoice" parameterType="OrderInvoice">
+        update order_invoice
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null  ">type = #{type},</if>
+            <if test="payable != null  ">payable = #{payable},</if>
+            <if test="email != null  and email != ''  ">email = #{email},</if>
+            <if test="unitName != null  and unitName != ''  ">unit_name = #{unitName},</if>
+            <if test="taxpayerNumber != null  and taxpayerNumber != ''  ">taxpayer_number = #{taxpayerNumber},</if>
+            <if test="createdBy != null  and createdBy != ''  ">created_by = #{createdBy},</if>
+            <if test="createdTime != null  ">created_time = #{createdTime},</if>
+            <if test="updatedBy != null  and updatedBy != ''  ">updated_by = #{updatedBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="enable != null  ">enable = #{enable},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteOrderInvoiceById" parameterType="String">
+        delete from order_invoice where id = #{id}
+    </delete>
+	
+    <delete id="deleteOrderInvoiceByIds" parameterType="String">
+        delete from order_invoice where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:include="include :: header('新增商品分类关系')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+	<form class="form-horizontal m" id="form-proChannelRelation-add">
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>商品id：</label>
+			<div class="col-sm-8">
+				<a href="javascript:;" onclick="showPro()">点击选择商品 </a>
+				<input name="proNames" id="proNames" class="form-control">
+				<input id="proIds" name="proIds" type="hidden" class="form-control">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>分类id：</label>
+			<div class="col-sm-8">
+				<div class="input-group">
+					<input name="channelName" onclick="selectChannelTree()" id="treeName" type="text" placeholder="请选择分类" class="form-control" required>
+					<input name="channelId" onclick="selectChannelTree()" type="hidden" id="treeId">
+					<span class="input-group-addon"><i class="fa fa-search"></i></span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">备注：</label>
+			<div class="col-sm-8">
+				<input id="remarks" name="remarks" class="form-control" type="text">
+			</div>
+		</div>
+
+	</form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript" src="../../../util.js"></script>
+<script type="text/javascript">
+    var prefix = ctx + "system/proChannelRelation"
+    $("#form-proChannelRelation-add").validate({
+        rules: {
+            xxxx: {
+                required: true,
+            },
+        },
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-proChannelRelation-add').serialize());
+        }
+    }
+
+    function showPro(title, url, width, hight) {
+		if (!hight) {
+			width = 700;
+		}
+		if (!hight) {
+			hight = 600;
+		}
+        $.modal.open("选择商品", "/system/product/selectProductAll", width, hight);
+    }
+
+    /*用户管理-新增-选择部门树*/
+    function selectChannelTree() {
+        var treeId = $("#treeId").val();
+        var channelId = $.common.isEmpty(treeId) ? "0" : $("#treeId").val();
+        var url = ctx + "system/proChannel/selectChannelTree/" + channelId;
+        var options = {
+            title: '选择分类',
+            width: "380",
+            url: url,
+            callBack: doSubmit
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSubmit(index, layero) {
+        var tree = layero.find("iframe")[0].contentWindow.$._tree;
+        if ($.tree.allCheck(tree)) {
+            var body = layer.getChildFrame('body', index);
+            $("#treeId").val(body.find('#treeId').val());
+            $("#treeName").val(body.find('#treeName').val());
+            layer.close(index);
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingyunfu.ebank.mapper.product.EbankProductRecordMapper">
+    <select id="findByEbankOrderNo" parameterType="java.lang.String" resultType="com.xingyunfu.ebank.domain.product.EbankProductRecordDTO">
+        select * from ebank_product_record where ebank_order_no = #{ebankOrderNo}
+    </select>
+    <select id="findByOrderNo" parameterType="java.lang.String" resultType="com.xingyunfu.ebank.domain.product.EbankProductRecordDTO">
+        select * from ebank_product_record where order_no = #{orderNo}
+    </select>
+    <insert id="insert" parameterType="com.xingyunfu.ebank.domain.product.EbankProductRecordDTO">
+        insert into ebank_product_record (id, ebank_order_no, order_no, sys_order_no, account_no, product_type, amount,
+                pay_type, trade_type, return_url, server_name, status, order_type, client_ip, subject,
+                create_time, last_modify_time)
+            values (#{id}, #{ebankOrderNo}, #{orderNo}, #{sysOrderNo}, #{accountNo}, #{productType}, #{amount},
+                #{payType}, #{tradeType}, #{returnUrl}, #{serverName}, #{status}, #{orderType}, #{clientIp}, #{subject},
+                #{createTime}, #{lastModifyTime});
+    </insert>
+    <update id="update" parameterType="com.xingyunfu.ebank.domain.product.EbankProductRecordDTO">
+        update ebank_product_record
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id != null">id = #{id},</if>
+            <if test="ebankOrderNo != null">ebank_order_no = #{ebankOrderNo},</if>
+            <if test="orderNo != null">order_no = #{orderNo},</if>
+            <if test="sysOrderNo != null">sys_order_no = #{sysOrderNo},</if>
+            <if test="accountNo != null">account_no = #{accountNo},</if>
+            <if test="productType != null">product_type = #{productType},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="payType != null">pay_type = #{payType},</if>
+            <if test="tradeType != null">trade_type = #{tradeType},</if>
+            <if test="returnUrl != null">return_url = #{returnUrl},</if>
+            <if test="serverName != null">server_name = #{serverName},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="orderType != null">order_type = #{orderType},</if>
+            <if test="clientIp != null">client_ip = #{clientIp},</if>
+            <if test="subject != null">subject = #{subject},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="lastModifyTime != null">last_modify_time = #{lastModifyTime},</if>
+        </trim>
+        where ebank_order_no = #{ebankOrderNo}
+    </update>
+</mapper>

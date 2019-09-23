@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh" xmlns:th="http://www.thymeleaf.org">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../../../layui/css/layui.css"  media="all">
+</head>
+<body>
+<div class="layui-container">
+	<div class="layui-row">
+		<div class="layui-col-xs12">
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+				<legend>商品列表</legend>
+			</fieldset>
+			<div class="layui-form">
+				<table class="layui-table">
+					<colgroup>
+						<col>
+						<col width="300">
+					</colgroup>
+					<thead>
+					<tr>
+						<th>商品ID</th>
+						<th>商品名称</th>
+						<th>商品图片</th>
+						<th>规格参数</th>
+						<th>购买数量</th>
+						<th>商品运费</th>
+						<th>优惠金额</th>
+						<th>出售单价</th>
+						<!--<th>SKUID</th>-->
+					</tr>
+					</thead>
+					<tbody >
+					<tr th:each="com : ${data.list}">
+						<td th:text="${com.goodsId}"></td>
+						<td th:text="${com.goodsName}"></td>
+						<td><img th:src="${com.img}"></td>
+						<td th:text="${com.skuRemarks}"></td>
+						<td th:text="${com.buyCount}"></td>
+						<td th:text="${com.freight}"></td>
+						<td th:text="${com.discount}"></td>
+						<td th:text="${com.price}"></td>
+						<!--<td th:text="${com.skuId}"></td>-->
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="layui-row">
+		<div class="layui-col-xs6">
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+				<legend>地址信息</legend>
+			</fieldset>
+			<form class="layui-form layui-form-pane" >
+				<div class="layui-form-item">
+					<label class="layui-form-label">收货人名称</label>
+					<div class="layui-input-block">
+						<input type="text" disabled th:value="${data.consignee.consigneeName}" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">电话号码</label>
+					<div class="layui-input-block">
+						<input type="text" disabled th:value="${data.consignee.phone}" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">邮政编码</label>
+					<div class="layui-input-block">
+						<input type="text" disabled th:value="${data.consignee.postCode}" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item layui-form-text">
+					<label class="layui-form-label">地址信息</label>
+					<div class="layui-input-block">
+						<textarea disabled class="layui-textarea" th:text="${data.consignee.province + data.consignee.city + data.consignee.region + data.consignee.address}"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">地址备注</label>
+					<div class="layui-input-block">
+						<input type="text" disabled th:value="${data.consignee.remarks}" class="layui-input">
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="layui-col-xs5 layui-col-xs-offset1">
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+				<legend>订单信息</legend>
+			</fieldset>
+			<form class="layui-form layui-form-pane" >
+				<div class="layui-form-item">
+					<label class="layui-form-label">商家ID</label>
+					<div class="layui-input-block">
+						<input type="text" disabled th:value="${data.item.storeId}" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">商家名称</label>
+					<div class="layui-input-block">
+						<input type="text" disabled th:value="${data.item.storeName}" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">下单时间</label>
+					<div class="layui-input-block">
+						<input type="text" disabled th:value="${data.item.createTime}" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">订单备注</label>
+					<div class="layui-input-block">
+						<input type="text" disabled th:value="${data.item.remarks}" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">快递公司</label>
+					<div class="layui-input-block">
+						<input type="text" disabled th:value="${data.item.shippingCompName}" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">快递单号</label>
+					<div class="layui-input-block">
+						<input type="text" disabled th:value="${data.item.shippingSn}" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">发货时间</label>
+					<div class="layui-input-block">
+						<input type="text" disabled th:value="${data.item.deliveryTime}" class="layui-input">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+</body>
+<!--<script type="text/javascript" src="../../../util.js"></script>-->
+</html>

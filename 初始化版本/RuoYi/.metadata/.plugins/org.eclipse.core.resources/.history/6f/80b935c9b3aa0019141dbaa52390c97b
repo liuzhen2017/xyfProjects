@@ -1,0 +1,16 @@
+package com.example.utils;
+
+import lombok.Data;
+
+@Data
+public class TestBean {
+
+	
+	
+	public int id;
+	
+	
+	public int name;
+	
+	
+}

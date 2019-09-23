@@ -1,0 +1,636 @@
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改商品')" />
+</head>
+<link th:href="@{/ajax/libs/summernote/summernote.css}" rel="stylesheet"/>
+<link th:href="@{/ajax/libs/summernote/summernote-bs3.css}" rel="stylesheet"/>
+<link th:href="@{/layui/css/layui.css}" rel="stylesheet"/>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+	<form class="form-horizontal m" id="form-product-edit" th:object="${allProDto}">
+		<input id="proId" name="proId" th:value="*{product.proId}"  type="hidden">
+		<!--商品信息-->
+		<h4 class="form-header h4">基本信息</h4>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>商品名称：</label>
+			<div class="col-sm-8">
+				<input name="proName" placeholder="请输入商品名称" class="form-control" type="text" maxlength="250"
+					   required th:value="*{product.proName}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>商品标题：</label>
+			<div class="col-sm-8">
+				<input id="proTitle" name="proTitle"  class="form-control" type="text" maxlength="150"
+					   required th:value="*{product.proTitle}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>商品排序号：</label>
+			<div class="col-sm-8">
+				<input id="sortNumber" name="sortNumber"  class="form-control" type="text" maxlength="150"
+					   required th:value="*{product.sortNumber}">
+			</div>
+		</div>
+		<!--商品分类-->
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>活动类型：</label>
+			<div class="col-sm-8">
+				<input type="hidden" th:value="*{product.proType}" id="proTypeValue">
+				<select name="proType" onclick="typeChange()" id="proType"  >
+					<option th:value="0" id="proType0">普通商品</option>
+					<option th:value="1" id="proType1">秒杀商品</option>
+					<option th:value="2" id="proType2">套餐商品</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>商品单位：</label>
+			<div class="col-sm-8">
+				<input id="unit" name="unit" class="form-control" type="text" required th:value="*{product.unit}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>重量(千克)：</label>
+			<div class="col-sm-8">
+				<input id="weight" name="weight" class="form-control" type="number" required th:value="*{product.weight}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>支付方式：</label>
+			<div class="col-sm-8">
+				支付宝<input type="checkbox" name="payType" id="payType16" value="16" >&nbsp;&nbsp;&nbsp;
+				微信<input type="checkbox" name="payType"  id="payType32" value="32">
+				他人代付<input type="checkbox" name="payType" id="payType256"  value="256">
+				钱包支付<input type="checkbox" name="payType"  id="payType512" value="512">
+				支付宝他人代付<input type="checkbox" name="payType" id="payType550" value="550">
+			</div>
+		</div>
+		<input th:if="*{product.proType==2}"  id="packageId" name="packageId" th:value="*{proPackage.packageId}"  type="hidden">
+		<div id="tcDiv" hidden="hidden">
+			<div class="form-group" >
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>套餐价钱：</label>
+				<div class="col-sm-8" id="package1">
+					<input th:if="*{product.proType==2}"  id="tcPrice" name="tcPrice" class="form-control" type="number" th:value="*{proPackage.packagePrice}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>套餐名称：</label>
+				<div class="col-sm-8"  id="package2">
+					<input th:if="*{product.proType==2}"  id="tcName" name="tcName" class="form-control" type="text" required th:value="*{proPackage.packageName}">
+				</div>
+			</div>
+		</div>
+		<!--商品信息end-->
+
+		<!--商品分类-->
+		<h4 class="form-header h4">商品分类</h4>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>活动分类id：</label>
+			<div class="col-sm-8">
+				<div class="input-group">
+					<input name="channelName" onclick="selectChannelTree()" id="treeName" type="text" placeholder="请选择分类" class="form-control" required th:value="*{proChannelRelation.channelName}">
+					<input name="channelId" onclick="selectChannelTree()" type="hidden" id="treeId" th:value="*{proChannelRelation.channelId}">
+					<input id="proChannelRelationId" name="proChannelRelationId" th:value="*{proChannelRelation.id}"  type="hidden">
+					<span class="input-group-addon"><i class="fa fa-search"></i></span>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>商品详情：</label>
+			<div class="col-sm-8">
+				<input id="details" name="details" placeholder="请输入商品详情" class="form-control"
+					   type="hidden"   th:value="*{proDetails.details}">
+				<input id="detailsId" name="detailsId" th:value="*{proDetails.id}"  type="hidden">
+				<div class="summernote" id="detailsText"></div>
+			</div>
+		</div>
+		<!--商品详情end-->
+		<!--商品图片begin-->
+		<h4 class="form-header h4">添加图片信息</h4>
+		<a href="javascript:;" th:onclick="addPicRow()">添加图片列</a>
+		<a href="javascript:;"  th:onclick="delPicRow()">删除图片列</a>
+		<div id="picDiv">
+			<input  name="imgUrl" id="imgUrl"  class="form-control" type="hidden" >
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>图片上传：</label>
+				<div class="col-sm-8">
+					<div style="display: flex;align-items: center;">
+						<div style="width: 150px;">
+							<input id="imgIds0" name="imgIds"  type="hidden">
+							<input  name="file" id="proFile0" class="form-control" style="padding: 0px;height: 60px;" type="file"  placeholder="请上传图片">
+						</div>
+						<div>
+							<img id="productImg0" src="#" hidden  style="height: 60px;width: auto;">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--商品图片-->
+		<!--商品属性begin-->
+		<h4 class="form-header h4">商品属性</h4>
+		<a href="javascript:;" th:onclick="addrow()">添加属性</a>
+		<a href="javascript:;"  th:onclick="delRow()">删除属性</a>
+		<div id="propertyDiv">
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>属性名称：</label>
+				<div class="col-sm-8">
+					<input  name="valueIds"  class="form-control" type="hidden" id="valueId0">
+					<input  name="propertyName" id="propertyName0" placeholder="请输入属性名称"class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>属性值：</label>
+				<div class="col-sm-8">
+					<input  name="propertyIds"  class="form-control" type="hidden" id="propertyId0">
+					<input  name="propertyValue" id="propertyValue0" placeholder="请输入属性值,多个值请用;;号代替" class="form-control" type="text">
+				</div>
+			</div>
+		</div>
+		<!--商品属性end-->
+		<!--商品SKU begin-->
+		<a href="javascript:;"  th:onclick="loadSkU()">点击加载sku属性</a>
+		<h4 class="form-header h4">商品SKU</h4>
+		<div id="bootstrap-table" class="form-group">
+
+
+		</div>
+		<!-- 支付类型-->
+		<input type="hidden" id="proPayType"  th:value="*{payTypeStr}">
+		<input type="hidden" id="proPayTypeId" name="proPayTypeId"  th:value="*{proPayType.id}">
+		<!-- 商品主图-->
+		<input type="hidden" id="proImages"  th:value="*{proImagesStr}" >
+		<!-- sku属性-->
+		<input type="hidden" id="proProperties"  th:value="*{proPropertiesStr}">
+		<!-- 商品sku list-->
+		<input type="hidden" id="proSkuJsons"  th:value="*{proSkuJsons}">
+		<!-- sku属性值-->
+		<input type="hidden" id="propertyValues"  th:value="*{propertyValuesStr}">
+		<input type="hidden" id="skuImgFiles" name="skuImgFiles">
+		'<input id="skuIds" name="skuIds"  type="hidden">'+
+
+	</form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript" src="../../../util.js"></script>
+<script th:src="@{/Table.js}"></script>
+<script th:src="@{/layui/laui.js}"></script>
+<script th:src="@{/ajax/libs/summernote/summernote.min.js}"></script>
+<script th:src="@{/ajax/libs/summernote/summernote-zh-CN.js}"></script>
+
+<script type="text/javascript">
+
+	$(function(){
+
+	    $("#proType").on("change",(e)=>{
+			if(e.target.value == 2){
+			    $("#package1").append(`<input  id="tcPrice" name="tcPrice" class="form-control" type="number">`);
+			    $("#package2").append(`<input  id="tcName" name="tcName" class="form-control" type="text">`);
+			}else{
+                $("#package1").empty();
+                $("#package2").empty();
+			}
+		})
+
+		//加载详情
+
+		$('#detailsText').summernote('code',decodeURIComponent($("#details").val()));
+		//加载 套餐类型
+		var v =$("#proTypeValue").val();
+		$('#proType').find('option:eq('+v+')').attr('selected','selected');
+
+		//加载payType
+		var payType =$("#proPayType").val().split(",");
+		for(var i =0;i<payType.length ;i++){
+			$("#payType"+payType[i]+"").attr("checked","checked");
+		}
+		//加载主图
+		var str =$("#proImages").val();
+
+		var proImages =JSON.parse(str);
+		for (var i=0; i<proImages.length ;i++){
+			if(i>0){
+				addPicRow(i);
+			}
+			$("#productImg"+i).attr("src",proImages[i].imgUrl).removeAttr("hidden").attr("width","200").attr("height","50");
+			$("#imgIds"+i).val(proImages[i].id);
+			// $("#proFile"+i).val(proImages[i].imgUrl);
+		}
+
+		//加载proProperties
+
+		var proProperties=JSON.parse($("#proProperties").val());
+		var propertyValues=JSON.parse($("#propertyValues").val());
+		var value ="";
+		var valueText="";
+		var valueId ="";
+		for(var i=0;i<proProperties.length;i++) {
+			if (i > 0) {
+				addrow(i);
+			}
+			valueId="";
+			valueText="";
+			value ="";
+			$("#propertyName"+i).val(proProperties[i].propertyName);
+			$("#propertyId"+i).val(proProperties[i].propertyId);
+
+			value =propertyValues[i];
+			for(var j=0; j<value.length;j++){
+				if(valueText){
+					valueText+=";"
+				}
+				if(valueId){
+					valueId+=";"
+				}
+				valueText +=value[j].valueText;
+				valueId  +=value[j].valueId;
+			}
+			$("#propertyValue"+i).val(valueText);
+			$("#valueId"+i).val(valueId);
+
+		}
+		loadSkU();
+		//加载sku列表
+		loadSkuStr();
+
+		//加载套餐
+		typeChange();
+
+		//初始化加载完毕
+
+	});
+
+	function loadSkuStr(){
+		var skujson =JSON.parse($("#proSkuJsons").val());
+		var skuIds="";
+		for(var i=0; i<skujson.length; i++){
+			$("#price"+i).val(skujson[i].price);
+			$("#marketPrice"+i).val(skujson[i].marketPrice);
+			$("#costPrice"+i).val(skujson[i].costPrice);
+			$("#stock"+i).val(skujson[i].stock);
+			$("#killPrice"+i).val(skujson[i].killPrice);
+			$("#killStock"+i).val(skujson[i].killStock);
+
+			$("#skuFileImg"+i).attr("src",skujson[i].imgUrl).attr("width","200").attr("height","50");
+
+            if(skuIds){
+                skuIds+=";";
+            }
+            skuIds +=skujson[i].skuId+"";
+
+
+		}
+        $("#skuIds").val(skuIds);
+
+	}
+
+	$('.summernote').summernote({
+		height : '220px',
+		lang : 'zh-CN',
+		callbacks: {
+			onImageUpload: function(files, editor, welEditable) {
+				var fileFormat =files[0].name;
+				if (!/.(gif|jpg|jpeg|png|GIF|JPG|png)$/.test(fileFormat)) {
+					$.modal.alertError("圖片必須是.gif,jpeg,jpg,png格式..");
+					return false;
+				}
+				var url =uploadFileByFile(files[0],fileFormat,8);
+				if(!url){
+					return false;
+				}
+				$(this).summernote('editor.insertImage', url);
+
+			}
+		},toolbar: [
+			// [groupName, [list of button]]
+			['style', ['style']],
+			['font', ['bold', 'underline', 'clear']],
+			['fontname', ['fontname']],
+			['color', ['color']],
+			['para', ['ul', 'ol', 'paragraph']],
+			['table', ['table']],
+			['insert', ['link', 'picture', 'video']],
+			['view', ['fullscreen', 'codeview', 'help']]
+		] , // popover
+		popover: {
+			image: [
+				['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
+				['float', ['floatLeft', 'floatRight', 'floatNone']],
+				['remove', ['removeMedia']]
+			],
+			link: [
+				['link', ['linkDialogShow', 'unlink']]
+			],
+			air: [
+				['color', ['color']],
+				['font', ['bold', 'underline', 'clear']],
+				['para', ['ul', 'paragraph']],
+				['table', ['table']],
+				['insert', ['link', 'picture']]
+			]
+		},
+	});
+
+
+	var prefix = ctx + "system/product"
+	$("#form-product-edit").validate({
+		rules: {
+			xxxx: {
+				required: true,
+			},
+		},
+		focusCleanup: true
+	});
+
+	function submitHandler() {
+		if ($.validate.form()) {
+			//获取富文本
+			var sHTML = $('#detailsText').summernote('code');
+			$("#details").val(encodeURIComponent(sHTML));
+			var sHTML = $('#specsText').summernote('code');
+			$("#specs").val(encodeURIComponent(sHTML));
+			//上传图片
+			var fileUrl="";
+			var i=0;
+			$("input[name='file']").each(function(){
+				if(fileUrl){
+					fileUrl +=";";
+				}
+				if(!this.value){
+					fileUrl+=$("#productImg"+i).attr('src');
+				}else{
+						fileUrl+=uploadFileByFile(this.files[0],this.value.substring(this.value.lastIndexOf(".")).toLowerCase()+";",4);
+				}
+			});
+
+			var i=0;
+			var skuImgFile="";
+			$("input[name='skuImgFile']").each(function(){
+				if(skuImgFile){
+					skuImgFile +=";";
+				}
+				if(!this.value){
+					skuImgFile+=$("#skuFileImg"+i).attr("src");
+				}else{
+					skuImgFile+=uploadFileByFile(this.files[0],this.value.substring(this.value.lastIndexOf(".")).toLowerCase()+";",4)+";"
+				}
+				i++;
+			});
+
+			$("#skuImgFiles").val(skuImgFile);
+			$("#imgUrl").val(fileUrl);
+			var doc =$('#form-product-edit').serialize();
+            // doc =doc.replace(/product./g,"");
+			// doc =doc.replace(/proPackage./g,"");
+			// doc =doc.replace(/proDetails./g,"");
+			// doc =doc.replace(/proChannelRelation./g,"");
+			// doc =doc.replace(/proDetails./g,"");
+            // doc =doc.replace(/proPayType./g,"");
+			$.operate.save(prefix + "/edit",doc);
+		}
+	}
+	function typeChange() {
+		var objS = document.getElementById("proType");
+		var proType = objS.options[objS.selectedIndex].value;
+
+		if(proType ==2){
+			$("#tcDiv").show();
+		}else{
+			$("#tcDiv").hide();
+		}
+
+	}
+	// function typeChange() {
+	// 	var objS = document.getElementById("proType");
+	// 	var proType = objS.options[objS.selectedIndex].value;
+	//
+	// 	if(*{product.proType} ==2){
+	// 		$("#tcDiv").show();
+	// 	}else{
+	// 		$("#tcDiv").hide();
+	// 	}
+	//
+	// }
+
+	$('.summernote').summernote({
+		height : '220px',
+		lang : 'zh-CN',
+		callbacks: {
+			onImageUpload: function(files, editor, welEditable) {
+				var fileFormat =files[0].name;
+				if (!/.(gif|jpg|jpeg|png|GIF|JPG|png)$/.test(fileFormat)) {
+					$.modal.alertError("圖片必須是.gif,jpeg,jpg,png格式..");
+					return false;
+				}
+				var url =uploadFileByFile(files[0],fileFormat,8);
+				if(!url){
+					return false;
+				}
+				$(this).summernote('editor.insertImage', url);
+
+			}
+		},toolbar: [
+			// [groupName, [list of button]]
+			['style', ['style']],
+			['font', ['bold', 'underline', 'clear']],
+			['fontname', ['fontname']],
+			['color', ['color']],
+			['para', ['ul', 'ol', 'paragraph']],
+			['table', ['table']],
+			['insert', ['link', 'picture', 'video']],
+			['view', ['fullscreen', 'codeview', 'help']]
+		] , // popover
+		popover: {
+			image: [
+				['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
+				['float', ['floatLeft', 'floatRight', 'floatNone']],
+				['remove', ['removeMedia']]
+			],
+			link: [
+				['link', ['linkDialogShow', 'unlink']]
+			],
+			air: [
+				['color', ['color']],
+				['font', ['bold', 'underline', 'clear']],
+				['para', ['ul', 'paragraph']],
+				['table', ['table']],
+				['insert', ['link', 'picture']]
+			]
+		}
+	});
+	//增加
+	function addrow(index){
+
+		var tables = $('#propertyDiv');
+		var addtr = $('<div class="form-group"> ' +
+				'<label class="col-sm-3 control-label"><span style="color: red; ">*</span>属性名称：</label>' +
+				'<div class="col-sm-8">' +
+				'<input  name="propertyIds" placeholder="请输入属性名称"class="form-control" type="hidden" id="propertyId'+index+'">' +
+				'<input  name="propertyName" placeholder="请输入属性名称"class="form-control" type="text" id="propertyName'+index+'">' +
+				'</div>' +
+				'</div>' +
+				'<div class="form-group">' +
+				'<label class="col-sm-3 control-label"><span style="color: red; ">*</span>属性值：</label>' +
+				'<div class="col-sm-8">' +
+				'<input  name="valueIds"  class="form-control" type="hidden" id="valueId'+index+'">'+
+				'<input i name="propertyValue" placeholder="请输入属性值,多个值请用;;号代替" class="form-control" type="text" id="propertyValue'+index+'">' +
+				'</div>' +
+				'</div>');
+
+		addtr.appendTo(tables);
+
+	}
+
+	function delRow(){
+		var divList =$("#propertyDiv").children("div");
+		if(divList.length <=2){
+			$.modal.alertError("至少保留一个");
+			return false;
+		}
+		//删除最后一个
+		$("#propertyDiv>div:last").remove();
+		//删除最后一个
+		$("#propertyDiv>div:last").remove();
+		//
+
+
+	}
+	function addPicRow(index){
+		var tables = $('#picDiv');
+		var addtr = $('<div class="form-group"> '
+				+' <label class="col-sm-3 control-label"><span style="color: red; ">*</span>图片上传：</label> '
+				+'<div class="col-sm-8"> '
+				+'<input  name="file" id="proFile'+index+'" class="form-control" type="file"  placeholder="请上传图片">'
+				+'<img id="productImg'+index+'" src="#" hidden >'
+				// +'<a href="javascript:;" productImgA'+index+'"><img height="100px" id="productImg'+index+'"  src="#" hidden></a>'
+               +'<input id="imgIds'+index+'" name="imgIds"  type="hidden">'
+				+'</div> '
+				+'</div>');
+		addtr.appendTo(tables);
+	}
+	function delPicRow(){
+		var divList =$("#picDiv").children("div");
+		if(divList.length <=1){
+			$.modal.alertError("至少保留一个");
+			return false;
+		}
+		//删除最后一个
+		$("#picDiv>div:last").remove();
+	}
+
+	function loadSkU(){
+		var valuelist =new Array();
+		var index=0;
+		$("input[name='propertyValue']").each(function(){
+			proper=$(this).val();
+			valuelist[index]=proper;
+			index++;
+		});
+		var value;
+		index =0;
+		var strBuff='';
+		var str;
+		$("#skuGoupsProDiv").html(strBuff);
+		loadSKUMSG();
+
+	}
+	function loadSKUMSG() {
+		var index=0;
+		var proper;
+		var valuelist=[];
+		$("input[name='propertyValue']").each(function(){
+			proper=$(this).val();
+			valuelist.push(proper)
+			index++;
+		});
+		var propertyNameValue =[];
+		$("input[name='propertyName']").each(function(){
+			proper=$(this).val();
+			propertyNameValue.push(proper)
+		});
+		var lists=[];
+		lists[0] =valuelist;
+		var datas ={};
+		$.ajax({
+			url:"/system/product/getSetting",
+			data:{"list":JSON.stringify(valuelist)},
+			async:false,
+			type:"post",
+			success:function(data){
+				datas=data;
+			}
+
+		})
+		if(!datas){
+			return;
+		}
+		var propertyValueList=[];
+		var propertyValue=[];
+		var str="";
+		var list ="";
+		for(var i=0; i< datas.length; i++){
+			str =datas[i];
+			propertyValue =[];
+			if(str){
+				list = str.split("_");
+				for(var j=0;j<list.length; j++){
+					propertyValue.push("<input type='text'  readonly='readonly' name='pro' value='"+list[j]+"'>");
+				}
+				propertyValue.push("<input type='number' min='0' id='price"+i+"' required placeholder='请输入出售价格' value='0' name='price'>");
+				propertyValue.push("<input type='number' min='0' id='marketPrice"+i+"' required placeholder='请输入市场价格' value='0' name='marketPrice'>");
+				propertyValue.push("<input type='number' min='0' id='costPrice"+i+"' required placeholder='请输入成本价格' value='0' name='costPrice'>");
+				propertyValue.push("<input type='number' min='0' id='stock"+i+"' required placeholder='请输入库存' value='0' name='stock'>");
+                if($("#proType").val() ==1){
+                    propertyValue.push("<input type='number' min='0' required placeholder='请输入秒杀价格' value='0' name='killPrice'>");
+                    propertyValue.push("<input type='number' min='0' required placeholder='请输入库存' value='0' name='killStock'>");
+                }
+                if($("#proType").val() ==0){
+                    propertyValue.push("<input type='number' min='0' required placeholder='请输入券后价格' value='0' name='minSellPrice'>");
+                }
+
+				//propertyValue.push("<input  name='skuImgFile' class='form-control' type='file' placeholder='请上传图片' id='skuImgFile"+i+"'> <img id='skuFileImg"+i+"' src='#' >");
+
+				propertyValue.push(
+						"<div style='display: flex;align-items: center;'>"+
+							'<div style="width: 80px;">'+
+								'<input  name="skuImgFile" id="skuImgFile'+i+'" class="form-control" style="padding: 0px;height: 60px;" type="file"  placeholder="请上传图片">'+
+							'</div>'+
+							'<div>'+
+								'<img id="skuFileImg'+i+'" src="#"   style="height: 60px;width: auto;">'+
+
+
+                    '</div>'+
+						'</div>');
+			}
+			propertyValueList.push(propertyValue);
+		}
+		propertyNameValue.push("出售价格");
+		propertyNameValue.push("市场价格");
+		propertyNameValue.push("成本价格");
+		propertyNameValue.push("库存");
+		if($("#proType").val() ==1){
+			propertyNameValue.push("秒杀价格");
+			propertyNameValue.push("秒杀库存");
+		}
+		if ($("#proType").val() ==0) {
+            propertyNameValue.push("券后价格");
+        }
+		propertyNameValue.push("SKU图片");
+
+		Table().init({
+			id:'bootstrap-table',
+			header:propertyNameValue,
+			data:propertyValueList,
+			size:"12px"
+		});
+
+		loadSkuStr();
+
+	}
+</script>
+</body>
+</html>

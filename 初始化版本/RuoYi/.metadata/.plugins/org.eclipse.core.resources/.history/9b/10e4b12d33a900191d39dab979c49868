@@ -1,0 +1,7 @@
+package com.example.demo.api;
+
+
+@RestController
+public class MainAPI {
+
+}

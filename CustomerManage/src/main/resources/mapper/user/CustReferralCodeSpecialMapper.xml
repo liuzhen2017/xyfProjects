@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyunfu.customer.repository.user.CustReferralCodeSpecialMapper">
+    <select id="findByReferralCode" resultType="com.xinyunfu.customer.domain.user.CustReferralCodeSpecialDTO">
+        select * from cust_referral_code_special where referral_code = #{referralCode}
+    </select>
+    <select id="findAllReferralCode" resultType="java.lang.String">
+        select referral_code from cust_referral_code_special;
+    </select>
+    <insert id="add" parameterType="com.xinyunfu.customer.domain.user.CustReferralCodeSpecialDTO">
+        insert into cust_referral_code_special (id, referral_code, used, remark)
+            values (#{id}, #{referralCode}, #{used}, #{remark})
+    </insert>
+    <update id="update" parameterType="com.xinyunfu.customer.domain.user.CustReferralCodeSpecialDTO">
+        update cust_referral_code_special
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id != null">id = #{id},</if>
+            <if test="referralCode != null">referral_code = #{referralCode},</if>
+            <if test="used != null">used = #{used},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <update id="updateByReferralCode" parameterType="com.xinyunfu.customer.domain.user.CustReferralCodeSpecialDTO">
+        update cust_referral_code_special
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id != null">id = #{id},</if>
+            <if test="referralCode != null">referral_code = #{referralCode},</if>
+            <if test="used != null">used = #{used},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where referral_code = #{referralCode}
+    </update>
+</mapper>

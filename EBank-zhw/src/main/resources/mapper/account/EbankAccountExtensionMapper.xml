@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingyunfu.ebank.mapper.account.EbankAccountExtensionMapper">
+    <select id="findByAccountNo" parameterType="java.lang.String"
+        resultType="com.xingyunfu.ebank.domain.account.EbankAccountExtensionDTO">
+        select * from ebank_account_extension where account_no=#{accountNo}
+    </select>
+    <insert id="insert" parameterType="com.xingyunfu.ebank.domain.account.EbankAccountExtensionDTO">
+        insert into ebank_account_extension (id, account_no, user_phone, super_account_no, super_phone)
+            values (#{id}, #{accountNo}, #{userPhone}, #{superAccountNo}, #{superPhone})
+    </insert>
+    <update id="update" parameterType="com.xingyunfu.ebank.domain.account.EbankAccountExtensionDTO">
+        update ebank_account_extension
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id != null">id = #{id},</if>
+            <if test="accountNo != null">account_no = #{accountNo},</if>
+            <if test="userPhone != null">user_phone = #{userPhone},</if>
+            <if test="superAccountNo != null">super_account_no = #{superAccountNo},</if>
+            <if test="superPhone != null">super_phone = #{superPhone},</if>
+        </trim>
+        where account_no=#{accountNo}
+    </update>
+</mapper>

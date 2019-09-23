@@ -1,0 +1,23 @@
+CREATE TABLE `acc_flow` (
+  `id` int(11)              NOT NULL AUTO_INCREMENT         COMMENT '序号',
+  `super_order_number`      varchar(50)                     COMMENT '订单父编号',
+  `order_number`            varchar(50)                     COMMENT '订单编号',
+  `user_no`                 varchar(100)                    COMMENT '用户编号_支付方',
+  `pay_number`              varchar(50)                     COMMENT '支付成功后的支付编号',
+  `pay_acc_no`              varchar(100)                    COMMENT '付款账号',
+  `pay_acc_name`            varchar(200)                    COMMENT '付款账号名称',
+  `rece_acc_no`             varchar(100)                    COMMENT '收款账号',
+  `rece_acc_name`           varchar(200)                    COMMENT '收款名称',
+  `pay_amount`              decimal(30,2)                   COMMENT '付款金额',
+  `tran_date`               datetime                        COMMENT '交易时间',
+  `tran_type`               varchar(20)                     COMMENT '交易类型',
+  `busi_status`             varchar(30)                     COMMENT '业务状态',
+  `enable`                  tinyint(2)      DEFAULT '1'     COMMENT '是否可用（可用=1，禁用=0）',
+  `channel`                 char(20) ,
+  `subject`                 varchar(200) ,
+  `created_date`            timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `created_by`              varchar(50) NOT NULL            COMMENT '创建人',
+  `updated_date`            timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  `updated_by`              varchar(50) NOT NULL            COMMENT '最后修改人',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=225 DEFAULT CHARSET=utf8

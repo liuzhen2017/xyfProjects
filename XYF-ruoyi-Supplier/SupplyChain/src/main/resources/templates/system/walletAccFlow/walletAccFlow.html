@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('每笔转账的转入转出记录列表')"/>
+	<link rel="stylesheet" href="../../../layui/css/layui.css"  media="all">
+	<style>
+		.liw{
+			width: 145px!important;
+		}
+		blockquote{
+			font-size: 15px;
+		}
+		.layui-badge{
+			font-size: 14px;
+			font-weight: bold;
+		}
+	</style>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+	<div class="row">
+		<div class="col-xs-8 search-collapse">
+			<div class="row" style="margin-top: 20px">
+				<div class="layui-col-xs3">
+					<blockquote class="layui-elem-quote layui-quote-nm" >
+						用户名：<span class="layui-badge layui-bg-gray" th:text="${user.userName}"></span>
+						<br><br>
+						用户编号：<span class="layui-badge layui-bg-gray" th:text="${user.userNo}"></span>
+						<br><br>
+						我的账户：<span class="layui-badge layui-bg-gray" th:text="${user.accountNo}"></span>
+					</blockquote>
+				</div>
+				<div class="layui-col-xs3">
+					<blockquote class="layui-elem-quote layui-quote-nm" >
+						总金额：<span class="layui-badge layui-bg-gray" th:text="${user.balance}"></span>
+						<br><br>
+						冻结金额：<span class="layui-badge layui-bg-gray" th:text="${user.frozenBalance}"></span>
+						<br><br>
+						可用金额：<span class="layui-badge layui-bg-gray" th:text="${user.availableBalance}" id="kyMoney"></span>
+						<div style="float: right">
+							<input type="number" style="width: 100px" id="money"/>
+							<button type="button" onclick="checkMoney(0)" class="layui-btn layui-btn-sm">提现</button>
+							<button type="button" onclick="checkMoney(1)" class="layui-btn layui-btn-sm layui-btn-normal" style="margin-left: 0px">全额提现</button>
+						</div>
+					</blockquote>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-8 search-collapse">
+			<form id="formId" autocomplete="off">
+				<div class="select-list">
+					<ul>
+						<li>
+							订单编号：<input type="text" name="orderNo" class="liw"/>
+						</li>
+						<li>
+							流水类型
+							<select name="flowType" class="liw">
+								<option value="">请选择流水类型</option>
+								<option value="in">转入</option>
+								<option value="out">转出</option>
+							</select>
+						</li>
+						<li>流水来源
+							<select name="flowSource" class="liw">
+								<option value="">请选择流水来源</option>
+								<option value="product">商品/套餐购买</option>
+								<option value="transfer">转账</option>
+								<option value="withdraw">提现</option>
+							</select>
+						</li>
+						<li>流水金额：<input type="text" name="amount" class="liw"/></li>
+						<li>流水状态
+							<select name="status" class="liw">
+								<option value="">请选择流水状态</option>
+								<option value="wait">处理中</option>
+								<option value="success">支付成功</option>
+								<option value="failed">支付失败</option>
+							</select>
+						</li>
+						<li>时间范围：<input type="text" id="startDate" placeholder="开始时间" name="createTime" autocomplete="off" class="liw"/></li>
+						<li>-<input type="text" id="endDate" placeholder="结束时间" name="lastModifyTime" autocomplete="off" class="liw"/></li>
+						<li>
+							<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+									class="fa fa-search"></i>&nbsp;搜索</a>
+							<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+									class="fa fa-refresh"></i>&nbsp;重置</a>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+
+		<div class="btn-group-sm" id="toolbar" role="group">
+			<a class="btn btn-warning" onclick="$.table.exportExcel()" ><i class="fa fa-download"></i> 导出</a>
+		</div>
+		<div class="col-sm-8 select-table table-striped">
+			<table id="bootstrap-table" data-mobile-responsive="true"></table>
+		</div>
+	</div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "system/walletAccFlow";
+
+    /**
+	 * 提现点击事件
+     * @param type 0指定金额/1全额
+     */
+    let checkMoney = type => {
+        let money = $("#money").val();
+        if(!type){
+            if(!money){
+                $.modal.msgWarning("请输入正确的金额！");
+                return;
+            }
+		}else{ //全额
+            money = $("#kyMoney").text();
+            if(!money){
+                return;
+            }
+		}
+        $.modal.confirm("您确认提现"+money+"元么？",()=>{
+            layer.prompt({title: '请输入支付密码', formType: 1}, function(text,index){
+                layer.close(index);
+                $.getJSON(prefix+"/checkPayPwd","payPwd="+text,(v)=>{
+                   if(v.code == "0"){
+                       $.getJSON(prefix+"/SupplierWithdraw","money="+money,(res)=>{
+                           if(res.code == "0000"){
+                               window.location.reload();
+                               // $.modal.msgSuccess(res.data);
+                           }else{
+                               $.modal.msgError(res.message);
+                           }
+                       })
+				   }else{
+                       $.modal.msgError("很抱歉，支付密码错误！");
+				   }
+                })
+            });
+
+        });
+    }
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            exportUrl: prefix + "/export",
+            modalName: "每笔转账的转入转出记录",
+            showExport: true,
+            columns: [
+                {
+                    field: 'id',
+                    title: '流水编号',
+                    visible: true
+                },
+                {
+                    field: 'orderNo',
+                    title: '订单编号',
+                    sortable: true
+                },
+                {
+                    field: 'flowType',
+                    title: '流水类型',
+                    sortable: true, formatter: function (value, row, index) {
+                        if (value == "in") {
+                            return "转入";
+                        } else if (value == "out") {
+                            return "转出";
+                        }
+                    }
+                },
+                {
+                    field: 'flowSource',
+                    title: '流水来源',
+                    sortable: true, formatter: function (value, row, index) {
+                        if (value == "product") {
+                            return "购买商品";
+                        } else if (value == "transfer") {
+                            return "用户转账";
+                        } else if (value == "withdraw") {
+                            return "提现";
+                        }
+                    }
+                },
+                {
+                    field: 'amount',
+                    title: '流水金额',
+                    sortable: true, formatter: function (value, row, index) {
+                        if(row.flowType == "in"){
+                            return `<span style="font-weight: bold;color: #00b900;"> + `+value+`</span>`;
+						}else{
+                            return `<span style="font-weight: bold;color: #c52400;"> - `+value+`</span>`;
+						}
+                    }
+                },
+                {
+                    field: 'status',
+                    title: '流水状态',
+                    sortable: true,formatter: function (value, row, index) {
+                        if(value == "wait"){
+                            return "处理中";
+                        }else if(value =="success"){
+                            return "支付成功";
+                        }else if(value =="failed"){
+                            return "支付失败";
+                        }
+                    }
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间',
+                    sortable: true,formatter: function (value, row, index) {
+                        return !value ? "-":value.split(".")[0].replace("T"," ")
+                    }
+                },
+				{
+                    field: 'flowDesc',
+                    title: '流水说明',
+                    sortable: true
+                }]
+        };
+        $.table.init(options);
+    });
+
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
+        var startDate = laydate.render({
+            elem: '#startDate',
+            theme: 'molv',
+            trigger: 'click',
+            type : 'date',
+            done: function(value, date) {
+                // 结束时间大于开始时间
+                if (value !== '') {
+                    endDate.config.min.year = date.year;
+                    endDate.config.min.month = date.month - 1;
+                    endDate.config.min.date = date.date;
+                } else {
+                    endDate.config.min.year = '';
+                    endDate.config.min.month = '';
+                    endDate.config.min.date = '';
+                }
+            }
+        });
+        var endDate = laydate.render({
+            elem: '#endDate',
+            min: $('#startDate').val(),
+            theme: 'molv',
+            trigger: 'click',
+            type : 'date',
+            done: function(value, date) {
+                // 开始时间小于结束时间
+                if (value !== '') {
+                    startDate.config.max.year = date.year;
+                    startDate.config.max.month = date.month - 1;
+                    startDate.config.max.date = date.date;
+                } else {
+                    startDate.config.max.year = '';
+                    startDate.config.max.month = '';
+                    startDate.config.max.date = '';
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

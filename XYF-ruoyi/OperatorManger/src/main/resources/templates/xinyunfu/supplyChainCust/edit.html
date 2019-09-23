@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改供应链')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-supplyChainCust-edit" th:object="${supplyChainCust}">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">企业名称：</label>
+				<div class="col-sm-8">
+					<input id="custName" name="custName" th:field="*{custName}" class="form-control" type="text" placeholder="此处不能为空"  maxlength="20">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">企业地址：</label>
+				<div class="col-sm-8">
+					<input id="custAdd" name="custAdd" th:field="*{custAdd}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">联系电话：</label>
+				<div class="col-sm-8">
+					<input id="contactsTel" name="contactsTel" th:field="*{contactsTel}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">联系人：</label>
+				<div class="col-sm-8">
+					<input id="contactsName" name="contactsName" th:field="*{contactsName}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">传真：</label>
+				<div class="col-sm-8">
+					<input id="fax" name="fax" th:field="*{fax}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">邮箱：</label>
+				<div class="col-sm-8">
+					<input id="email" name="email" th:field="*{email}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">结算周期：</label>
+				<div class="col-sm-8">
+					<input id="settCycle" name="settCycle" th:field="*{settCycle}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">业务状态：</label>
+				<div class="col-sm-8">
+					<input id="busiStatus" name="busiStatus" th:field="*{busiStatus}" class="form-control" type="text">
+				</div>
+			</div>
+
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">营业执照：</label>
+				<div class="col-sm-8">
+					<input id="businessLicenseImg" name="businessLicenseImg" th:field="*{businessLicenseImg}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">统一社会代码：</label>
+				<div class="col-sm-8">
+					<input id="unifyingSocialCredit" name="unifyingSocialCredit" th:field="*{unifyingSocialCredit}" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "xinyunfu/supplyChainCust";
+		$("#form-supplyChainCust-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-supplyChainCust-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

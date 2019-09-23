@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyunfu.customer.repository.address.CustShippingAddressMapper">
+
+    <select id="findById" parameterType="java.lang.Long" resultType="com.xinyunfu.customer.domain.address.CustShippingAddressDTO">
+        select * from cust_shipping_address where id = #{id}
+    </select>
+    <select id="findByUserNo" parameterType="java.lang.Long" resultType="com.xinyunfu.customer.domain.address.CustShippingAddressDTO">
+        select * from cust_shipping_address where user_no = #{userNo}
+    </select>
+    <select id="findIdByUerNo" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select id from cust_shipping_address where user_no = #{userNo}
+    </select>
+    <delete id="delete" parameterType="java.lang.Long">
+        delete from cust_shipping_address where id = #{id}
+    </delete>
+    <insert id="add" parameterType="com.xinyunfu.customer.domain.address.CustShippingAddressDTO">
+        <selectKey resultType="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        update cust_shipping_address set default_address=false
+            where user_no = #{userNo} and ${defaultAddress} is true;
+        insert into cust_shipping_address (id, user_no, default_address, phone, name,
+                 region_id, address, post_code, create_time, last_modify_time)
+            values (#{id}, #{userNo}, #{defaultAddress}, #{phone}, #{name},
+                #{regionId}, #{address}, #{postCode}, #{createTime}, #{lastModifyTime});
+    </insert>
+    <update id="update" parameterType="com.xinyunfu.customer.domain.address.CustShippingAddressDTO">
+        update cust_shipping_address
+        <trim prefix="set" suffixOverrides=",">
+            <if test="defaultAddress != null"> default_address = #{defaultAddress},</if>
+            <if test="phone != null"> phone = #{phone},</if>
+            <if test="name != null"> name = #{name},</if>
+            <if test="regionId != null">region_id = #{regionId},</if>
+            <if test="address != null"> address = #{address},</if>
+            <if test="postCode != null"> post_code = #{postCode},</if>
+            <if test="createTime != null"> create_time = #{createTime},</if>
+            <if test="lastModifyTime != null"> last_modify_time = #{lastModifyTime},</if>
+        </trim>
+        where id = #{id} and user_no = #{userNo};
+        update cust_shipping_address set default_address=false
+                where id != #{id} and user_no = #{userNo} and ${defaultAddress} is true;
+    </update>
+</mapper>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('订单发票列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								发票类型：<select name="type">
+								<option value="-1">请选择发票类型</option>
+								<option value="0">电子发票</option>
+								<option value="1">纸质发票</option>
+							</select>
+							</li>
+
+							<li>
+								发票抬头：<select name="payable">
+								<option value="">请选择发票抬头</option>
+								<option value="0">个人</option>
+								<option value="1">企业</option>
+							</select>
+							</li>
+							<li>
+								发票状态：<select name="status">
+								<option value="-1">请选择状态</option>
+								<option value="2">已开发票</option>
+								<option value="0">未开发票</option>
+							</select>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-primary"   onclick="printInvoice()">
+					<i class="fa fa-edit"></i> 打印发票
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:orderInvoice:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+
+	 <script type="text/javascript" src="../../../util.js"></script>
+	 <script type="text/javascript" src="../../../layui/layui.js"></script>
+	 <script th:inline="javascript">
+
+        var editFlag = [[${@permission.hasPermi('system:orderInvoice:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:orderInvoice:remove')}]];
+        var prefix = ctx + "system/orderInvoice";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "订单发票",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : '唯一的id',
+					visible: false
+				},
+				{
+					field : 'type', 
+					title : '发票类型',
+					sortable: true,formatter: function (value, row, index) {
+                        if (row.type == 0) {
+                            return "电子发票";
+                        }
+                        else if (row.type == 1) {
+                            return "纸质发票";
+                        }
+
+                    }
+				},
+				{
+					field : 'payable', 
+					title : '发票抬头',
+					sortable: true,
+					formatter: function (value, row, index) {
+                        if (row.payable == 0) {
+                            return "个人";
+                        }
+                        else if (row.payable == 1) {
+                            return "企业";
+                        }
+
+                    }
+				},
+				{
+					field : 'email', 
+					title : '邮箱',
+					sortable: true
+				},
+				{
+					field : 'unitName', 
+					title : '单位名称',
+					sortable: true
+				},
+				{
+					field : 'taxpayerNumber', 
+					title : '纳税人识别号',
+					sortable: true
+				},
+					{
+						field : 'status',
+						title : '订单状态',
+						formatter: function (value, row, index) {
+							if (value == "0") {
+								return "待付款";
+							}
+							else if (value == 1) {
+								return "待发货";
+							}
+							else if (value == 2) {
+								return "待签收";
+							}else if (value == 3) {
+								return "待点评";
+							}else if (value == 4) {
+								return "已接收";
+							}
+
+						}
+					},
+					{
+						field : 'invoiceIdStatus',
+						title : '发票状态',
+						formatter: function (value, row, index) {
+							if (value == "0") {
+								return "未开";
+							}
+							else if (value == 1) {
+								return "审核中";
+							}
+							else if (value == 2) {
+								return "已开";
+							}
+
+						}
+					},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+        function printInvoice() {
+
+			var row = $("#bootstrap-table").bootstrapTable('getSelections');
+			if ($.common.isEmpty(row)) {
+				$.modal.alertWarning("请至少选择一条记录");
+				return;
+			}
+			var str ="";
+			for(var i=0;i<row.length;i++){
+				if(row[i].invoiceIdStatus== 2){
+					$.modal.alertWarning(row[i].email+" 该邮箱发票已经打印,不能选择!");
+					return null;
+				}
+				str+= row[i].orderInvoiceId;
+			}
+
+			layer.open({
+				content: '确认修改为已经打发票吗?'
+				,btn: ['確定']
+				,yes: function(index){
+					$.ajax({
+						url:prefix+"/updateInvoice?ids="+str,
+						data:{"ids":str},
+						success:function(data){
+							if(data ==1){
+								$.modal.alertWarning("修改发票状态成功!");
+								$.table.init(options);
+							}else{
+							   $.modal.alertWarning("修改发票状态失败!");
+							}
+
+						}
+
+					})
+
+
+					layer.close(index);
+				},no:function(index){
+					console.log("否认!")
+					layer.close(index);
+				}
+			});
+		}
+    </script>
+</body>
+</html>

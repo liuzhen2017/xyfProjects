@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyunfu.product.mapper.ProductMapper">
+    <select id="getRProductDTO" resultType="com.xinyunfu.product.dto.RProductDTO" parameterType="Map">
+        select
+        pro_id,pro_no,pro_name,pro_title,`status`,store_id,unit,weight,source,remarks,created_time,coupon_type,coupon_type_name,pro_type,sort_number
+        from product
+        <where>
+            status !=2
+            <if test="rProductDTO.proId != null ">and pro_id = #{rProductDTO.proId}</if>
+            <if test="rProductDTO.proNo != null  and rProductDTO.proNo != '' ">and pro_no = #{rProductDTO.proNo}</if>
+            <if test="rProductDTO.proName != null  and rProductDTO.proName !='' ">and pro_name like
+                '%${rProductDTO.proName}%'
+            </if>
+            <if test="rProductDTO.proTitle != null  and rProductDTO.proTitle != '' ">and pro_title like
+                '%${rProductDTO.proTitle}%'
+            </if>
+            <if test="rProductDTO.freightId != null ">and freight_id = #{rProductDTO.freightId}</if>
+            <if test="rProductDTO.storeId != null ">and store_id = #{rProductDTO.storeId}</if>
+            <if test="rProductDTO.proType != null ">and pro_type = #{rProductDTO.proType}</if>
+            <if test="rProductDTO.killStatus != null ">and kill_status = #{rProductDTO.killStatus}</if>
+            <if test="rProductDTO.status != null ">and `status` = #{rProductDTO.status}</if>
+            <if test="rProductDTO.unit != null  and unit != '' ">and unit = #{rProductDTO.unit}</if>
+            <if test="rProductDTO.weight != null ">and weight = #{rProductDTO.weight}</if>
+            <if test="rProductDTO.source != null ">and source = #{rProductDTO.source}</if>
+            <if test="rProductDTO.couponType != null  and couponType != '' ">and coupon_type =
+                #{rProductDTO.couponType}
+            </if>
+            <if test="rProductDTO.remarks != null  and remarks != '' ">and remarks = #{rProductDTO.remarks}</if>
+            <if test="rProductDTO.createdTime!= null ">and created_time = #{rProductDTO.createdTime}</if>
+        </where>
+        order by sort_number desc
+    </select>
+    <!--  -->
+    <select id="getProDto" resultType="com.xinyunfu.product.dto.ProDto" parameterType="Map">
+    SELECT  * FROM v_product t WHERE t.`channel_id`=#{channelId} order by t.sort_number desc
+    </select>
+
+    <select id="getProDtoPageByChannelIdOrderByAllSellStockDesc" resultType="com.xinyunfu.product.dto.ProDto">
+      SELECT * FROM v_product t WHERE t.`channel_id`=#{channelId} order by t.all_sell_stock desc
+    </select>
+
+    <select id="getProDtoPageByChannelIdOrderByPriceDesc" resultType="com.xinyunfu.product.dto.ProDto">
+      SELECT * FROM v_product t WHERE t.`channel_id`=#{channelId} order by t.price desc
+    </select>
+
+    <select id="getProDtoPageByChannelIdOrderByPriceAsc" resultType="com.xinyunfu.product.dto.ProDto">
+    SELECT * FROM v_product t WHERE t.`channel_id`=#{channelId} order by t.price asc
+    </select>
+
+    <select id="findProDtoByProName" resultType="com.xinyunfu.product.dto.ProDto">
+        SELECT * FROM v_product t
+        <where>
+            and t.channel_type_id=1
+            <if test="queryParam != null and queryParam != ''">and t.pro_name like '%${queryParam}%'</if>
+            <if test="channelId != null ">and t.channel_id = #{channelId}</if>
+        </where>
+        <if test="orderByCloum != null and orderByCloum != ''">order by ${orderByCloum}</if>
+        <if test="isAsc==1">desc</if>
+    </select>
+
+    <select id="searchProDtoByProName" resultType="com.xinyunfu.product.dto.ProDto">
+        SELECT * FROM s_product s
+        <where>
+            <if test="queryParam != null and queryParam != ''">and s.pro_name like '%${queryParam}%'</if>
+        </where>
+        <if test="orderByCloum != null and orderByCloum != ''">order by ${orderByCloum}</if>
+        <if test="isAsc==1">desc</if>
+    </select>
+
+    <select id="findProDtosByChannelId" resultType="com.xinyunfu.product.dto.ProDto">
+    SELECT * FROM v_product t WHERE t.`channel_id`=#{channelId}
+    </select>
+</mapper>

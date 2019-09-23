@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyunfu.mapper.OrderInvoiceMapper">
+
+    <select id="getInvoceDTO" resultType="com.xinyunfu.dto.InvoiceDTO">
+        select
+            info.type As type,
+            info.email As email,
+            info.unit_name As unitName,
+            info.taxpayer_number As taxpayerNumber,
+            item.amount As amount,
+            item.pay_amount As payAmount,
+            item.item_no As itemNo,
+            item.`status` As `status`,
+            invoice.invoice_id As invoiceId,
+            invoice.`status` As invoiceIdStatus,
+            invoice.id As orderInvoiceId
+        from order_invoice invoice
+        left join invoice_info info on(invoice.invoice_id = info.id)
+        left join order_item item on(invoice.item_no = item.item_no)
+        <where>
+            item.`status` != 0
+            <if test="status != null and status != -1">
+                and invoice.`status` = #{status}
+            </if>
+            <if test="type != null and type != -1">
+                and invoice.type = #{type}
+            </if>
+        </where>
+        order by invoice.created_date desc
+    </select>
+
+</mapper>

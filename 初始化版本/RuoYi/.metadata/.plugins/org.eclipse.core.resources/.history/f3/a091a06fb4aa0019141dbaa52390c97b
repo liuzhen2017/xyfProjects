@@ -1,0 +1,44 @@
+package com.example.utils;
+
+import java.util.ArrayList;
+
+import org.aspectj.weaver.ast.Test;
+
+public class ComparUtils {
+
+	
+	
+	
+	public static void main(String[] args) {
+		ArrayList<TestBean> list = new ArrayList<>();
+		TestBean tb1 = new TestBean();
+		TestBean tb2 = new TestBean();
+		TestBean tb3 = new TestBean();
+		TestBean tb4 = new TestBean();
+		tb1.setId(55).setName("a");
+		tb2.setId(21).setName("b");
+		tb3.setId(43).setName("c");
+		tb4.setId(99).setName("d");
+		list.add(tb1);
+		list.add(tb2);
+		list.add(tb3);
+		list.add(tb4);
+        System.out.println("默认：=>"+list);
+        System.out.println("降序：=>"+);
+		
+	}
+	
+	
+	/**
+	 * 升序
+	 * @param list
+	 * @return
+	 */
+	public static ArrayList<TestBean> sort(ArrayList<TestBean> list){
+		
+	}
+	
+	public static ArrayList<TestBean> desc(ArrayList<TestBean> list){
+		
+	}
+}

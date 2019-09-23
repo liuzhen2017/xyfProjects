@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('用户钱包充值')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-userWallet-edit" >
+            <input id="id" name="id"  type="hidden">
+			<div class="form-group">
+				<label class="col-sm-3 control-label">用户编号：</label>
+				<div class="col-sm-8">
+					<input id="userNo" name="userNo"  class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">用户姓名：</label>
+				<div class="col-sm-8">
+					<input id="userName" name="userName" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>金额：</label>
+				<div class="col-sm-8">
+					<input id="userNo" name="userNo" class="form-control" type="text"  placeholder="请输入充值金额"  required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>密码：</label>
+				<div class="col-sm-8">
+					<input id="userName" name="userName" class="form-control" type="text" placeholder="请输入充值密码"  required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>短信：</label>
+				<div class="col-sm-8">
+					<input id="accountNo" name="accountNo" class="form-control" type="text" placeholder="请输入验证短信"  required>
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "ruoyi/userWallet";
+		$("#form-userWallet-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-userWallet-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

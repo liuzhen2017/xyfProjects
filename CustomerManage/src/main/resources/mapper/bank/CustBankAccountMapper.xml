@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyunfu.customer.repository.bank.CustBankAccountMapper">
+
+    <select id="findByUserNo" parameterType="java.lang.Long" resultType="com.xinyunfu.customer.domain.bank.CustBankAccountDTO">
+        select * from cust_bank_account where user_no = #{userNo}
+    </select>
+    <select id="findIdByUserNo" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select id from cust_bank_account where user_no = #{userNo}
+    </select>
+    <select id="findById" parameterType="java.lang.Long" resultType="com.xinyunfu.customer.domain.bank.CustBankAccountDTO">
+        select * from cust_bank_account where id = #{id}
+    </select>
+    <select id="findByAccountNo" parameterType="java.lang.String" resultType="com.xinyunfu.customer.domain.bank.CustBankAccountDTO">
+        select * from cust_bank_account where account_no = #{accountNo} and status != 0
+    </select>
+    <update id="update" parameterType="com.xinyunfu.customer.domain.bank.CustBankAccountDTO">
+        update cust_bank_account
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id != null">id = #{id},</if>
+            <if test="userNo != null">user_no = #{userNo},</if>
+            <if test="bankId != null">bank_id = #{bankId},</if>
+            <if test="accountName != null">account_name = #{accountName},</if>
+            <if test="accountNo != null">account_no = #{accountNo},</if>
+            <if test="cardNo != null">card_no = #{cardNo},</if>
+            <if test="defaultCard != null">default_card = #{defaultCard},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="bankName != null">bank_name = #{bankName},</if>
+            <if test="bankCode != null">bank_code = #{bankCode},</if>
+            <if test="provinceId != null">province_id = #{provinceId},</if>
+            <if test="cityId != null">city_id = #{cityId},</if>
+            <if test="regionId != null">region_id = #{regionId},</if>
+            <if test="provinceName != null">province_name = #{provinceName},</if>
+            <if test="cityName != null">city_name = #{cityName},</if>
+            <if test="regionName != null">region_name = #{regionName},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="accountType != null">account_type = #{accountType},</if>
+            <if test="cardType != null">card_type = #{cardType},</if>
+            <if test="cardName != null">card_name = #{cardName},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="branchNo != null">branch_no = #{branchNo},</if>
+            <if test="branchName != null">branch_name = #{branchName},</if>
+            <if test="branchBank != null">branch_bank = #{branchBank},</if>
+            <if test="imageFullpath != null">image_fullpath = #{imageFullpath},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="lastModifyTime != null">last_modify_time = #{lastModifyTime},</if>
+        </trim>
+        where id = #{id} and user_no = #{userNo};
+        update cust_bank_account set default_card = false
+            where user_no = #{userNo} and ${defaultCard} is true;
+    </update>
+    <insert id="add" parameterType="com.xinyunfu.customer.domain.bank.CustBankAccountDTO">
+        <selectKey resultType="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        update cust_bank_account set default_card = false
+            where user_no = #{userNo} and ${defaultCard} is true;
+        insert into cust_bank_account (id, user_no, bank_id, account_name, account_no,
+                                card_no, default_card, phone, bank_name, bank_code,
+                                province_id, city_id, region_id, province_name, city_name, region_name, address,
+                                account_type, card_type, card_name, status,
+                                branch_no, branch_name, branch_bank, image_fullpath,
+                                remark, create_time, last_modify_time)
+            values (#{id}, #{userNo}, #{bankId}, #{accountName}, #{accountNo},
+                #{cardNo}, #{defaultCard}, #{phone}, #{bankName}, #{bankCode},
+                #{provinceId}, #{cityId}, #{regionId}, #{provinceName}, #{cityName}, #{regionName}, #{address},
+                #{accountType}, #{cardType}, #{cardName}, #{status},
+                #{branchNo}, #{branchName}, #{branchBank}, #{imageFullpath},
+                #{remark}, #{createTime}, #{lastModifyTime});
+    </insert>
+</mapper>

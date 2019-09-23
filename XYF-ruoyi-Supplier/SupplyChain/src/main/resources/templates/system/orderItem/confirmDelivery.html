@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改订单子')" />
+	<link rel="stylesheet" href="../../../layui/css/layui.css"  media="all">
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m layui-form" id="form-orderItem-edit" >
+			<div class="form-group">
+				<label class="col-sm-3 control-label">子订单编号：</label>
+				<div class="col-sm-8">
+					<input id="itemNo" name="itemNo" th:value="*{itemNo}"   type="hidden">
+					<input id="itemNo1"  th:value="*{itemNo}" class="form-control" disabled type="text">
+				</div>
+			</div>
+			<!--<div class="form-group">-->
+				<!--<label class="col-sm-3 control-label">快递公司名称：</label>-->
+				<!--<div class="col-sm-8">-->
+					<!--<input id="shippingCompName" name="shippingCompName" class="form-control" type="text">-->
+				<!--</div>-->
+			<!--</div>-->
+			<div class="layui-form-item form-group">
+				<label class="layui-form-label" style="width: 30%">选择物流公司：</label>
+				<div class="layui-input-inline" >
+					<select id="shippingCompName" name="shippingCompName" lay-verify="required" lay-search="">
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">快递单号：</label>
+				<div class="col-sm-8">
+					<input id="shippingSn" name="shippingSn"  class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+	<script type="text/javascript" src="../../../util.js"></script>
+	<script src="../../../layui/layui.js"></script>
+    <script type="text/javascript">
+		var prefix = ctx + "system/orderItem";
+		$("#form-orderItem-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/confirmDeliverySave", $('#form-orderItem-edit').serialize());
+	        }
+	    }
+
+        $.getJSON(getRootPath()+"/orderItem/getExpress",(data)=>{
+            let arr = [];
+            // <option value="信丰物流">信丰物流</option> <option value="">直接选择或搜索选择</option>
+            $.each(data,(v,i)=>{
+                arr.push(`<option value="`+i.expressName+`">`+i.expressName+`</option>`)
+            })
+            $("#shippingCompName").empty().append(arr.join());
+            layui.use(['form'], function(){
+                var form = layui.form;
+            });
+        })
+
+	</script>
+</body>
+</html>

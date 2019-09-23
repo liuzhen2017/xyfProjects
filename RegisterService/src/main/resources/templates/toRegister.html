@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>星云福注册</title>
+
+</head>
+<style>
+	* {
+		padding: 0;
+		margin: 0;
+	}
+	input {
+		border: 0;
+		margin: 0;
+		padding: 0;
+		outline:none;
+		background-color: transparent;
+
+	}
+	html ,body{
+		height: 100%;
+	}
+	input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+		font-size: 0.28rem;
+		color: #ccc;
+	}
+
+	input::-moz-placeholder { /* Mozilla Firefox 19+ */
+		font-size: 0.28rem;
+		color: #ccc;
+	}
+
+	input:-ms-input-placeholder,
+	textarea:-ms-input-placeholder {
+		font-size: 0.28rem;
+		color: #ccc;
+	}
+
+	input::-webkit-input-placeholder,
+	textarea::-webkit-input-placeholder {
+		font-size: 0.28rem;
+		color: #ccc;
+	}
+
+	.content {
+		font-size: 0.3rem;
+		color: #333;
+		padding-top: 0.3rem;
+		background: url('./image/bg.png');
+		background-size: 100% 100%;
+		height: 100%;
+		box-sizing: border-box;
+	}
+
+	.logo {
+		display: block;
+		width: 2.69rem;
+		height: 2.69rem;
+		margin: 0.8rem auto 0 auto;
+	}
+	.title {
+		text-align: center;
+		font-size: 0.36rem;
+		font-weight: bold;
+		color: #fff;
+		opacity: 0.8;
+	}
+	.form {
+		padding: 0 1rem;
+	}
+	.form .input {
+		height: 0.99rem;
+		width: 100%;
+		border-bottom: 1px solid rgba(204,204,204,0.6);
+		font-size: 0.38rem;
+		color: #fff;
+		opacity: 0.8;
+	}
+	.btn {
+		display: block;
+		line-height: 0.75rem;
+		text-align: center;
+		height: 0.75rem;
+		width: 100%;
+		border-radius: 0.4rem;
+		background-color: rgba(204,204,204,0.6);
+		font-size: 0.34rem;
+		color: #fff;
+		margin-top: 0.8rem;
+	}
+	.check {
+		font-size: 0.26rem;
+		color: #ccc;
+		margin-top: 0.3rem;
+	}
+	.able {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+	.able > input {
+		margin-right: 0.1rem;
+		width: 0.3rem;
+		height: 0.3rem;
+	}
+	.active {
+		background-color: rgba(234, 191, 112, 0.6);
+	}
+	.input.code {
+		display: flex;
+		align-items: center;
+	}
+	.input.code > span {
+		font-size: 0.26rem;
+		flex: 1;
+		text-align: right;
+		font-size: 0.28rem;
+	}
+	.input.code > input{
+		width: 60%;
+		font-size: 0.38rem;
+	}
+
+</style>
+
+<body>
+<div class="content">
+	<img class="logo" src="./image/logo.png" alt="">
+	<div class="title">星云福</div>
+
+	<div class="form">
+		<input class="input get-input" id="phones" type="number" shuType="phone" maxlength="11" placeholder="请输入手机号码">
+		<input class="input get-input" id="password" type="password" shuType="password" maxlength="18" placeholder="请输入密码">
+		<div class="input code">
+			<input class="input get-input" id="code" type="number" shuType="codetext" maxlength="6" placeholder="请输入验证码">
+			<span style="color:#EABF70" id="codeNumyanzhnegma" onclick="getCode()">获取验证码</span>
+		</div>
+		<div class="input code">
+			<input class="input get-input" id="userId" style="border:none" value=""  type="text"  disabled maxlength="18" placeholder="请输入邀请码">
+			<span>邀请码</span>
+		</div>
+		<div class="btn" id="bottom" onclick="submitClick()">注  册</div>
+
+		<div class="check">
+			<label class="able">
+				<input type="checkbox" id="check"  name="like" value="0">
+				勾选代表您已同意星云福<span onclick="href()" style="color:#378EEF">《注册协议》</span>
+			</label>
+		</div>
+	</div>
+	<div id="captcha"></div>
+
+</div>
+</body>
+<!--   顶象无感验证码   -->
+<script src="https://cdn.dingxiang-inc.com/ctu-group/captcha-ui/index.js"></script>
+<script src="../js/jsencrypt.js"></script>
+<script src="../js/md5.js"></script>
+<script>
+    let tokenData = null;
+    const url = "http://register.xyf823.com";
+    // const url = "http://localhost:9527";
+
+    const encrypt = new JSEncrypt();
+    // console.log(JSEncrypt)
+    const key = `MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkuwOb8EFmP8RmRRQGQnTDDR+x+5yTfzhpXvYDMmStKWpEdy4DImU1dvg1sXi/0EyfIxb5YvTzSNwV1rTMvTPuwxVsQTSIV0Z7DsYpOFzB/69cxsfRA5SHm1N8jd8ecFQ6FpheQD0zkWezIMG7KGLvOM4bi+d8/hqLH6rfnHlSEBrI4ZvFEn/I2zDtmU1mwV53RrMRjHfj/32dL50xP8yjhJmePagaWm6ozPB6/1+NWzNri6Z+G3IZAPBWdilFO3lkqzZdjeOs8AqG6zogS67XldqIZO2T9pQb0hfs8RVYEHyYdrU7rZliDMAUZeHUR4vtUCGxWvUCAems/Y5ck0bfQIDAQAB`;
+    // encrypt.setPublicKey(key);
+
+
+    //  获取url地址栏参数
+    function GetUrlPara(){
+        let url = window.location.href;
+        let arrUrl = url.split("?");
+        let para = arrUrl[1];
+        if(!para) return false
+        let arr = para.split('&')
+        let obj = {}
+        for(var i = 0; i <arr.length; i++) {
+            let l = arr[i].split('=')
+            obj[l[0]] = l[1]
+        }
+        return obj;
+    };
+
+    if(GetUrlPara()) {
+        document.getElementById("userId").value = GetUrlPara().code;
+
+    };
+    function href ( ) {
+        window.location.href = 'http://html.xyf823.com/register.html';
+    };
+    let doc = document.getElementsByClassName("get-input");
+    let input1 = '';
+    let input2 = '';
+    let input3 = "";
+
+    for(var i = 0; i < doc.length; i++) {
+        doc[i].oninput = docInput;
+    };
+
+
+
+
+    function docInput (e){
+        let type = this.getAttribute('shuType')
+        if(type == 'phone') {
+            input1 = this.value;
+        } else if(type == 'password') {
+            input2 = this.value;
+        } else if(type == 'codetext') {
+            input3 = this.value;
+        }
+        let btnHtml = document.getElementById("bottom");
+        if(input1  && input2 && input3) {
+            btnHtml.classList.add('active');
+        } else {
+            btnHtml.classList.remove('active');
+        }
+    };
+    let hasReg = true;
+    function submitClick (){
+        let phone = document.getElementById('phones').value;
+        let password = document.getElementById('password').value;
+        let code = document.getElementById('code').value;  // 验证码
+        let userCode = document.getElementById('userId').value; // 邀请码
+        let check = document.getElementById('check').checked;  //
+
+        if(phone.length == 0 || password.length == 0 || code.length == 0 || userCode.length == 0) {
+            alert('请填写完整信息');
+            return false;
+        }
+        if(!check) {
+            alert('请勾选注册协议');
+            return false;
+        }
+        if(!hasReg) {
+            return false;
+        }
+        hasReg = false;
+        btnClick(url+'/submit',getSignData({
+            phone: phone,
+            verifyCode: code,
+            password:password,
+            userCode: userCode,
+            token: tokenData
+        })).then(res=>{
+            if(res.code == '0000') {
+                alert('亲，恭喜你注册成功！');
+                window.location.href = res.data.downloadUrl;
+            } else {
+                alert(res.message);
+            }
+            document.getElementById('phones').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('code').value  = '';
+            hasReg = true;
+        })
+    }
+
+    /*
+    获取短信验证
+    */
+    let conuut = 60;
+    let hascode = true;
+
+    function getCode() {
+        if(!hascode) return
+        if(!input1 || input1.length < 11) {
+            alert('请输入正确的手机号码');
+            return false;
+        };
+
+        hascode = false;
+
+        var myCaptcha = _dx.Captcha(document.getElementById('captcha'), {
+            appId: '93df4d172e45633f634ed2b9569a3c45', //appId，在控制台中“应用管理”或“应用配置”模块获取
+            style:'popup',
+            success:  (token) => {
+                tokenData = token
+                codeClick(token);
+                myCaptcha.hide();
+            }
+        })
+        myCaptcha.show();
+
+        myCaptcha.on('hide', function () {
+
+        });
+    };
+
+    function codeClick(token) {
+        let el = document.getElementById('codeNumyanzhnegma')
+
+        var a = getSignData2({
+            phone: input1,
+            token: token,
+            tokenType: 1,
+            type:'register'
+        });
+        btnClick(url+'/sendCode',a).then(res=>{
+            if(res.code == '0000') {
+                let id = setInterval(()=>{
+                    conuut--;
+                    el.innerHTML = conuut +'s后重新获取';
+                    if(conuut <= 0) {
+                        clearInterval(id);
+                        el.innerHTML = '重新获取';
+                        conuut = 60;
+                        hascode = true;
+                    }
+                },1000)
+            } else {
+                alert(res.message)
+                hascode = true
+            }
+        });
+    };
+
+
+    function getKey(data) {
+        // let key = encrypt.encryptLong(JSON.stringify(data))
+        return JSON.stringify(data);
+        // if (key.lastIndexOf('==') == -1) {
+        //     return getKey(data)
+        // }
+        // return key
+    }
+
+    function getSignData(data) {
+        var s = '';//JSON.stringify(data);
+
+        s='phone='+data.phone+'&';
+        s+='verifyCode='+data.verifyCode+'&';
+        s+='password='+data.password+'&';
+        s+='userCode='+data.userCode+'&';
+        s+='token='+data.token+'&';
+
+        s+='keyn='+'B6A05C25A3C98305F69CE720DF21AB5A';
+		// console.log(s);
+        data.sign= md5(s);
+        // console.log(data.sign);
+        return data;
+
+    }
+    function getSignData2(data) {
+        var s = '';//JSON.stringify(data);
+        s='phone='+data.phone+'&';
+        s+='token='+data.token+'&';
+        s+='tokenType='+data.tokenType+'&';
+        s+='type='+data.type+'&';
+
+        s+='keyn='+'B6A05C25A3C98305F69CE720DF21AB5A';
+
+        data.sign= md5(s);
+
+        return data;
+
+    }
+    function btnClick(url,data) {
+        // let arr = []
+        // for(var k in data) {
+        //     arr.push(`${k}=${data[k]}`)
+        // }
+        // let formData = arr.join('&')
+        //let rsa = getKey(data);\
+		var rsa = data;
+        return new Promise(function(reslove,reject){
+            //创建核心对象
+            xmlhttp = null;
+            if (window.XMLHttpRequest) {// code for Firefox, Opera, IE7, etc.
+                xmlhttp = new XMLHttpRequest();
+            } else if (window.ActiveXObject) {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            };
+            //编写回调函数
+            xmlhttp.onreadystatechange = function() {
+                /* 	alert(xmlhttp.readyState); */
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    reslove(JSON.parse(xmlhttp.responseText));
+                }
+                /* alert(123); */
+            };
+            //open设置请求方式和请求路径
+            xmlhttp.open("post", url,true);//一个servlet，后面还可以写是否同步
+            //设置请求头
+            // xmlhttp.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded')
+            xmlhttp.setRequestHeader("Content-Type", 'application/json');
+            //send 发送
+            // xmlhttp.send(`data=${rsa}`);
+            xmlhttp.send(JSON.stringify({data:rsa}));
+        })
+
+    }
+
+
+</script>
+<script>
+    (function (doc, win) {
+        var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function () {
+                var clientWidth = docEl.clientWidth;
+                if (!clientWidth) return;
+                if(clientWidth>=750){
+                    docEl.style.fontSize = '100px';
+                }else{
+                    docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+                }
+            };
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener('DOMContentLoaded', recalc, false);
+    })(document, window);
+</script>
+</html>

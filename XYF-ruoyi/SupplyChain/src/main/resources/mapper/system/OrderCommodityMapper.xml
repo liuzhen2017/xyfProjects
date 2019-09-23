@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.OrderCommodityMapper">
+    
+    <resultMap type="OrderCommodity" id="OrderCommodityResult">
+        <result property="id"    column="id"    />
+        <result property="itemNo"    column="item_no"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="skuId"    column="sku_id"    />
+        <result property="skuRemarks"    column="sku_remarks"    />
+        <result property="goodsName"    column="goods_name"    />
+        <result property="price"    column="price"    />
+        <result property="marketPrice"    column="market_price"    />
+        <result property="freight"    column="freight"    />
+        <result property="discount"    column="discount"    />
+        <result property="costPrice"    column="cost_price"    />
+        <result property="buyCount"    column="buy_count"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="enable"    column="enable"    />
+        <result property="img"    column="img"    />
+    </resultMap>
+	
+	<sql id="selectOrderCommodityVo">
+        select id, item_no, goods_id, sku_id, sku_remarks, goods_name, price, market_price, freight, discount, cost_price, buy_count, created_by, created_time, updated_by, updated_time, enable, img from order_commodity
+    </sql>
+	
+    <select id="selectOrderCommodityList" parameterType="OrderCommodity" resultMap="OrderCommodityResult">
+        <include refid="selectOrderCommodityVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="itemNo != null  and itemNo != '' "> and item_no = #{itemNo}</if>
+             <if test="goodsId != null "> and goods_id = #{goodsId}</if>
+             <if test="skuId != null "> and sku_id = #{skuId}</if>
+             <if test="skuRemarks != null  and skuRemarks != '' "> and sku_remarks = #{skuRemarks}</if>
+             <if test="goodsName != null  and goodsName != '' "> and goods_name = #{goodsName}</if>
+             <if test="price != null "> and price = #{price}</if>
+             <if test="marketPrice != null "> and market_price = #{marketPrice}</if>
+             <if test="freight != null "> and freight = #{freight}</if>
+             <if test="discount != null "> and discount = #{discount}</if>
+             <if test="costPrice != null "> and cost_price = #{costPrice}</if>
+             <if test="buyCount != null "> and buy_count = #{buyCount}</if>
+             <if test="createdBy != null  and createdBy != '' "> and created_by = #{createdBy}</if>
+             <if test="createdTime != null "> and created_time = #{createdTime}</if>
+             <if test="updatedBy != null  and updatedBy != '' "> and updated_by = #{updatedBy}</if>
+             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+             <if test="enable != null "> and enable = #{enable}</if>
+             <if test="img != null  and img != '' "> and img = #{img}</if>
+         </where>
+    </select>
+    
+    <select id="selectOrderCommodityById" parameterType="Long" resultMap="OrderCommodityResult">
+        <include refid="selectOrderCommodityVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertOrderCommodity" parameterType="OrderCommodity" useGeneratedKeys="true" keyProperty="id">
+        insert into order_commodity
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="itemNo != null  and itemNo != ''  ">item_no,</if>
+			<if test="goodsId != null  ">goods_id,</if>
+			<if test="skuId != null  ">sku_id,</if>
+			<if test="skuRemarks != null  and skuRemarks != ''  ">sku_remarks,</if>
+			<if test="goodsName != null  and goodsName != ''  ">goods_name,</if>
+			<if test="price != null  ">price,</if>
+			<if test="marketPrice != null  ">market_price,</if>
+			<if test="freight != null  ">freight,</if>
+			<if test="discount != null  ">discount,</if>
+			<if test="costPrice != null  ">cost_price,</if>
+			<if test="buyCount != null  ">buy_count,</if>
+			<if test="createdBy != null  and createdBy != ''  ">created_by,</if>
+			<if test="createdTime != null  ">created_time,</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">updated_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+			<if test="enable != null  ">enable,</if>
+			<if test="img != null  and img != ''  ">img,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="itemNo != null  and itemNo != ''  ">#{itemNo},</if>
+			<if test="goodsId != null  ">#{goodsId},</if>
+			<if test="skuId != null  ">#{skuId},</if>
+			<if test="skuRemarks != null  and skuRemarks != ''  ">#{skuRemarks},</if>
+			<if test="goodsName != null  and goodsName != ''  ">#{goodsName},</if>
+			<if test="price != null  ">#{price},</if>
+			<if test="marketPrice != null  ">#{marketPrice},</if>
+			<if test="freight != null  ">#{freight},</if>
+			<if test="discount != null  ">#{discount},</if>
+			<if test="costPrice != null  ">#{costPrice},</if>
+			<if test="buyCount != null  ">#{buyCount},</if>
+			<if test="createdBy != null  and createdBy != ''  ">#{createdBy},</if>
+			<if test="createdTime != null  ">#{createdTime},</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">#{updatedBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+			<if test="enable != null  ">#{enable},</if>
+			<if test="img != null  and img != ''  ">#{img},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateOrderCommodity" parameterType="OrderCommodity">
+        update order_commodity
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="itemNo != null  and itemNo != ''  ">item_no = #{itemNo},</if>
+            <if test="goodsId != null  ">goods_id = #{goodsId},</if>
+            <if test="skuId != null  ">sku_id = #{skuId},</if>
+            <if test="skuRemarks != null  and skuRemarks != ''  ">sku_remarks = #{skuRemarks},</if>
+            <if test="goodsName != null  and goodsName != ''  ">goods_name = #{goodsName},</if>
+            <if test="price != null  ">price = #{price},</if>
+            <if test="marketPrice != null  ">market_price = #{marketPrice},</if>
+            <if test="freight != null  ">freight = #{freight},</if>
+            <if test="discount != null  ">discount = #{discount},</if>
+            <if test="costPrice != null  ">cost_price = #{costPrice},</if>
+            <if test="buyCount != null  ">buy_count = #{buyCount},</if>
+            <if test="createdBy != null  and createdBy != ''  ">created_by = #{createdBy},</if>
+            <if test="createdTime != null  ">created_time = #{createdTime},</if>
+            <if test="updatedBy != null  and updatedBy != ''  ">updated_by = #{updatedBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="enable != null  ">enable = #{enable},</if>
+            <if test="img != null  and img != ''  ">img = #{img},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteOrderCommodityById" parameterType="Long">
+        delete from order_commodity where id = #{id}
+    </delete>
+	
+    <delete id="deleteOrderCommodityByIds" parameterType="String">
+        delete from order_commodity where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

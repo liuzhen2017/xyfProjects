@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('商品分类关系列表')"/>
+	<link rel="stylesheet" href="../../../layui/css/layui.css"  media="all">
+</head>
+<body class="gray-bg">
+<div class="container-div">
+	<div class="row">
+		<div class="col-sm-12 search-collapse">
+			<form id="formId">
+				<div class="select-list">
+					<ul>
+						<li>
+							商品id：<input type="text" name="proId"/>
+						</li>
+						<li>
+							商品名称：<input type="text" name="proName"/>
+						</li>
+						<li>
+							分类id：<input type="text" name="channelId"/>
+						</li>
+						<li>
+							分类名称：<input type="text" name="channelName"/>
+						</li>
+						<li>
+							状态：<select name="status">
+							<option value="0">启用</option>
+							<option value="1">禁用</option>
+							<option value="2">删除</option>
+						</select>
+						</li>
+
+						<li>
+							备注：<input type="text" name="remarks"/>
+						</li>
+
+
+						<li>
+							<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+									class="fa fa-search"></i>&nbsp;搜索</a>
+							<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+									class="fa fa-refresh"></i>&nbsp;重置</a>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+
+		<div class="btn-group-sm" id="toolbar" role="group">
+			<a class="btn btn-success" onclick="openPage('添加商品分类关系','/system/proChannelRelation/add',1500,800)" shiro:hasPermission="system:proChannelRelation:add">
+				<i class="fa fa-plus"></i> 添加
+			</a>
+			<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:proChannelRelation:edit">
+			<i class="fa fa-edit"></i> 修改
+			</a>
+			<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:proChannelRelation:remove">
+			<i class="fa fa-remove"></i> 删除
+			</a>
+			<a class="btn btn-warning" onclick="$.table.exportExcel()"
+			   shiro:hasPermission="system:proChannelRelation:export">
+				<i class="fa fa-download"></i> 导出
+			</a>
+		</div>
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table" data-mobile-responsive="true"></table>
+		</div>
+	</div>
+</div>
+<div th:include="include :: footer"></div>
+<script type="text/javascript" src="../../../util.js"></script>
+<script type="text/javascript" src="../../../ruoyi/js/common.js"></script>
+<script type="text/javascript" src="../../../util.js"></script>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:proChannelRelation:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:proChannelRelation:remove')}]];
+    var prefix = ctx + "system/proChannelRelation";
+
+    /**
+     *  打开图片
+     * @param src img的URL
+     */
+    function previewImg(src) {
+        var img = new Image();
+        img.src = src;
+        var height = img.height + 50; //获取图片高度
+        var width = img.width; 		  //获取图片宽度
+        height = height > 800 ? 800:height; //限制 最高
+        width = width > 1400 ? 1400:width; //限制 最宽
+        var imgHtml = "<img height='"+(height-50)+"' width='"+width+"' src='" + src+ "' />";
+        //弹出层
+        layer.open({
+            type: 1,
+            shade: 0.8,
+            offset: 'auto',
+            area: [width + 'px',height+'px'],
+            shadeClose:true,//点击外围关闭弹窗
+            scrollbar: false,//不现实滚动条
+            title: "图片预览", //不显示标题
+            content: imgHtml //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+        });
+    }
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "商品分类关系",
+            showExport: true,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '主键id',
+                    visible: false
+                },
+                {
+                    field: 'proId',
+                    title: '商品id',
+                    sortable: true
+                },
+                {
+                    field: 'proName',
+                    title: '商品名称',
+                    sortable: true
+                },
+                {
+                    field: 'channelId',
+                    title: '分类id',
+                    sortable: true
+                },
+                {
+                    field: 'channelName',
+                    title: '分类名称',
+                    sortable: true
+                },
+                {
+                    field: 'imgUrl',
+                    title: '栏目展示的图片',
+                    sortable:true, formatter: function (value, row, index) {
+                        if(value == "不需要"){
+                            value = false;
+                        }
+                        return value ? `<a href="javascript:;" onclick="previewImg('` + value + `')"><img height="80"  src="` + value + `"/></a>`:"-";
+                    }
+                },
+                {
+                    field: 'color',
+                    title: '背景颜色',
+                    sortable: true
+                },
+                {
+                    field: 'status',
+                    title: '状态',
+                    sortable:true,formatter: function (value, row, index) {
+                        return value == "0" ? `<button type="button" class="layui-btn layui-btn layui-btn-xs">可用</button>`:`<button type="button" class="layui-btn layui-btn-disabled layui-btn-xs">禁用</button>`;
+                    }
+                },
+                {
+                    field: 'remarks',
+                    title: '备注',
+                    sortable: true
+                },
+                {
+                    field: 'createdTime',
+                    title: '创建时间',
+                    sortable: true
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                            var actions = [];
+						actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.proId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+
+						return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>

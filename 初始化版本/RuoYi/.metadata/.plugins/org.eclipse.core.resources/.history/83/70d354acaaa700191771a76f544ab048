@@ -1,0 +1,5 @@
+package com.microservice.sao;
+
+public interface AppUserSao {
+
+}

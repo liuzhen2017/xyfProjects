@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增账户')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-acctManger-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">账号：</label>
+				<div class="col-sm-8">
+					<input id="accNo" name="accNo" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">账号名：</label>
+				<div class="col-sm-8">
+					<input id="accName" name="accName" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">银行名称：</label>
+				<div class="col-sm-8">
+					<input id="bankName" name="bankName" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">银行编号：</label>
+				<div class="col-sm-8">
+					<input id="bankNo" name="bankNo" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">余额：</label>
+				<div class="col-sm-8">
+					<input id="balance" name="balance" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">冻结余额：</label>
+				<div class="col-sm-8">
+					<input id="freezingBalance" name="freezingBalance" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">可用余额：</label>
+				<div class="col-sm-8">
+					<input id="canUserBalance" name="canUserBalance" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">用户ID：</label>
+				<div class="col-sm-8">
+					<input id="userId" name="userId" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">账户类型：</label>
+				<div class="col-sm-8">
+					<input id="accType" name="accType" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">业务状态：</label>
+				<div class="col-sm-8">
+					<input id="busiStatus" name="busiStatus" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">创建时间：</label>
+				<div class="col-sm-8">
+					<input id="createdTime" name="createdTime" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">创建人：</label>
+				<div class="col-sm-8">
+					<input id="createdBy" name="createdBy" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">最后修改时间：</label>
+				<div class="col-sm-8">
+					<input id="updatedTime" name="updatedTime" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">最后修改人：</label>
+				<div class="col-sm-8">
+					<input id="updatedBy" name="updatedBy" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">是否可用（可用=1，禁用=0）：</label>
+				<div class="col-sm-8">
+					<input id="enable" name="enable" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">身份证号码：</label>
+				<div class="col-sm-8">
+					<input id="idCardNo" name="idCardNo" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">分行名称：</label>
+				<div class="col-sm-8">
+					<input id="branchName" name="branchName" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">分行行号：</label>
+				<div class="col-sm-8">
+					<input id="branchNo" name="branchNo" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">省份：</label>
+				<div class="col-sm-8">
+					<input id="provinceName" name="provinceName" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">城市：</label>
+				<div class="col-sm-8">
+					<input id="cityName" name="cityName" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">用户姓名：</label>
+				<div class="col-sm-8">
+					<input id="userName" name="userName" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">企业ID：</label>
+				<div class="col-sm-8">
+					<input id="custId" name="custId" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "xinyunfu/acctManger"
+		$("#form-acctManger-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-acctManger-add').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

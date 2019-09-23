@@ -1,0 +1,106 @@
+spring:
+  application:
+    name: ProductDocKing
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: ENC(gmyc0w5G9juDFphYmJc/1F1DTg//s+dA)
+#    url: jdbc:mysql://120.79.247.111:3306/productDocKing?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://192.168.1.24:3306/productdocking?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+    username: root
+  main:
+   allow-bean-definition-overriding: true
+#  jpa:
+ #   database-platform: org.hibernate.dialect.MySQL5Dialect
+server:
+  port: 8090
+#注册中心配置
+eureka:
+  instance:
+    lease-expiration-duration-in-seconds: 15
+    lease-renewal-interval-in-seconds: 5
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipaddress}:${server.port}
+  client:
+    registry-fetch-interval-seconds: 5
+    service-url:
+      defaultZone: http://192.168.1.56:8761/eureka,http://192.168.1.56:8762/eureka,http://192.168.1.56:8763/eureka
+    #defaultZone: http://119.23.31.3:8761/eureka,http://120.79.247.111:8761/eureka
+    logging:
+      level:
+        com.example.com.xinyunfu.mapper: debug
+feign:
+  hystrix:
+    enabled: false
+#mybatis-plush配置
+mybatis-plus:
+  type-aliases-package: com.xinyunfu.product
+  mapper-locations: classpath:mappers/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+jasypt:
+  encryptor:
+    password: EbfYkitulv73I2p0mXI50JMXoaxZTKJ7
+jd-gateway:
+  # baseUrl
+  baseUrl: http://183.2.171.119:8800/
+  # appKey
+  #appKey: d54cdba5e7a4453736e0f4c783c41891
+  appKey: 3515fb74346b1066682dbc5b1338eb8f
+  # appSecret
+  #appSecret: a6c55fb8067f70db11e509237e78db60
+  appSecret: 9255a9015f1f0508e70ea9cb7cb1ea45
+  # getTokenUrl
+  getTokenUrl: api/Jwt
+  # serialNumUrl
+  serialNumUrl: api/SerialNumber
+  # goodsPoolUrl
+  goodsPoolUrl: api/kpl/Goods/Pool
+  # goodsListUrl
+  goodsListUrl: api/kpl/Goods
+  # goodsDetailUrl
+  goodsDetailUrl: api/kpl/Goods
+  # ImageUrl
+  imageUrl: api/kpl/Goods/Image
+  # imageUrlPrefix
+  imagePrefixUrl: http://img13.360buyimg.com/n0/
+  # freightUrl
+  freightUrl: api/kpl/Goods/Freight
+  # stockUrl
+  priceUrl: api/kpl/Goods/Price
+  # stockUrl  批量获取商品库存接口（建议订单详情页、下单使用）
+  stockUrl: api/kpl/Goods/Stock
+  # batchStockUrl   商品列表页使用
+  batchStockUrl: api/kpl/Goods/Stock2
+  # orderUrl
+  orderUrl: api/kpl/Order
+  # categoryUrl
+  categoryUrl: api/kpl/Category
+  # similarGoodsUrl
+  similarGoodsUrl: api/kpl/Goods/Similar
+  # similarGoodsUrl
+  shelfUrl: api/kpl/Shelf
+  # shelfGoodsUrl
+  shelfGoodsUrl: api/kpl/ShelfGoods
+  # shelfGoodsStateUrl，上架商品状态
+  shelfGoodsStateUrl: api/kpl/ShelfGoods/state
+  # shelfGoodsStateUrl
+  goodsStyleUrl: api/kpl/Goods/Style
+  # goodsStateUrl，kpl商品上下架状态
+  goodsStateUrl: api/kpl/Goods/State
+  # goodsCheckUrl，查询商品时候可售
+  goodsCheckUrl: api/kpl/Goods/Check
+  # areaLimitUrl，区域购买限制
+  areaLimitUrl: api/kpl/Goods/AreaLimit
+  # logisticsUrl, 物流跟踪
+  logisticsUrl: api/kpl/Order/Logistics
+  # postage
+postage: 6
+logging:
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %level - %thread - %logger{50}.%M.%line - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %level - %thread - %logger{50}.%M.%line - %msg%n"
+  file:
+    max-history: 30
+    max-size: 500MB
+  level:
+    root: INFO

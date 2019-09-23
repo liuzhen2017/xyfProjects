@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.EbankTransferMapper">
+    
+    <resultMap type="EbankTransfer" id="EbankTransferResult">
+        <result property="id"    column="id"    />
+        <result property="orderNo"    column="order_no"    />
+        <result property="mergeOrderNo"    column="merge_order_no"    />
+        <result property="sourceUserNo"    column="source_user_no"    />
+        <result property="sourceAccountType"    column="source_account_type"    />
+        <result property="receiveUserNo"    column="receive_user_no"    />
+        <result property="receiveAccountType"    column="receive_account_type"    />
+        <result property="amount"    column="amount"    />
+        <result property="closed"    column="closed"    />
+        <result property="serverName"    column="server_name"    />
+        <result property="version"    column="version"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="lastModifyTime"    column="last_modify_time"    />
+    </resultMap>
+	
+	<sql id="selectEbankTransferVo">
+        select id, order_no, merge_order_no, source_user_no, source_account_type, receive_user_no, receive_account_type, amount, closed, server_name, version, create_time, last_modify_time from ebank_transfer
+    </sql>
+	
+    <select id="selectEbankTransferList" parameterType="EbankTransfer" resultMap="EbankTransferResult">
+        <include refid="selectEbankTransferVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="orderNo != null  and orderNo != '' "> and order_no = #{orderNo}</if>
+             <if test="mergeOrderNo != null  and mergeOrderNo != '' "> and merge_order_no = #{mergeOrderNo}</if>
+             <if test="sourceUserNo != null "> and source_user_no = #{sourceUserNo}</if>
+             <if test="sourceAccountType != null  and sourceAccountType != '' "> and source_account_type = #{sourceAccountType}</if>
+             <if test="receiveUserNo != null "> and receive_user_no = #{receiveUserNo}</if>
+             <if test="receiveAccountType != null  and receiveAccountType != '' "> and receive_account_type = #{receiveAccountType}</if>
+             <if test="amount != null "> and amount = #{amount}</if>
+             <if test="closed != null "> and closed = #{closed}</if>
+             <if test="serverName != null  and serverName != '' "> and server_name = #{serverName}</if>
+             <if test="version != null "> and version = #{version}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="lastModifyTime != null "> and last_modify_time = #{lastModifyTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectEbankTransferById" parameterType="Integer" resultMap="EbankTransferResult">
+        <include refid="selectEbankTransferVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertEbankTransfer" parameterType="EbankTransfer" useGeneratedKeys="true" keyProperty="id">
+        insert into ebank_transfer
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="orderNo != null  and orderNo != ''  ">order_no,</if>
+			<if test="mergeOrderNo != null  and mergeOrderNo != ''  ">merge_order_no,</if>
+			<if test="sourceUserNo != null  ">source_user_no,</if>
+			<if test="sourceAccountType != null  and sourceAccountType != ''  ">source_account_type,</if>
+			<if test="receiveUserNo != null  ">receive_user_no,</if>
+			<if test="receiveAccountType != null  and receiveAccountType != ''  ">receive_account_type,</if>
+			<if test="amount != null  ">amount,</if>
+			<if test="closed != null  ">closed,</if>
+			<if test="serverName != null  and serverName != ''  ">server_name,</if>
+			<if test="version != null  ">version,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="lastModifyTime != null  ">last_modify_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="orderNo != null  and orderNo != ''  ">#{orderNo},</if>
+			<if test="mergeOrderNo != null  and mergeOrderNo != ''  ">#{mergeOrderNo},</if>
+			<if test="sourceUserNo != null  ">#{sourceUserNo},</if>
+			<if test="sourceAccountType != null  and sourceAccountType != ''  ">#{sourceAccountType},</if>
+			<if test="receiveUserNo != null  ">#{receiveUserNo},</if>
+			<if test="receiveAccountType != null  and receiveAccountType != ''  ">#{receiveAccountType},</if>
+			<if test="amount != null  ">#{amount},</if>
+			<if test="closed != null  ">#{closed},</if>
+			<if test="serverName != null  and serverName != ''  ">#{serverName},</if>
+			<if test="version != null  ">#{version},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="lastModifyTime != null  ">#{lastModifyTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateEbankTransfer" parameterType="EbankTransfer">
+        update ebank_transfer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderNo != null  and orderNo != ''  ">order_no = #{orderNo},</if>
+            <if test="mergeOrderNo != null  and mergeOrderNo != ''  ">merge_order_no = #{mergeOrderNo},</if>
+            <if test="sourceUserNo != null  ">source_user_no = #{sourceUserNo},</if>
+            <if test="sourceAccountType != null  and sourceAccountType != ''  ">source_account_type = #{sourceAccountType},</if>
+            <if test="receiveUserNo != null  ">receive_user_no = #{receiveUserNo},</if>
+            <if test="receiveAccountType != null  and receiveAccountType != ''  ">receive_account_type = #{receiveAccountType},</if>
+            <if test="amount != null  ">amount = #{amount},</if>
+            <if test="closed != null  ">closed = #{closed},</if>
+            <if test="serverName != null  and serverName != ''  ">server_name = #{serverName},</if>
+            <if test="version != null  ">version = #{version},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="lastModifyTime != null  ">last_modify_time = #{lastModifyTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteEbankTransferById" parameterType="Integer">
+        delete from ebank_transfer where id = #{id}
+    </delete>
+	
+    <delete id="deleteEbankTransferByIds" parameterType="String">
+        delete from ebank_transfer where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

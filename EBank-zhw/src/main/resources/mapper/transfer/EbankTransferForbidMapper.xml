@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingyunfu.ebank.mapper.transfer.EbankTransferForbidMapper">
+    <select id="findAll" resultType="com.xingyunfu.ebank.domain.transfer.EbankTransferForbidDTO">
+        select * from ebank_transfer_forbid
+    </select>
+    <insert id="insert" parameterType="com.xingyunfu.ebank.domain.transfer.EbankTransferForbidDTO">
+        insert into ebank_transfer_forbid (id, account_no, user_no, user_phone)
+            values (#{id}, #{accountNo}, #{userNo}, #{userPhone})
+    </insert>
+</mapper>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增每个转账账户的虚拟账号')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-ebankAccount-add">
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>供应链名称：</label>
+				<div class="col-sm-8">
+					<a href="#" onclick="selectSupply()">点击选择供应链</a>
+					<input id="userName" name="userName" class="form-control" type="text" >
+					<input id="userNo" name="userNo" class="form-control" type="hidden" required placeholder="请选择供应链">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>账号名：</label>
+				<div class="col-sm-8">
+					<input id="accountName" name="accountName" class="form-control" type="text" required placeholder="请输入账号名">
+				</div>
+			</div>
+			<!---默认为供应链-->
+			<input id="accountType" name="accountType" class="form-control" type="hidden" value="supplier">
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>银行卡号：</label>
+				<div class="col-sm-8">
+					<input id="bankCardNo" name="bankCardNo" class="form-control" type="text" required placeholder="请输入银行卡号">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>银行名称：</label>
+				<div class="col-sm-8">
+					<input id="bankName" name="bankName" class="form-control" type="text" required placeholder="请输入银行名称">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">银行编号：</label>
+				<div class="col-sm-8">
+					<input id="bankNo" name="bankNo" class="form-control" type="text" required placeholder="请输入银行编号">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">分行名称：</label>
+				<div class="col-sm-8">
+					<input id="branchName" name="branchName" class="form-control" type="text"  placeholder="请输入分行名称">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">分行行号：</label>
+				<div class="col-sm-8">
+					<input id="branchNo" name="branchNo" class="form-control" type="text"  placeholder="请输入分行行号">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>省&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;份：</label>
+				<div class="col-sm-8">
+					<input id="provinceName" name="provinceName" class="form-control" type="text" required placeholder="请输入省份">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>城&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;市：</label>
+				<div class="col-sm-8">
+					<input id="cityName" name="cityName" class="form-control" type="text" required placeholder="请输入城市">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+	<script type="text/javascript" src="../../../util.js"></script>
+	<script type="text/javascript">
+		var prefix = ctx + "system/SupplyAccount"
+		$("#form-ebankAccount-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-ebankAccount-add').serialize());
+	        }
+	    }
+	    
+	    function selectSupply() {
+				openPage('选择供应链',"/system/SupplyAccount/selectSupplyChain",600,500);
+		}
+	</script>
+</body>
+</html>

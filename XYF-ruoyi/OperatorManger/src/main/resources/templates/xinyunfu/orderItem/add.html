@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增订单子')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-orderItem-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">用户ID ：</label>
+				<div class="col-sm-8">
+					<input id="userId" name="userId" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">子订单编号：</label>
+				<div class="col-sm-8">
+					<input id="itemNo" name="itemNo" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">主订单编号：</label>
+				<div class="col-sm-8">
+					<input id="masterNo" name="masterNo" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">商家ID：</label>
+				<div class="col-sm-8">
+					<input id="storeId" name="storeId" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">商家名称：</label>
+				<div class="col-sm-8">
+					<input id="storeName" name="storeName" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">子订单应付金额：</label>
+				<div class="col-sm-8">
+					<input id="amount" name="amount" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">商品总计：</label>
+				<div class="col-sm-8">
+					<input id="totalAmount" name="totalAmount" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">子订单实付金额：</label>
+				<div class="col-sm-8">
+					<input id="payAmount" name="payAmount" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">总运费：</label>
+				<div class="col-sm-8">
+					<input id="totalFreight" name="totalFreight" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">手续费（预留字段）：</label>
+				<div class="col-sm-8">
+					<input id="charge" name="charge" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">总优惠金额：</label>
+				<div class="col-sm-8">
+					<input id="totalDiscount" name="totalDiscount" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">购买总数量：</label>
+				<div class="col-sm-8">
+					<input id="totalCount" name="totalCount" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">订单状态（待付款=0,待发货=1，待签收=2，已签收=3，待点评=4，维权中=5，预留中=6,已退款=7，交易完成=8，已取消=9）默认为0：</label>
+				<div class="col-sm-8">
+					<input id="status" name="status" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">快递公司名称：</label>
+				<div class="col-sm-8">
+					<input id="shippingCompName" name="shippingCompName" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">快递单号：</label>
+				<div class="col-sm-8">
+					<input id="shippingSn" name="shippingSn" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">发货时间(时间戳)：</label>
+				<div class="col-sm-8">
+					<input id="deliveryTime" name="deliveryTime" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">订单来源 (自营=0，供应商=1)(保留字段)：</label>
+				<div class="col-sm-8">
+					<input id="orderSource" name="orderSource" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">支付时间：</label>
+				<div class="col-sm-8">
+					<input id="payTime" name="payTime" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">支付方式 （微信=16，支付宝=32，快捷支付=64，网银支付=128）：</label>
+				<div class="col-sm-8">
+					<input id="payType" name="payType" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">支付交易号：</label>
+				<div class="col-sm-8">
+					<input id="payNumber" name="payNumber" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">订单状态（0待支付/1支付成功/2支付失败/3交易关闭）：</label>
+				<div class="col-sm-8">
+					<input id="payStatus" name="payStatus" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<input id="remarks" name="remarks" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">创建时间：</label>
+				<div class="col-sm-8">
+					<input id="createdTime" name="createdTime" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">创建人id：</label>
+				<div class="col-sm-8">
+					<input id="createdBy" name="createdBy" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">最后修改时间：</label>
+				<div class="col-sm-8">
+					<input id="updatedTime" name="updatedTime" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">最后修改人id：</label>
+				<div class="col-sm-8">
+					<input id="updatedBy" name="updatedBy" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">是否可用（可用=1，禁用=0）：</label>
+				<div class="col-sm-8">
+					<input id="enable" name="enable" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "xinyunfu/orderItem"
+		$("#form-orderItem-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-orderItem-add').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

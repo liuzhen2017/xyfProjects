@@ -1,0 +1,49 @@
+package com.gateway.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import com.alibaba.fastjson.JSONObject;
+import com.gateway.sao.CustomerManageSao;
+import com.gateway.utils.JwtUtils;
+import com.gateway.utils.ResponseInfo;
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@Slf4j
+public class CallApiService {
+
+	
+	
+	@Autowired
+	private CustomerManageSao sao;
+	
+	@Autowired
+	private RedisService redis;
+	
+	@Value("${login.token.timeout}")
+	private String minutes;
+	
+	@Value("${xyf.api.version}")
+	private String apiVersion;
+	
+	/**
+	 *	登录接口
+	 * @param json
+	 * @param loginType
+	 * @return
+	 */
+	public ResponseInfo<String> login(JSONObject json){
+		String loginResult = null;
+		String data = json.getString("data");
+		
+		log.info("login  by  loginType{}", loginResult);
+	    JSONObject res = JSONObject.parseObject(loginResult);
+	    String token = null;
+
+		return new ResponseInfo<String>(res.getString("code"),res.getString("message"),res.getString("data"),apiVersion);
+	}
+	
+	
+	
+}

@@ -1,0 +1,71 @@
+package com.gateway.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import com.alibaba.fastjson.JSONObject;
+import com.gateway.sao.CustomerManageSao;
+import com.gateway.utils.JwtUtils;
+import com.gateway.utils.ResponseInfo;
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@Slf4j
+public class CallApiService {
+
+	
+	
+	@Autowired
+	private CustomerManageSao sao;
+	
+	@Autowired
+	private RedisService redis;
+	
+	@Value("${login.token.timeout}")
+	private String minutes;
+	
+	@Value("${login.encry.version}")
+	private String encryVersion;
+	
+	
+	@Value("${xyf.api.version}")
+	private String apiVersion;
+	
+	/**
+	 *	登录接口
+	 * @param json
+	 * @param loginType
+	 * @return
+	 */
+	public ResponseInfo<String> login(JSONObject json){
+		String loginResult = null;
+		switch (loginType) {
+		case "wechat":
+			loginResult = sao.wechatLogin(json);
+			break;
+		default:
+			loginResult = sao.login(json);
+			break;
+		}
+		log.info("login  by  loginType{}",loginType, loginResult);
+	    JSONObject res = JSONObject.parseObject(loginResult);
+	    String token = null;
+		if(null!=res.getString("code")&&ResponseInfo.CODE_SUCCESS.equals(res.getString("code"))) {
+			try {
+				token = JwtUtils.getToken(res.getString("userNo"), Integer.parseInt(minutes), encryVersion);
+				redis.set(res.getString("data"), token, Integer.parseInt(minutes)*60*1000);
+			} catch (Exception e) {
+				log.info("System exception message{}",e);
+				if(token == null) {
+					return ResponseInfo.error("请重新登录");
+				}
+			}
+			log.info("userNo:"+res.getString("userNo")+",getToken:"+token);
+			return ResponseInfo.success(token);
+		};
+		return new ResponseInfo<String>(res.getString("code"),res.getString("message"),res.getString("data"),apiVersion);
+	}
+	
+	
+	
+}

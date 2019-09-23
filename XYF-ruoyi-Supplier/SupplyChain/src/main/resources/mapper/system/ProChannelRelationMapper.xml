@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.ProChannelRelationMapper">
+    
+    <resultMap type="ProChannelRelation" id="ProChannelRelationResult">
+        <result property="id"    column="id"    />
+        <result property="proId"    column="pro_id"    />
+        <result property="channelId"    column="channel_id"    />
+        <result property="status"    column="status"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+    </resultMap>
+	
+	<sql id="selectProChannelRelationVo">
+        select id, pro_id, channel_id, status, remarks, created_time, created_by, updated_time, updated_by from pro_channel_relation
+    </sql>
+	
+    <select id="selectProChannelRelationList" parameterType="ProChannelRelation" resultMap="ProChannelRelationResult">
+        <include refid="selectProChannelRelationVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="proId != null "> and pro_id = #{proId}</if>
+             <if test="channelId != null "> and channel_id = #{channelId}</if>
+             <if test="status != null "> and status = #{status}</if>
+             <if test="remarks != null  and remarks != '' "> and remarks = #{remarks}</if>
+             <if test="createdTime!= null "> and created_time = #{createdTime}</if>
+             <if test="createdBy != null  and createdBy != '' "> and created_by = #{createdBy}</if>
+             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+             <if test="updatedBy != null  and updatedBy != '' "> and updated_by = #{updatedBy}</if>
+         </where> order by created_time desc
+    </select>
+    
+    <select id="selectProChannelRelationById" parameterType="Long" resultMap="ProChannelRelationResult">
+        <include refid="selectProChannelRelationVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertProChannelRelation" parameterType="ProChannelRelation" useGeneratedKeys="true" keyProperty="id">
+        insert into pro_channel_relation
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="proId != null  ">pro_id,</if>
+			<if test="channelId != null  ">channel_id,</if>
+			<if test="status != null  ">status,</if>
+			<if test="remarks != null  and remarks != ''  ">remarks,</if>
+			<if test="createdTime!= null  ">created_time,</if>
+			<if test="createdBy != null  and createdBy != ''  ">created_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">updated_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="proId != null  ">#{proId},</if>
+			<if test="channelId != null  ">#{channelId},</if>
+			<if test="status != null  ">#{status},</if>
+			<if test="remarks != null  and remarks != ''  ">#{remarks},</if>
+			<if test="createdTime!= null  ">#{createdTime},</if>
+			<if test="createdBy != null  and createdBy != ''  ">#{createdBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">#{updatedBy},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateProChannelRelation" parameterType="ProChannelRelation">
+        update pro_channel_relation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="proId != null  ">pro_id = #{proId},</if>
+            <if test="channelId != null  ">channel_id = #{channelId},</if>
+            <if test="status != null  ">status = #{status},</if>
+            <if test="remarks != null  and remarks != ''  ">remarks = #{remarks},</if>
+            <if test="createdTime!= null  ">created_time = #{createdTime},</if>
+            <if test="createdBy != null  and createdBy != ''  ">created_by = #{createdBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="updatedBy != null  and updatedBy != ''  ">updated_by = #{updatedBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteProChannelRelationById" parameterType="Long">
+        delete from pro_channel_relation where id = #{id}
+    </delete>
+	
+    <delete id="deleteProChannelRelationByIds" parameterType="String">
+        delete from pro_channel_relation where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,121 @@
+spring:
+  application:
+    name: InfoCenter
+  profiles:
+    active: dev
+  cloud: 
+    inetutils: 
+      preferredNetworks: 
+        -192.168.1.*  
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: ENC(gmyc0w5G9juDFphYmJc/1F1DTg//s+dA)
+    url: jdbc:mysql://120.79.247.111:3306/InfoCenter?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+  rabbitmq:
+    #非集群模式下，填写MQ服务器的地址和端口
+    addresses: 120.79.247.111:5672,119.23.31.3:5672
+    connection-timeout: 15000
+    listener:
+      simple:
+        acknowledge-mode: manual
+        concurrency: 1
+        max-concurrency: 5
+        prefetch: 1
+    # rabbitmq的用户名和密码
+    username: admin
+    password:  ENC(s96SQqGVBurvS+tvPIKleVYmDUpwCtGm)
+    publisher-confirms: true
+    publisher-returns: true
+    template:
+      mandatory: true
+  redis:
+    database: 0
+    host: 120.79.247.111
+    password: ENC(gmyc0w5G9juDFphYmJc/1F1DTg//s+dA)
+    port: 6379
+    jedis:
+      pool:
+        max-idle: 10
+        min-idle: 0
+        max-active: -1
+        max-wait: -1
+eureka:
+  instance:
+    lease-expiration-duration-in-seconds: 15
+    lease-renewal-interval-in-seconds: 5
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipaddress}:${server.port}
+  client:
+    registry-fetch-interval-seconds: 5
+    service-url:
+      defaultZone: http://120.79.247.111:8761/eureka/,119.23.31.3:8761/eureka/
+feign:
+  hystrix:
+    enabled: true
+logging:
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %level - %thread - %logger{50}.%M - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %level - %thread - %logger{50}.%M - %msg%n"
+  file:
+    max-history: 30
+    max-size: 100MB
+  level:
+    root: INFO
+    com:
+      xinyunfu: INFO
+  path: "/logs/infoCenter"
+send_message:
+  # 发送消息主题
+  sendSMS: InfoCenter_sendSMS
+  # 会员注册
+  registVipTpl: 78d281b57529e76803bc685e86797ccb
+  # 重置登录密码
+  resetPwdTpl: 2F8DD4EBE71F4F2B831E894BC5B790E9
+  # 修改支付密码
+  updatePayPwdTpl: E894BC5B790E92F8DD4EBE71F4F2B831
+  # 绑定手机号
+  bingPhonTpl: 1782eedab9234d81a6b6a9f94c61769e
+  # 解绑手机号
+  unbingPhonTpl: 1CAB1641F4B047FE8D6625D0E75456B5
+  # 验证码登录
+  vaildCodeLoginTpl: 0d5146cb3a12426da4aa77bf8b3208ba
+  # 推送APP模板
+  pushAppTpl: F5980685E03348DCA497DEF807303AF2
+  #发送验证码
+  sendCodeUrl: /sms/SendValidateCode
+  #校验验证码
+  vaildCodeUrl: /sms/ValidateCode
+  #发送短信
+  smsSendUrl: /sms/Send 
+  #发送短信
+  appBindUrl: /Register/Bind
+  appPushUrl: /Notification/Push
+jasypt:
+  encryptor:
+    password: EbfYkitulv73I2p0mXI50JMXoaxZTKJ7
+server:
+  port: 8083
+sftp:
+  host: 119.23.31.3
+  password: ENC(0shM4ewRFx4BmRLtrBo/q8B07p6djZQ0)
+  port: 22
+  rootPath: /data/sftp/sftp/upload
+  username: sftp
+send-message:
+  base-url: http://api.sms.yx18g.cn
+  merchant-no: XYF166668888
+  merchant-no-Key: 354c35183e7c4e85bdf88fdfb079be2b
+info-center:
+  push:
+    short-message: 18e7ed080a0d0081acb9b4e2bd913c25
+    push-message: 6f08ccd66fcfbf828814962055b190fc
+    wechat-message: 38ad8d3c312c9ff343dd4d84c3324ff5
+    # 商户号
+    merchant-no: ${send-message.merchant-no}
+    # 密钥
+    merchant-no-Key: ${send-message.merchant-no-Key}
+    # 请求地址
+    push-url: http://api.msg.yx18g.cn/send/index?MerchantNo={MerchantNo}&Data={Data}&Sign={Sign}
+    # 自定义短信内容
+    message-custom: http://api.msg.yx18g.cn/sms/Send?MerchantNo={MerchantNo}&Data={Data}&Sign={Sign}

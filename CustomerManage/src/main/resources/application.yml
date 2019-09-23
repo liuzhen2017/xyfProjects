@@ -1,0 +1,50 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: CustomerManage
+  redis:
+    jedis:
+      pool:
+        max-idle: 10
+        min-idle: 0
+        max-active: -1
+        max-wait: -1
+    ssl: false
+    timeout: 600
+  http:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+server:
+  tomcat:
+    uri-encoding: UTF-8
+eureka:
+  instance:
+    lease-expiration-duration-in-seconds: 15
+    lease-renewal-interval-in-seconds: 5
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipaddress}:${server.port}
+  client:
+    registry-fetch-interval-seconds: 5
+feign:
+  hystrix:
+    enabled: true
+ribbon:
+  eureka:
+    enabled: true
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.xinyunfu.customer.domain
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %level - %thread - %logger{50}.%M.%line - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %level - %thread - %logger{50}.%M.%line - %msg%n"
+  file:
+    max-history: 30
+    max-size: 500MB
+  level:
+    root: INFO

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyunfu.mapper.CouponMarketMapper">
+  <resultMap type="Map" id="CouponMarketMap">
+      <result property="id"    column="id"    />
+      <result property="signDate"    column="sign_date"    />
+      <result property="title"    column="title"    />
+      <result property="valueAmount"    column="value_amount"    />
+      <result property="amount"    column="sign_price"    />
+      <result property="dueDate"    column="due_date"    />
+      <result property="useDate"    column="use_date"    />
+      <result property="number"    column="numbers"    />
+      <result property="totalPrice"    column="total_price"    />
+      <!-- <result property="signPrice"    column="sign_price"    /> -->
+  </resultMap>
+  <select id="queryByGroupList" resultMap="CouponMarketMap">
+		 SELECT 
+      t.order_no,
+      SUM(
+        (
+          t.sign_price - t.service_charge + t.reward_amount
+        ) * t.number
+      ) total_price ,
+      SUM(t.number) numbers,
+      MAX(t.sign_date) sign_date,
+      MAX(t.`sign_price`) sign_price,
+      MAX(t.`due_date`) due_date,
+      MAX(t.`title`) title
+    FROM
+      coupon_market t 
+    WHERE t.coupon_status IN ('06') 
+      AND t.user_no = '${userNo}'
+   <if test="beginDate != null  and beginDate != ''  ">
+		   and t.sign_date >= '${beginDate}'
+		  </if>
+     <if test="endDate != null  and endDate != ''  ">
+		  and   '${endDate}' >= t.sign_date
+		  </if>
+      
+    GROUP BY order_no 
+    ORDER BY  sign_date DESC
+		  
+  </select>
+  <!-- 查询已经转让数量 -->
+  <select id="queryByGroupListSigns" resultMap="CouponMarketMap">
+	SELECT 
+      t.order_no,
+      SUM(
+        (
+          t.sign_price - t.service_charge + t.reward_amount
+        ) * t.number
+      ) total_price,
+       SUM(t.number) numbers,
+      MAX(t.use_date) use_date,
+      MAX(t.`sign_price`) sign_price,
+      MAX(t.`due_date`) due_date,
+      MAX(t.`title`) title
+    FROM
+      coupon_market t 
+    WHERE t.coupon_status IN ('07', '01') 
+      AND t.user_no = '${userNo}'
+       <if test="beginDate != null  and beginDate != ''  ">
+		   and t.use_date >= '${beginDate}'
+		  </if>
+     <if test="endDate != null  and endDate != ''  ">
+		  and   '${endDate}' >= t.use_date
+		  </if>
+    GROUP BY order_no
+    ORDER BY  use_date DESC
+
+  </select>
+  <select id="queryByGroupBySign" resultType="Map">
+  SELECT 
+  IFNULL(SUM((sign_price-service_charge+reward_amount) * 3), 0) AS price,
+  IFNULL(SUM(1 * 3), 0) nums 
+FROM
+  coupon_market 
+WHERE user_no = '${userNo}'
+AND coupon_status in
+   <foreach collection="couponStatus" item="item" index="index" open="(" close=")" separator=",">
+      '${item}' 
+  </foreach>
+  
+  <if test="beginDate != null  and beginDate != ''  ">
+		   and sign_date >= '${beginDate}'
+		  </if>
+		  <if test="endDate != null  and endDate != ''  ">
+		  and   '${endDate}' >= sign_date
+		  </if>
+ORDER BY created_date   
+  </select>
+</mapper>

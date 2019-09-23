@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.EbankFlowMapper">
+    
+    <resultMap type="EbankFlow" id="EbankFlowResult">
+        <result property="id"    column="id"    />
+        <result property="ebankOrderNo"    column="ebank_order_no"    />
+        <result property="sysOrderNo"    column="sys_order_no"    />
+        <result property="accountNo"    column="account_no"    />
+        <result property="accountType"    column="account_type"    />
+        <result property="flowType"    column="flow_type"    />
+        <result property="flowSource"    column="flow_source"    />
+        <result property="amount"    column="amount"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="lastModifyTime"    column="last_modify_time"    />
+    </resultMap>
+	
+	<sql id="selectEbankFlowVo">
+        select id, ebank_order_no, sys_order_no, account_no, account_type, flow_type, flow_source, amount, status, create_time, last_modify_time from ebank_flow
+    </sql>
+	
+    <select id="selectEbankFlowList" parameterType="EbankFlow" resultMap="EbankFlowResult">
+        <include refid="selectEbankFlowVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="ebankOrderNo != null  and ebankOrderNo != '' "> and ebank_order_no = #{ebankOrderNo}</if>
+             <if test="sysOrderNo != null  and sysOrderNo != '' "> and sys_order_no = #{sysOrderNo}</if>
+             <if test="accountNo != null  and accountNo != '' "> and account_no = #{accountNo}</if>
+             <if test="accountType != null  and accountType != '' "> and account_type = #{accountType}</if>
+             <if test="flowType != null  and flowType != '' "> and flow_type = #{flowType}</if>
+             <if test="flowSource != null  and flowSource != '' "> and flow_source = #{flowSource}</if>
+             <if test="amount != null "> and amount = #{amount}</if>
+             <if test="status != null  and status != '' "> and status = #{status}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="lastModifyTime != null "> and last_modify_time = #{lastModifyTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectEbankFlowById" parameterType="Integer" resultMap="EbankFlowResult">
+        <include refid="selectEbankFlowVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertEbankFlow" parameterType="EbankFlow" useGeneratedKeys="true" keyProperty="id">
+        insert into ebank_flow
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="ebankOrderNo != null  and ebankOrderNo != ''  ">ebank_order_no,</if>
+			<if test="sysOrderNo != null  and sysOrderNo != ''  ">sys_order_no,</if>
+			<if test="accountNo != null  and accountNo != ''  ">account_no,</if>
+			<if test="accountType != null  and accountType != ''  ">account_type,</if>
+			<if test="flowType != null  and flowType != ''  ">flow_type,</if>
+			<if test="flowSource != null  and flowSource != ''  ">flow_source,</if>
+			<if test="amount != null  ">amount,</if>
+			<if test="status != null  and status != ''  ">status,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="lastModifyTime != null  ">last_modify_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="ebankOrderNo != null  and ebankOrderNo != ''  ">#{ebankOrderNo},</if>
+			<if test="sysOrderNo != null  and sysOrderNo != ''  ">#{sysOrderNo},</if>
+			<if test="accountNo != null  and accountNo != ''  ">#{accountNo},</if>
+			<if test="accountType != null  and accountType != ''  ">#{accountType},</if>
+			<if test="flowType != null  and flowType != ''  ">#{flowType},</if>
+			<if test="flowSource != null  and flowSource != ''  ">#{flowSource},</if>
+			<if test="amount != null  ">#{amount},</if>
+			<if test="status != null  and status != ''  ">#{status},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="lastModifyTime != null  ">#{lastModifyTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateEbankFlow" parameterType="EbankFlow">
+        update ebank_flow
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ebankOrderNo != null  and ebankOrderNo != ''  ">ebank_order_no = #{ebankOrderNo},</if>
+            <if test="sysOrderNo != null  and sysOrderNo != ''  ">sys_order_no = #{sysOrderNo},</if>
+            <if test="accountNo != null  and accountNo != ''  ">account_no = #{accountNo},</if>
+            <if test="accountType != null  and accountType != ''  ">account_type = #{accountType},</if>
+            <if test="flowType != null  and flowType != ''  ">flow_type = #{flowType},</if>
+            <if test="flowSource != null  and flowSource != ''  ">flow_source = #{flowSource},</if>
+            <if test="amount != null  ">amount = #{amount},</if>
+            <if test="status != null  and status != ''  ">status = #{status},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="lastModifyTime != null  ">last_modify_time = #{lastModifyTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteEbankFlowById" parameterType="Integer">
+        delete from ebank_flow where id = #{id}
+    </delete>
+	
+    <delete id="deleteEbankFlowByIds" parameterType="String">
+        delete from ebank_flow where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

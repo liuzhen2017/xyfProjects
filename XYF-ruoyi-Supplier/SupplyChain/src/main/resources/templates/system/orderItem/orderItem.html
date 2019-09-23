@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('订单子列表')"/>
+	<link rel="stylesheet" href="../../../layui/css/layui.css"  media="all">
+	<!--<script src="../../../layui/layui.js"></script>-->
+	<style>
+		.orderItem{
+			cursor: pointer;
+			font-weight: bold;
+			font-size: 14px;
+			color: rgb(24,144,255) !important;
+			background-color: #fff!important;
+		}
+	</style>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+	<div class="row">
+		<div class="col-sm-12 search-collapse">
+			<form id="formId" autocomplete="off">
+				<div class="select-list">
+					<ul>
+						<li>订单号：<input type="text" name="itemNo" autocomplete="off"/></li>
+						<li>商品ID:<input type="text" name="goodsId" autocomplete="off"/></li>
+						<li>商品名字：<input type="text" name="goodsName" autocomplete="off"/></li>
+						<li>收货人：<input type="text" name="consigneeName" autocomplete="off"/></li>
+						<li>手机号码：<input type="text" name="phone" autocomplete="off"/></li>
+						<li>订单状态：
+							<select name="status">
+								<option value="-1">请选择状态</option>
+								<option value="0">待付款</option>
+								<option value="1">待发货</option>
+								<option value="2">待签收</option>
+								<option value="3">已签收</option>
+								<option value="4">待点评</option>
+								<option value="5">维权中</option>
+								<option value="6">预留中</option>
+								<option value="7">已退款</option>
+								<option value="8">交易完成</option>
+								<option value="9">已取消</option>
+							</select>
+						</li>
+						<li>
+							订单来源 ：
+							<select name="orderSource">
+								<option value="-1">全部</option>
+								<option value="0">自营</option>
+								<option value="1">京东</option>
+								<option value="2">怡亚通</option>
+							</select>
+						</li>
+						<li>下单时间：<input type="text" id="startDate" placeholder="开始时间" name="startDate" autocomplete="off"/></li>
+						<li>-<input type="text" id="endDate" placeholder="结束时间" name="endDate" autocomplete="off"/></li>
+						<li>
+							<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+							<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+						</li>
+					</ul>
+				</div>
+				<!-- 使用在 选择 导出上 -->
+				<input type="hidden" name="itemNos" id="itemNos">
+			</form>
+		</div>
+
+		<div class="btn-group-sm" id="toolbar" role="group">
+			<a class="btn btn-warning" onclick="$.table.exportExcel()"><i class="fa fa-download"></i> 导出</a>
+			<a class="btn btn-success" onclick="selectExport()" ><i class="fa fa-download"></i> 选择导出</a>
+		</div>
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table" data-mobile-responsive="true"></table>
+		</div>
+	</div>
+</div>
+<div th:include="include :: footer"></div>
+<script type="text/javascript" src="../../../util.js"></script>
+<script th:inline="javascript">
+    var prefix = ctx + "system/orderItem";
+
+    /**
+	 * 重写新增 选择导出
+     */
+    let selectExport = function() {
+        var rows = $("#bootstrap-table .selected") //获取选中订单
+        if (rows.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        $.modal.confirm("确认要导出选中的" + rows.length + "条数据吗?", function() {
+            let url = prefix+"/exportSelect"; //自定义URL
+            let arr = [];
+            $.each(rows,function(i,v){ //遍历拼接
+                arr.push(v.cells[1].children[0].innerHTML); //提取选中的订单号
+			})
+			$("#itemNos").val(arr.join("-"));
+            $.operate.submit(url, "post", "json",  $("#formId").serialize(),function(result){
+                if (result.code == web_status.SUCCESS) {
+                    window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+			});
+        });
+    }
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            exportUrl: prefix + "/export",
+            modalName: "订单",
+            // showExport: true,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'storeId',
+                    title: '商家ID',
+                    visible: false
+                },
+                {
+                    field: 'itemNo',
+                    title: '订单编号',
+                    formatter: function (value, row, index) {
+                        return `<span class="layui-badge orderItem"  onclick="openPage('','/system/orderItem/Commdity/` + value + `',1230,800);">`+value+`</span>`;
+                    }
+                },
+                {
+                    field: 'createdDate',
+                    title: '下单时间',
+                    sortable: true
+                },
+                {
+                    field: 'goodsId',
+                    title: '商品ID',
+                    formatter: function (value, row, index){
+                        return  !value ? "-":value;
+					}
+                },
+                {
+                    field: 'goodsName',
+                    title: '商品名称',
+                    formatter: function (value, row, index){
+                        return  `<p style="width: 200px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" title="`+value+`">`+(!value ? "-":value)+`</p>`;
+                    }
+                },
+                {
+                    field: 'costAmount',
+                    title: '商品总额',
+                    sortable: true
+                },
+                {
+                    field: 'totalFreight',
+                    title: '运费',
+                    sortable: true
+                },
+                {
+                    field: 'totalCount',
+                    title: '购买数量',
+                    sortable: true
+                },
+                {
+                    field: 'status',
+                    title: '订单状态',
+                    formatter: function (value, row, index) {
+                        if (row.status == 0) {
+                            return "待付款";
+                        }
+                        else if (row.status == 1) {
+                            return `<span class='badge badge-success'>待发货</span>`;
+                        }
+                        else if (row.status == 2) {
+                            return "待收货";
+                        }
+                        else if (row.status == 3) {
+                            return "已签收"
+                        }
+                        else if (row.status == 4) {
+                            return "待点评"
+                        }
+                        else if (row.status == 5) {
+                            return "维权中"
+                        }
+                        else if (row.status == 6) {
+                            return "预留中"
+                        }
+                        else if (row.status == 7) {
+                            return "已退款"
+                        }
+                        else if (row.status == 8) {
+                            return "交易完成"
+                        }
+                        else if (row.status == 9) {
+                            return "已取消"
+                        }else {
+                            return "订单异常,请联系客服！";
+                        }
+                    }
+                },
+                {
+                    field: 'consigneeName',
+                    title: '收货人',
+                    sortable: true
+                },
+                {
+                    field: 'phone',
+                    title: '手机号码',
+                    sortable: true
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if (row.status != 1) return;
+                        var actions = [];
+                        actions.push(`<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="openPage('立即发货','/system/orderItem/confirmDelivery/` + row.itemNo + `',600,450);" ><i class="fa fa-edit"></i>立即发货</a> `);
+                        return actions.join('');
+                    }
+                }
+            ]
+        };
+        $.table.init(options);
+    });
+
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
+        var startDate = laydate.render({
+            elem: '#startDate',
+            theme: 'molv',
+            trigger: 'click',
+            type : 'datetime',
+            done: function(value, date) {
+                // 结束时间大于开始时间
+                if (value !== '') {
+                    endDate.config.min.year = date.year;
+                    endDate.config.min.month = date.month - 1;
+                    endDate.config.min.date = date.date;
+                } else {
+                    endDate.config.min.year = '';
+                    endDate.config.min.month = '';
+                    endDate.config.min.date = '';
+                }
+            }
+        });
+        var endDate = laydate.render({
+            elem: '#endDate',
+            min: $('#startDate').val(),
+            theme: 'molv',
+            trigger: 'click',
+            type : 'datetime',
+            done: function(value, date) {
+                // 开始时间小于结束时间
+                if (value !== '') {
+                    startDate.config.max.year = date.year;
+                    startDate.config.max.month = date.month - 1;
+                    startDate.config.max.date = date.date;
+                } else {
+                    startDate.config.max.year = '';
+                    startDate.config.max.month = '';
+                    startDate.config.max.date = '';
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

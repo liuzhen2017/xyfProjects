@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('订单子列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								用户ID ：<input type="text" name="userId"/>
+							</li>
+
+							<li>
+								子订单编号：<input type="text" name="itemNo"/>
+							</li>
+
+							<li>
+								主订单编号：<input type="text" name="masterNo"/>
+							</li>
+
+							<li>
+								商家ID：<input type="text" name="storeId"/>
+							</li>
+
+							<li>
+								商家名称：<input type="text" name="storeName"/>
+							</li>
+
+							<li>
+								子订单应付金额：<input type="text" name="amount"/>
+							</li>
+
+							<li>
+								商品总计：<input type="text" name="totalAmount"/>
+							</li>
+
+							<li>
+								子订单实付金额：<input type="text" name="payAmount"/>
+							</li>
+
+							<li>
+								总运费：<input type="text" name="totalFreight"/>
+							</li>
+
+							<li>
+								手续费（预留字段）：<input type="text" name="charge"/>
+							</li>
+
+							<li>
+								总优惠金额：<input type="text" name="totalDiscount"/>
+							</li>
+
+							<li>
+								购买总数量：<input type="text" name="totalCount"/>
+							</li>
+
+							<li>
+								订单状态（待付款=0,待发货=1，待签收=2，已签收=3，待点评=4，维权中=5，预留中=6,已退款=7，交易完成=8，已取消=9）默认为0：<input type="text" name="status"/>
+							</li>
+
+							<li>
+								快递公司名称：<input type="text" name="shippingCompName"/>
+							</li>
+
+							<li>
+								快递单号：<input type="text" name="shippingSn"/>
+							</li>
+
+							<li>
+								发货时间(时间戳)：<input type="text" name="deliveryTime"/>
+							</li>
+
+							<li>
+								订单来源 (自营=0，供应商=1)(保留字段)：<input type="text" name="orderSource"/>
+							</li>
+
+							<li>
+								支付时间：<input type="text" name="payTime"/>
+							</li>
+
+							<li>
+								支付方式 （微信=16，支付宝=32，快捷支付=64，网银支付=128）：<input type="text" name="payType"/>
+							</li>
+
+							<li>
+								支付交易号：<input type="text" name="payNumber"/>
+							</li>
+
+							<li>
+								订单状态（0待支付/1支付成功/2支付失败/3交易关闭）：<input type="text" name="payStatus"/>
+							</li>
+
+							<li>
+								备注：<input type="text" name="remarks"/>
+							</li>
+
+							<li>
+								创建时间：<input type="text" name="createdTime"/>
+							</li>
+
+							<li>
+								创建人id：<input type="text" name="createdBy"/>
+							</li>
+
+							<li>
+								最后修改时间：<input type="text" name="updatedTime"/>
+							</li>
+
+							<li>
+								最后修改人id：<input type="text" name="updatedBy"/>
+							</li>
+
+							<li>
+								是否可用（可用=1，禁用=0）：<input type="text" name="enable"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="xinyunfu:orderItem:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="xinyunfu:orderItem:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="xinyunfu:orderItem:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="xinyunfu:orderItem:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('xinyunfu:orderItem:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('xinyunfu:orderItem:remove')}]];
+        var prefix = ctx + "xinyunfu/orderItem";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "订单子",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'itemId', 
+					title : '子订单id 自增',
+					visible: false
+				},
+				{
+					field : 'userId', 
+					title : '用户ID ',
+					sortable: true
+				},
+				{
+					field : 'itemNo', 
+					title : '子订单编号',
+					sortable: true
+				},
+				{
+					field : 'masterNo', 
+					title : '主订单编号',
+					sortable: true
+				},
+				{
+					field : 'storeId', 
+					title : '商家ID',
+					sortable: true
+				},
+				{
+					field : 'storeName', 
+					title : '商家名称',
+					sortable: true
+				},
+				{
+					field : 'amount', 
+					title : '子订单应付金额',
+					sortable: true
+				},
+				{
+					field : 'totalAmount', 
+					title : '商品总计',
+					sortable: true
+				},
+				{
+					field : 'payAmount', 
+					title : '子订单实付金额',
+					sortable: true
+				},
+				{
+					field : 'totalFreight', 
+					title : '总运费',
+					sortable: true
+				},
+				{
+					field : 'charge', 
+					title : '手续费（预留字段）',
+					sortable: true
+				},
+				{
+					field : 'totalDiscount', 
+					title : '总优惠金额',
+					sortable: true
+				},
+				{
+					field : 'totalCount', 
+					title : '购买总数量',
+					sortable: true
+				},
+				{
+					field : 'status', 
+					title : '订单状态（待付款=0,待发货=1，待签收=2，已签收=3，待点评=4，维权中=5，预留中=6,已退款=7，交易完成=8，已取消=9）默认为0',
+					sortable: true
+				},
+				{
+					field : 'shippingCompName', 
+					title : '快递公司名称',
+					sortable: true
+				},
+				{
+					field : 'shippingSn', 
+					title : '快递单号',
+					sortable: true
+				},
+				{
+					field : 'deliveryTime', 
+					title : '发货时间(时间戳)',
+					sortable: true
+				},
+				{
+					field : 'orderSource', 
+					title : '订单来源 (自营=0，供应商=1)(保留字段)',
+					sortable: true
+				},
+				{
+					field : 'payTime', 
+					title : '支付时间',
+					sortable: true
+				},
+				{
+					field : 'payType', 
+					title : '支付方式 （微信=16，支付宝=32，快捷支付=64，网银支付=128）',
+					sortable: true
+				},
+				{
+					field : 'payNumber', 
+					title : '支付交易号',
+					sortable: true
+				},
+				{
+					field : 'payStatus', 
+					title : '订单状态（0待支付/1支付成功/2支付失败/3交易关闭）',
+					sortable: true
+				},
+				{
+					field : 'remarks', 
+					title : '备注',
+					sortable: true
+				},
+				{
+					field : 'createdTime',
+					title : '创建时间',
+					sortable: true
+				},
+				{
+					field : 'createdBy', 
+					title : '创建人id',
+					sortable: true
+				},
+				{
+					field : 'updatedTime',
+					title : '最后修改时间',
+					sortable: true
+				},
+				{
+					field : 'updatedBy', 
+					title : '最后修改人id',
+					sortable: true
+				},
+				{
+					field : 'enable', 
+					title : '是否可用（可用=1，禁用=0）',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.itemId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.itemId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

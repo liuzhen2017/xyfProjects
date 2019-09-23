@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('优惠券列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								优惠券名称：<input type="text" name="couponTypeName"/>
+							</li>
+
+							<li>
+								价值：<input type="text" name="valueAmount"/>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:couponManger:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:couponManger:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:couponManger:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:couponManger:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+	 <script type="text/javascript" src="../../../util.js"></script>
+	 <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:couponManger:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:couponManger:remove')}]];
+        var prefix = ctx + "system/couponManger";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "优惠券",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : '序号',
+					visible: false
+				},
+				{
+					field : 'couponType',
+					title : '优惠券类型',
+					formatter:function(value,row,index){
+						if(value =='0'){
+							return "通用券";
+						}else if(value =='1'){
+							return "普通券";
+						}
+					}
+				},
+				{
+					field : 'couponNode', 
+					title : '赠送节点',
+					formatter:function(value,row,index){
+						if(value =='regist'){
+							return "注册赠送";
+						}else if(value =='recommend'){
+							return "推荐好友赠送";
+						}
+						return "非赠送";
+					}
+				},
+				{
+					field : 'title', 
+					title : '标题',
+					sortable: true
+				},
+				{
+					field : 'describes', 
+					title : '描述',
+					sortable: true
+				},
+				{
+					field : 'picUrl', 
+					title : '图片',
+					formatter:function(value,row,index){
+						if(value){
+							return '<a href="javascript:void(0)" onclick=openImg("'+value+'")>查看图片 </a>';
+						}
+						return "";
+					}
+				},
+				{
+					field : 'rules', 
+					title : '使用规则',
+					formatter:function(value,row,index){
+						return encodeURIComponent(value);
+					}
+
+				},
+					{
+						field : 'sellPrice',
+						title : '售价',
+						sortable: true
+					},
+				{
+					field : 'valueAmount', 
+					title : '价值',
+					sortable: true
+				},
+				{
+					field : 'effectiveTime', 
+					title : '有效日期',
+					sortable: true
+				},
+				{
+					field : 'invalidTime', 
+					title : '失效日期',
+					sortable: true
+				},
+				{
+					field : 'totalNum', 
+					title : '总数',
+					sortable: true
+				},
+				{
+					field : 'canNum', 
+					title : '可用数量',
+					sortable: true
+				},
+				{
+					field : 'usedNum', 
+					title : '已经使用',
+					sortable: true
+				},
+				{
+					field : 'couponStatus', 
+					title : '优惠券状态',
+					formatter:function(value,row,index){
+						if(value=="02"){
+							return "已经过期";
+						}else if(value=="03"){
+							return "系统禁用";
+						}
+						return "正常";
+					}
+				},
+				{
+					field : 'isCanBuy', 
+					title : '是否可以购买',
+					formatter:function(value,row,index){
+						return value=="N"?"否":"是";
+					}
+				},
+				// {
+				// 	field : 'productType',
+				// 	title : '商品类型',
+				// 	sortable: true
+				// },
+				// 	{
+				// 		field : 'productTypeName',
+				// 		title : '商品名称',
+				// 		sortable: true
+				// 	},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

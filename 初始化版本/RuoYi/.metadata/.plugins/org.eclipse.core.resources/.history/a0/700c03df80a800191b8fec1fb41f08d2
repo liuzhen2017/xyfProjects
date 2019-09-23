@@ -1,0 +1,32 @@
+#微服务名称
+server.port=8088
+#数据库配置
+spring.datasource.url=jdbc:mysql://localhost:3306/otree?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+spring.datasource.username=root
+spring.datasource.password=
+#ENC(gmyc0w5G9juDFphYmJc/1F1DTg//s+dA)
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+#注册中心地址
+eureka.client.service-url.defaultZone=http://192.168.1.56:8761/eureka,http://192.168.1.56:8762/eureka,http://192.168.1.56:8763/eureka
+eureka.instance.instance-id=${application.}
+#http://119.23.31.3:8761/eureka,http://120.79.247.111:8761/eureka
+
+#redis 哨兵模式配置
+spring.redis.host= 120.79.247.111
+# 启用SSL支持。
+spring.redis.port= 6379
+spring.redis.password= ENC(gmyc0w5G9juDFphYmJc/1F1DTg//s+dA)
+#ENC(4nYI+MBaMhYCBOR2FvzyqMcwrdIoqt+SDGMMlnf934A=)
+spring.redis.database= 0
+# （哨兵模式，不使用则不用开启）主机：端口对的逗号分隔列表。 
+spring.redis.sentinel.nodes= 120.79.247.111:26379,119.23.31.3:26379
+#jasypt加密的密匙
+jasypt.encryptor.password: EbfYkitulv73I2p0mXI50JMXoaxZTKJ7
+#自定义配置
+spring.free.button=take_on
+spring.unit.price=30
+
+
+
+

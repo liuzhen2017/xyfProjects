@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.EbankAccountMapper">
+    
+    <resultMap type="EbankAccount" id="EbankAccountResult">
+        <result property="id"    column="id"    />
+        <result property="accountNo"    column="account_no"    />
+        <result property="userNo"    column="user_no"    />
+        <result property="userName"    column="user_name"    />
+        <result property="idCardNo"    column="id_card_no"    />
+        <result property="accountName"    column="account_name"    />
+        <result property="accountType"    column="account_type"    />
+        <result property="bankCardNo"    column="bank_card_no"    />
+        <result property="bankName"    column="bank_name"    />
+        <result property="bankNo"    column="bank_no"    />
+        <result property="branchName"    column="branch_name"    />
+        <result property="branchNo"    column="branch_no"    />
+        <result property="provinceName"    column="province_name"    />
+        <result property="cityName"    column="city_name"    />
+        <result property="balance"    column="balance"    />
+        <result property="frozenBalance"    column="frozen_balance"    />
+        <result property="availableBalance"    column="available_balance"    />
+        <result property="businessStatus"    column="business_status"    />
+        <result property="enable"    column="enable"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedTime"    column="updated_time"    />
+    </resultMap>
+	
+	<sql id="selectEbankAccountVo">
+        select id, account_no, user_no, user_name, id_card_no, account_name, account_type, bank_card_no, bank_name, bank_no, branch_name, branch_no, province_name, city_name, balance, frozen_balance, available_balance, business_status, enable, created_time, updated_time from ebank_account
+    </sql>
+	
+    <select id="selectEbankAccountList" parameterType="EbankAccount" resultMap="EbankAccountResult">
+        <include refid="selectEbankAccountVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="accountNo != null  and accountNo != '' "> and account_no = #{accountNo}</if>
+             <if test="userNo != null "> and user_no = #{userNo}</if>
+             <if test="userName != null  and userName != '' "> and user_name = #{userName}</if>
+             <if test="idCardNo != null  and idCardNo != '' "> and id_card_no = #{idCardNo}</if>
+             <if test="accountName != null  and accountName != '' "> and account_name = #{accountName}</if>
+             <if test="accountType != null  and accountType != '' "> and account_type = #{accountType}</if>
+             <if test="bankCardNo != null  and bankCardNo != '' "> and bank_card_no = #{bankCardNo}</if>
+             <if test="bankName != null  and bankName != '' "> and bank_name = #{bankName}</if>
+             <if test="bankNo != null  and bankNo != '' "> and bank_no = #{bankNo}</if>
+             <if test="branchName != null  and branchName != '' "> and branch_name = #{branchName}</if>
+             <if test="branchNo != null  and branchNo != '' "> and branch_no = #{branchNo}</if>
+             <if test="provinceName != null  and provinceName != '' "> and province_name = #{provinceName}</if>
+             <if test="cityName != null  and cityName != '' "> and city_name = #{cityName}</if>
+             <if test="balance != null "> and balance = #{balance}</if>
+             <if test="frozenBalance != null "> and frozen_balance = #{frozenBalance}</if>
+             <if test="availableBalance != null "> and available_balance = #{availableBalance}</if>
+             <if test="businessStatus != null  and businessStatus != '' "> and business_status = #{businessStatus}</if>
+             <if test="enable != null "> and enable = #{enable}</if>
+             <if test="createdTime != null "> and created_time = #{createdTime}</if>
+             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectEbankAccountById" parameterType="Integer" resultMap="EbankAccountResult">
+        <include refid="selectEbankAccountVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertEbankAccount" parameterType="EbankAccount" useGeneratedKeys="true" keyProperty="id">
+        insert into ebank_account
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="accountNo != null  and accountNo != ''  ">account_no,</if>
+			<if test="userNo != null  ">user_no,</if>
+			<if test="userName != null  and userName != ''  ">user_name,</if>
+			<if test="idCardNo != null  and idCardNo != ''  ">id_card_no,</if>
+			<if test="accountName != null  and accountName != ''  ">account_name,</if>
+			<if test="accountType != null  and accountType != ''  ">account_type,</if>
+			<if test="bankCardNo != null  and bankCardNo != ''  ">bank_card_no,</if>
+			<if test="bankName != null  and bankName != ''  ">bank_name,</if>
+			<if test="bankNo != null  and bankNo != ''  ">bank_no,</if>
+			<if test="branchName != null  and branchName != ''  ">branch_name,</if>
+			<if test="branchNo != null  and branchNo != ''  ">branch_no,</if>
+			<if test="provinceName != null  and provinceName != ''  ">province_name,</if>
+			<if test="cityName != null  and cityName != ''  ">city_name,</if>
+			<if test="balance != null  ">balance,</if>
+			<if test="frozenBalance != null  ">frozen_balance,</if>
+			<if test="availableBalance != null  ">available_balance,</if>
+			<if test="businessStatus != null  and businessStatus != ''  ">business_status,</if>
+			<if test="enable != null  ">enable,</if>
+			<if test="createdTime != null  ">created_time,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="accountNo != null  and accountNo != ''  ">#{accountNo},</if>
+			<if test="userNo != null  ">#{userNo},</if>
+			<if test="userName != null  and userName != ''  ">#{userName},</if>
+			<if test="idCardNo != null  and idCardNo != ''  ">#{idCardNo},</if>
+			<if test="accountName != null  and accountName != ''  ">#{accountName},</if>
+			<if test="accountType != null  and accountType != ''  ">#{accountType},</if>
+			<if test="bankCardNo != null  and bankCardNo != ''  ">#{bankCardNo},</if>
+			<if test="bankName != null  and bankName != ''  ">#{bankName},</if>
+			<if test="bankNo != null  and bankNo != ''  ">#{bankNo},</if>
+			<if test="branchName != null  and branchName != ''  ">#{branchName},</if>
+			<if test="branchNo != null  and branchNo != ''  ">#{branchNo},</if>
+			<if test="provinceName != null  and provinceName != ''  ">#{provinceName},</if>
+			<if test="cityName != null  and cityName != ''  ">#{cityName},</if>
+			<if test="balance != null  ">#{balance},</if>
+			<if test="frozenBalance != null  ">#{frozenBalance},</if>
+			<if test="availableBalance != null  ">#{availableBalance},</if>
+			<if test="businessStatus != null  and businessStatus != ''  ">#{businessStatus},</if>
+			<if test="enable != null  ">#{enable},</if>
+			<if test="createdTime != null  ">#{createdTime},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateEbankAccount" parameterType="EbankAccount">
+        update ebank_account
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="accountNo != null  and accountNo != ''  ">account_no = #{accountNo},</if>
+            <if test="userNo != null  ">user_no = #{userNo},</if>
+            <if test="userName != null  and userName != ''  ">user_name = #{userName},</if>
+            <if test="idCardNo != null  and idCardNo != ''  ">id_card_no = #{idCardNo},</if>
+            <if test="accountName != null  and accountName != ''  ">account_name = #{accountName},</if>
+            <if test="accountType != null  and accountType != ''  ">account_type = #{accountType},</if>
+            <if test="bankCardNo != null  and bankCardNo != ''  ">bank_card_no = #{bankCardNo},</if>
+            <if test="bankName != null  and bankName != ''  ">bank_name = #{bankName},</if>
+            <if test="bankNo != null  and bankNo != ''  ">bank_no = #{bankNo},</if>
+            <if test="branchName != null  and branchName != ''  ">branch_name = #{branchName},</if>
+            <if test="branchNo != null  and branchNo != ''  ">branch_no = #{branchNo},</if>
+            <if test="provinceName != null  and provinceName != ''  ">province_name = #{provinceName},</if>
+            <if test="cityName != null  and cityName != ''  ">city_name = #{cityName},</if>
+            <if test="balance != null  ">balance = #{balance},</if>
+            <if test="frozenBalance != null  ">frozen_balance = #{frozenBalance},</if>
+            <if test="availableBalance != null  ">available_balance = #{availableBalance},</if>
+            <if test="businessStatus != null  and businessStatus != ''  ">business_status = #{businessStatus},</if>
+            <if test="enable != null  ">enable = #{enable},</if>
+            <if test="createdTime != null  ">created_time = #{createdTime},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteEbankAccountById" parameterType="Integer">
+        delete from ebank_account where id = #{id}
+    </delete>
+	
+    <delete id="deleteEbankAccountByIds" parameterType="String">
+        delete from ebank_account where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

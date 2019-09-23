@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyunfu.customer.repository.address.CustAreaMapper">
+    <select id="findByAreaLevel" parameterType="java.lang.Integer" resultType="com.xinyunfu.customer.domain.address.CustAreaDTO">
+        select * from cust_area where area_level = #{areaLevel}
+    </select>
+    <select id="findIdByAreaLevel" parameterType="java.lang.Integer" resultType="java.lang.Long">
+        select id from cust_area where area_level = #{areaLevel}
+    </select>
+    <select id="findByParentId" parameterType="java.lang.Long" resultType="com.xinyunfu.customer.domain.address.CustAreaDTO">
+        select * from cust_area where parent_id = #{parentId}
+    </select>
+    <select id="findIdByParentId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select id from cust_area where parent_id = #{parentId}
+    </select>
+    <select id="findById" parameterType="java.lang.Long" resultType="com.xinyunfu.customer.domain.address.CustAreaDTO">
+        select * from cust_area where id = #{id}
+    </select>
+</mapper>

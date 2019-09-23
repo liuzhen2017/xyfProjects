@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('用户列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								手机号：<input type="text" name="phone"/>
+							</li>
+
+							<li>
+								推荐<input type="text" name="userCode"/>
+							</li>
+
+							<li>
+								昵称：<input type="text" name="nickName"/>
+							</li>
+
+							<li>
+								真实姓名：<input type="text" name="name"/>
+								<input type="hidden" name="custType" value="1"/>
+							</li>
+
+							<li>
+								性别 ：
+								<select name="sex">
+									<option value="">请选择</option>
+									<option value="0">女</option>
+									<option value="1">男</option>
+								</select>
+							</li>
+							<li>
+								用户状态
+								<select name="status">
+									<option value="">请选择</option>
+									<option value="0">未激活</option>
+									<option value="1">已激活</option>
+									<option value="2">已注销</option>
+									<option value="3">系统禁用</option>
+								</select>
+							</li>
+							<li>
+								用户类型：
+								<select name="level">
+									<option value="">请选择</option>
+									<option value="0">普通用户</option>
+									<option value="1">VIP</option>
+									<option value="2">VIP PLUS</option>
+								</select>
+							</li>
+							<li>
+								用户分类：
+								<select name="userType">
+									<option value="">请选择</option>
+									<option value="0">新用户</option>
+									<option value="1">活跃用户</option>
+									<option value="2">睡眠用户</option>
+								</select>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:custUser:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:custUser:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+				<a class="btn btn-warning"  onclick="checkOpen('升级VIP','custUser/upgradeVIP',600,400)" shiro:hasPermission="system:custUser:upgradeVIP">
+					<i class="fa fa-download"></i> 升级VIP
+				</a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+	 <script type="text/javascript" src="../../../util.js"></script>
+
+	 <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:custUser:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:custUser:remove')}]];
+        var prefix = ctx + "system/custUser";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "用户",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : '序号',
+					visible: false
+				},
+				{
+					field : 'phone', 
+					title : '手机号',
+					sortable: true
+				},
+				{
+					field : 'userCode', 
+					title : '推荐码',
+					sortable: true
+				},
+				{
+					field : 'nickName', 
+					title : '昵称',
+					sortable: true
+				},
+				{
+					field : 'name', 
+					title : '真实姓名',
+					sortable: true
+				},
+				{
+					field : 'sex', 
+					title : '性别',
+					formatter:function(value,row,index){
+						return value==0?"女":"男";
+					}
+				},
+				{
+					field : 'status', 
+					title : '用户状态',
+					formatter:function(value,row,index){
+						if(value==0){
+							return "未激活";
+						}else if(value==1){
+							return "已激活";
+						}else if(value==2){
+							return "已注销";
+						}else if(value==3){
+							return "系统禁用";
+						}
+					}
+				},
+				{
+					field : 'level', 
+					title : '用户级别',
+					formatter:function(value,row,index){
+						if(value==0){
+							return "普通用户";
+						}else
+						if(value==2){
+							return "VIP";
+						}
+						return "VIP PLUS";
+					}
+				},
+				{
+					field : 'cardNo', 
+					title : '证件号'
+				},
+				{
+					field : 'cardType', 
+					title : '证件类型',
+					formatter:function(value,row,index){
+							return "身份证";
+					}
+				},
+				{
+					field : 'authStatus', 
+					title : '认证状态',
+					formatter:function(value,row,index){
+						if(value ==0 ){
+							return "认证失败!"
+						}else if (value ==1 ){
+							return "认证通过!"
+						}
+						return "未认证!";
+					}
+				},
+				{
+					field : 'authTime', 
+					title : '认证时间',
+					sortable: true
+				},
+				{
+					field : 'wechat', 
+					title : '微信号码',
+					sortable: true
+				},
+				{
+					field : 'dataSource', 
+					title : '用户来源',
+					sortable: true
+				},
+				{
+					field : 'remarks', 
+					title : '备注信息',
+					sortable: true
+				},
+				{
+					field : 'createdTime', 
+					title : '创建时间',
+					sortable: true
+				},
+				{
+					field : 'updatedTime', 
+					title : '最后修改时间',
+					sortable: true
+				},
+				{
+					field : 'userNo', 
+					title : '用户编号',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

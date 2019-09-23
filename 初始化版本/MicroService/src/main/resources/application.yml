@@ -1,0 +1,30 @@
+---
+spring:
+  application:
+    #微服务名
+    name: MicroServeice
+  profiles:
+    #默认环境
+    active: dev
+  redis:
+    sentinel:
+      master: mymaster
+    jedis:
+      pool:
+        max-idle: 10
+        min-idle: 0
+        max-active: -1
+        max-wait: -1
+    ssl: false
+    timeout: 600
+    
+#注册中心配置    
+eureka:
+  instance:
+    lease-expiration-duration-in-seconds: 15
+    lease-renewal-interval-in-seconds: 5
+  client:
+    registry-fetch-interval-seconds: 5
+feign:
+  hystrix:
+    enabled: true

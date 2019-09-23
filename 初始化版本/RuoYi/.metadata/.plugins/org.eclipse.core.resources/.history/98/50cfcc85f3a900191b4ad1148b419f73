@@ -1,0 +1,14 @@
+
+### set log levels ###
+log4j.rootLogger = info,stdout
+ 
+### \u8F93\u51FA\u5230\u63A7\u5236\u53F0 ###
+log4j.appender.stdout = org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.Target = System.out
+log4j.appender.stdout.layout = com.yogapay.core.ExPatternLayout
+log4j.appender.stdout.layout.ConversionPattern = lgcNo:%#{orgId} %d{yyyy-MM-dd HH:mm:ss} [%t] %p [%c] - %m%n
+--------------------- 
+\u4F5C\u8005\uFF1AKuseBear 
+\u6765\u6E90\uFF1ACSDN 
+\u539F\u6587\uFF1Ahttps://blog.csdn.net/u010162887/article/details/51736637 
+\u7248\u6743\u58F0\u660E\uFF1A\u672C\u6587\u4E3A\u535A\u4E3B\u539F\u521B\u6587\u7AE0\uFF0C\u8F6C\u8F7D\u8BF7\u9644\u4E0A\u535A\u6587\u94FE\u63A5\uFF01

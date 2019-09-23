@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingyunfu.ebank.mapper.channel.EbankChannelMapper">
+    <select id="findByEbankPayTypeAndClientType" parameterType="com.xingyunfu.ebank.domain.channel.EbankChannelDTO"
+            resultType="com.xingyunfu.ebank.domain.channel.EbankChannelDTO">
+        select * from ebank_channel where ebank_pay_type = #{ebankPayType} and client_type = #{clientType} and enable is true
+    </select>
+    <select id="findAllId" resultType="java.lang.Long">
+        select id from ebank_channel
+    </select>
+    <select id="findById" resultType="com.xingyunfu.ebank.domain.channel.EbankChannelDTO" parameterType="java.lang.Long">
+        select * from ebank_channel where id = #{id}
+    </select>
+    <select id="pageQuery" parameterType="java.util.Map" resultType="java.lang.Long">
+        select id from ebank_channel limit #{pageNo},#{pageSize}
+    </select>
+    <update id="update" parameterType="com.xingyunfu.ebank.domain.channel.EbankChannelDTO">
+        update ebank_channel
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id != null">id = #{id},</if>
+            <if test="ebankPayType != null">ebank_pay_type = #{ebankPayType},</if>
+            <if test="clientType != null">client_type = #{clientType},</if>
+            <if test="ebankPayName != null">ebank_pay_name = #{ebankPayName},</if>
+            <if test="payType != null">pay_type = #{payType},</if>
+            <if test="tradeType != null">trade_type = #{tradeType},</if>
+            <if test="payName != null">pay_name = #{payName},</if>
+            <if test="tradeName != null">trade_name = #{tradeName},</if>
+            <if test="enable != null">enable = #{enable},</if>
+        </trim>
+        where id = #{id}
+    </update>
+</mapper>

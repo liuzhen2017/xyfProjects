@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.ProPropertyMapper">
+    
+    <resultMap type="ProProperty" id="ProPropertyResult">
+        <result property="propertyId"    column="property_id"    />
+        <result property="propertyName"    column="property_name"    />
+        <result property="proId"    column="pro_id"    />
+        <result property="status"    column="status"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+    </resultMap>
+	
+	<sql id="selectProPropertyVo">
+        select property_id, property_name, pro_id, status, remarks, created_time, created_by, updated_time, updated_by from pro_property
+    </sql>
+	<select id="selectProPropertyByProId" parameterType="Long" resultMap="ProPropertyResult">
+        <include refid="selectProPropertyVo"/>
+        where pro_id=#{proId}
+    </select>
+    <select id="selectProPropertyList" parameterType="ProProperty" resultMap="ProPropertyResult">
+        <include refid="selectProPropertyVo"/>
+        <where>  
+            <if test="propertyId != null "> and property_id = #{propertyId}</if>
+             <if test="propertyName != null  and propertyName != '' "> and property_name = #{propertyName}</if>
+             <if test="proId != null "> and pro_id = #{proId}</if>
+             <if test="status != null "> and status = #{status}</if>
+             <if test="remarks != null  and remarks != '' "> and remarks = #{remarks}</if>
+             <if test="createdTime!= null "> and created_time = #{createdTime}</if>
+             <if test="createdBy != null  and createdBy != '' "> and created_by = #{createdBy}</if>
+             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+             <if test="updatedBy != null  and updatedBy != '' "> and updated_by = #{updatedBy}</if>
+         </where> order by created_time desc
+    </select>
+    
+    <select id="selectProPropertyById" parameterType="Long" resultMap="ProPropertyResult">
+        <include refid="selectProPropertyVo"/>
+        where property_id = #{propertyId}
+    </select>
+        
+    <insert id="insertProProperty" parameterType="ProProperty" useGeneratedKeys="true" keyProperty="propertyId">
+        insert into pro_property
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="propertyName != null  and propertyName != ''  ">property_name,</if>
+			<if test="proId != null  ">pro_id,</if>
+			<if test="status != null  ">status,</if>
+			<if test="remarks != null  and remarks != ''  ">remarks,</if>
+			<if test="createdTime!= null  ">created_time,</if>
+			<if test="createdBy != null  and createdBy != ''  ">created_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">updated_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="propertyName != null  and propertyName != ''  ">#{propertyName},</if>
+			<if test="proId != null  ">#{proId},</if>
+			<if test="status != null  ">#{status},</if>
+			<if test="remarks != null  and remarks != ''  ">#{remarks},</if>
+			<if test="createdTime!= null  ">#{createdTime},</if>
+			<if test="createdBy != null  and createdBy != ''  ">#{createdBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">#{updatedBy},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateProProperty" parameterType="ProProperty">
+        update pro_property
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="propertyName != null  and propertyName != ''  ">property_name = #{propertyName},</if>
+            <if test="proId != null  ">pro_id = #{proId},</if>
+            <if test="status != null  ">status = #{status},</if>
+            <if test="remarks != null  and remarks != ''  ">remarks = #{remarks},</if>
+            <if test="createdTime!= null  ">created_time = #{createdTime},</if>
+            <if test="createdBy != null  and createdBy != ''  ">created_by = #{createdBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="updatedBy != null  and updatedBy != ''  ">updated_by = #{updatedBy},</if>
+        </trim>
+        where property_id = #{propertyId}
+    </update>
+
+	<delete id="deleteProPropertyById" parameterType="Long">
+        delete from pro_property where property_id = #{propertyId}
+    </delete>
+	
+    <delete id="deleteProPropertyByIds" parameterType="String">
+        delete from pro_property where property_id in 
+        <foreach item="propertyId" collection="array" open="(" separator="," close=")">
+            #{propertyId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,56 @@
+package com.gateway.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import com.alibaba.fastjson.JSONObject;
+import com.gateway.sao.CustomerManageSao;
+import com.gateway.utils.JwtUtils;
+import com.gateway.utils.RSAEncrypt;
+import com.gateway.utils.ResponseInfo;
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@Slf4j
+public class CallApiService {
+
+	
+	
+	@Autowired
+	private CustomerManageSao sao;
+	
+	@Autowired
+	private RedisService redis;
+	
+	@Value("${login.token.timeout}")
+	private String minutes;
+	
+	@Value("${xyf.api.version}")
+	private String apiVersion;
+	
+	@Value("${handler.encry.key}")
+	private String encryKey;
+	
+	/**
+	 *	登录接口
+	 * @param json
+	 * @param loginType
+	 * @return
+	 * @throws Exception 
+	 */
+	public ResponseInfo<String> login(JSONObject json) throws Exception{
+		String data = json.getString("data");
+		String str = RSAEncrypt.decrypt(data, encryKey);
+		String loginResult = sao.login(JSONObject.parseObject(str));
+		log.info("login  by  loginResult{}", loginResult);
+	    JSONObject res = JSONObject.parseObject(loginResult);
+	    if(ResponseInfo.CODE_SUCCESS.equals(res.getString("code"))) {//  登录成功
+	      long userNo = JSONObject.parseObject(res.getString("data")).getLong("userNo");
+	      
+	    }
+		return new ResponseInfo<String>(res.getString("code"),res.getString("message"),res.getString("data"),apiVersion);
+	}
+	
+	
+	
+}

@@ -1,0 +1,189 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head>
+	<th:block th:include="include :: header('修改SKU')"/>
+</head>
+
+<link th:href="@{/ajax/libs/summernote/summernote.css}" rel="stylesheet"/>
+<link th:href="@{/ajax/libs/summernote/summernote-bs3.css}" rel="stylesheet"/>
+
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+	<form class="form-horizontal m" id="form-product-add">
+
+		<!--商品属性begin-->
+		<h4 class="form-header h4">商品属性</h4>
+		<a href="#" th:onclick="addrow()">添加属性</a>
+		<a href="#"  th:onclick="delRow()">删除属性</a>
+		<div id="propertyDiv">
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>属性名称：</label>
+				<div class="col-sm-8">
+					<input  name="propertyName" placeholder="请输入属性名称"class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>属性值：</label>
+				<div class="col-sm-8">
+					<input  name="propertyValue" placeholder="请输入属性值,多个值请用;;号代替" class="form-control" type="text">
+				</div>
+			</div>
+		</div>
+		<!--商品属性end-->
+
+		<!--商品SKU begin-->
+		<a href="#"  th:onclick="loadSkU()">点击加载sku属性</a>
+		<h4 class="form-header h4">商品SKU</h4>
+		<div id="skuGroup" class="form-group">
+			<div class="form-group">
+				<div class="col-sm-8" id="skuGoupsProDiv">
+
+				</div>
+			</div>
+
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-3 control-label">sku图片：</label>
+			<div class="col-sm-8">
+				<input  name="skuImg" class="form-control" type="hidden">
+				<input  name="skuImgFile" class="form-control" type="file">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>出售价格：(元)</label>
+			<div class="col-sm-8">
+				<input id="price" name="price" class="form-control" type="number">（单位：元)
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>市场价格：(元)</label>
+			<div class="col-sm-8">
+				<input id="marketPrice" name="marketPrice" class="form-control" type="number">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>成本价格：(元)</label>
+			<div class="col-sm-8">
+				<input id="costPrice" name="costPrice" class="form-control" type="number">
+			</div>
+		</div>
+
+		<!--商品SKU-->
+	</form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript" src="../../../util.js"></script>
+
+<script type="text/javascript">
+
+	var prefix = ctx + "system/product"
+	$("#form-product-add").validate({
+		rules: {
+			xxxx: {
+				required: true,
+			},
+		},
+		focusCleanup: true
+	});
+
+	function submitHandler() {
+		if ($.validate.form()) {
+			$.operate.save(prefix + "/add", $('#form-product-add').serialize());
+		}
+	}
+	//增加
+	function addrow(){
+		var str="";
+
+		var tables = $('#propertyDiv');
+		var addtr = $('<div class="form-group"> ' +
+						'<label class="col-sm-3 control-label"><span style="color: red; ">*</span>属性名称：</label>' +
+						'<div class="col-sm-8">' +
+						'<input  name="propertyName" placeholder="请输入属性名称"class="form-control" type="text">' +
+						'</div>' +
+						'</div>' +
+						'<div class="form-group">' +
+						'<label class="col-sm-3 control-label"><span style="color: red; ">*</span>属性值：</label>' +
+						'<div class="col-sm-8">' +
+						'<input i name="propertyValue" placeholder="请输入属性值,多个值请用;;号代替" class="form-control" type="text">' +
+						'</div>' +
+				'</div>');
+
+		addtr.appendTo(tables);
+
+	}
+
+	function delRow(){
+		var divList =$("#propertyDiv").children("div");
+		if(divList.length <=2){
+			$.modal.alertError("至少保留一个");
+			return false;
+		}
+		//删除最后一个
+		$("#propertyDiv>div:last").remove();
+		//删除最后一个
+		$("#propertyDiv>div:last").remove();
+		//
+
+
+	}
+	function addPicRow(){
+		var tables = $('#picDiv');
+		var addtr = $('<div class="form-group"> '
+				+' <label class="col-sm-3 control-label"><span style="color: red; ">*</span>图片上传：</label> '
+				+'<div class="col-sm-8"> '
+				+'<input  name="file" class="form-control" type="file"  placeholder="请上传图片">'
+				+'</div> '
+				+'</div>');
+		addtr.appendTo(tables);
+	}
+	function delPicRow(){
+		var divList =$("#picDiv").children("div");
+		if(divList.length <=1){
+			$.modal.alertError("至少保留一个");
+			return false;
+		}
+		//删除最后一个
+		$("#picDiv>div:last").remove();
+	}
+
+	function loadSkU(){
+		var valuelist =new Array();
+		var index=0;
+		$("input[name='propertyValue']").each(function(){
+			proper=$(this).val();
+			valuelist[index]=proper;
+			index++;
+		});
+		var value;
+		index =0;
+		var strBuff='';
+		var str;
+		$("input[name='propertyName']").each(function(){
+			proper=$(this).val();
+			value =valuelist[index].replace("；\g").split(";");
+			str="";
+			str ='<label class="col-sm-3 control-label">'+proper+'：</label>';
+			str+='<div class="col-sm-9"> '
+			for(var j=0;j<=value.length;j++ ){
+				str+='    <label class="check-box">'
+				if(value[j]){
+					str+='<div class="icheckbox-blue"> '
+							// +'<input type="checkbox" value="option1" id="inlineCheckbox1" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;"></ins> '
+							+'<input type="checkbox" value="option1" id="inlineCheckbox1"> '
+							+'</div>'+value[j]+'</label> ';
+
+				}
+			}
+			index++;
+			strBuff+="</div><br/>" +str;
+		});
+		$("#skuGoupsProDiv").html(strBuff);
+
+	}
+</script>
+</body>
+</html>

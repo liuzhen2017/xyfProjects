@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;Test.java&apos; to &apos;AppUser/src/main/java/com.microservice.model&apos;&#x0D;&#x0A;- Original project: &apos;MicroService&apos;&#x0D;&#x0A;- Destination element: &apos;AppUser/src/main/java/com.microservice.model&apos;&#x0D;&#x0A;- Original element: &apos;com.microservice.model.Test.java&apos;" description="Copy compilation unit" destination="=AppUser/src\/main\/java&lt;com.microservice.model" element1="/src\/main\/java&lt;com.microservice.model{Test.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1562837571145" units="1" version="1.0"/>
+</session>

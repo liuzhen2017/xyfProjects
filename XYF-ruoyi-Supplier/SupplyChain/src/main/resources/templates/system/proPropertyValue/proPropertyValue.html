@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('商品属性值列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+	<div class="row">
+		<div class="col-sm-12 search-collapse">
+			<form id="formId">
+				<div class="select-list">
+					<ul>
+						<li>
+							属性id：<input type="text" name="propertyId"/>
+						</li>
+
+						<li>
+							属性值：<input type="text" name="valueText"/>
+						</li>
+
+						<li>
+							<select name="status">
+								<option value="">请选择状态</option>
+								<option value="0">启用</option>
+								<option value="1">禁用</option>
+								<option value="2">删除</option>
+								<option value="99">待审核</option>
+							</select>
+						</li>
+
+						<!--<li>-->
+						<!--备注：<input type="text" name="remarks"/>-->
+						<!--</li>-->
+
+
+						<li>
+							<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+									class="fa fa-search"></i>&nbsp;搜索</a>
+							<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+									class="fa fa-refresh"></i>&nbsp;重置</a>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+
+		<div class="btn-group-sm" id="toolbar" role="group">
+			<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:proPropertyValue:add">
+				<i class="fa fa-plus"></i> 添加
+			</a>
+			<a class="btn btn-warning" onclick="$.table.exportExcel()"
+			   shiro:hasPermission="system:proPropertyValue:export">
+				<i class="fa fa-download"></i> 导出
+			</a>
+		</div>
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table" data-mobile-responsive="true"></table>
+		</div>
+	</div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:proPropertyValue:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:proPropertyValue:remove')}]];
+    var prefix = ctx + "system/proPropertyValue";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "商品属性值",
+            showExport: true,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'valueId',
+                    title: '属性值id',
+                    visible: true
+                },
+                {
+                    field: 'propertyId',
+                    title: '属性id',
+                    sortable: true
+                },
+                {
+                    field: 'valueText',
+                    title: '属性值',
+                    sortable: true
+                },
+                {
+                    field: 'status',
+                    title: '状态',
+                    sortable: true, formatter: function (value, row, index) {
+                        if (row.status == 0) {
+                            return "启用";
+                        }
+                        else if (row.status == 1) {
+                            return "禁用";
+                        }
+                        else if (row.status == 2) {
+                            return "删除";
+                        }
+                        else {
+                            return "待审核";
+                        }
+                    }
+                },
+                {
+                    field: 'remarks',
+                    title: '备注',
+                    sortable: true
+                },
+                {
+                    field: 'createdTime',
+                    title: '创建时间',
+                    sortable: true
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if (row.status == 99) {
+                            var actions = [];
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.valueId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.valueId + '\')"><i class="fa fa-remove"></i>撤回</a>');
+                            return actions.join('');
+                        } else {
+                        }
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>

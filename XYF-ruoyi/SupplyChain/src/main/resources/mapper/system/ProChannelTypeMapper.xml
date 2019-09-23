@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.ProChannelTypeMapper">
+    
+    <resultMap type="ProChannelType" id="ProChannelTypeResult">
+        <result property="channelTypeId"    column="channel_type_id"    />
+        <result property="channelTypeName"    column="channel_type_name"    />
+        <result property="status"    column="status"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+    </resultMap>
+	
+	<sql id="selectProChannelTypeVo">
+        select channel_type_id, channel_type_name, status, remarks, created_time, created_by, updated_time, updated_by from pro_channel_type
+    </sql>
+	
+    <select id="selectProChannelTypeList" parameterType="ProChannelType" resultMap="ProChannelTypeResult">
+        <include refid="selectProChannelTypeVo"/>
+        <where>  
+            <if test="channelTypeId != null "> and channel_type_id = #{channelTypeId}</if>
+             <if test="channelTypeName != null  and channelTypeName != '' "> and channel_type_name = #{channelTypeName}</if>
+             <if test="status != null "> and status = #{status}</if>
+             <if test="remarks != null  and remarks != '' "> and remarks = #{remarks}</if>
+             <if test="createdTime != null "> and created_time = #{createdTime}</if>
+             <if test="createdBy != null  and createdBy != '' "> and created_by = #{createdBy}</if>
+             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+             <if test="updatedBy != null  and updatedBy != '' "> and updated_by = #{updatedBy}</if>
+         </where>
+    </select>
+    
+    <select id="selectProChannelTypeById" parameterType="Long" resultMap="ProChannelTypeResult">
+        <include refid="selectProChannelTypeVo"/>
+        where channel_type_id = #{channelTypeId}
+    </select>
+        
+    <insert id="insertProChannelType" parameterType="ProChannelType" useGeneratedKeys="true" keyProperty="channelTypeId">
+        insert into pro_channel_type
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="channelTypeName != null  and channelTypeName != ''  ">channel_type_name,</if>
+			<if test="status != null  ">status,</if>
+			<if test="remarks != null  and remarks != ''  ">remarks,</if>
+			<if test="createdTime != null  ">created_time,</if>
+			<if test="createdBy != null  and createdBy != ''  ">created_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">updated_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="channelTypeName != null  and channelTypeName != ''  ">#{channelTypeName},</if>
+			<if test="status != null  ">#{status},</if>
+			<if test="remarks != null  and remarks != ''  ">#{remarks},</if>
+			<if test="createdTime != null  ">#{createdTime},</if>
+			<if test="createdBy != null  and createdBy != ''  ">#{createdBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">#{updatedBy},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateProChannelType" parameterType="ProChannelType">
+        update pro_channel_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="channelTypeName != null  and channelTypeName != ''  ">channel_type_name = #{channelTypeName},</if>
+            <if test="status != null  ">status = #{status},</if>
+            <if test="remarks != null  and remarks != ''  ">remarks = #{remarks},</if>
+            <if test="createdTime != null  ">created_time = #{createdTime},</if>
+            <if test="createdBy != null  and createdBy != ''  ">created_by = #{createdBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="updatedBy != null  and updatedBy != ''  ">updated_by = #{updatedBy},</if>
+        </trim>
+        where channel_type_id = #{channelTypeId}
+    </update>
+
+	<delete id="deleteProChannelTypeById" parameterType="Long">
+        delete from pro_channel_type where channel_type_id = #{channelTypeId}
+    </delete>
+	
+    <delete id="deleteProChannelTypeByIds" parameterType="String">
+        delete from pro_channel_type where channel_type_id in 
+        <foreach item="channelTypeId" collection="array" open="(" separator="," close=")">
+            #{channelTypeId}
+        </foreach>
+    </delete>
+    
+</mapper>

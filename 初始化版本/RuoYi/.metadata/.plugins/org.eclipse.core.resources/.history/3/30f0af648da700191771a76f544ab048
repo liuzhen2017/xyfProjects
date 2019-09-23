@@ -1,0 +1,242 @@
+package com.gateway.service;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
+import com.alibaba.fastjson.JSONObject;
+import com.gateway.utils.BusinessException;
+import com.gateway.utils.JwtUtils;
+import com.gateway.utils.MD5Utils;
+import com.gateway.utils.RSAEncrypt;
+import com.gateway.utils.ResponseInfo;
+import com.netflix.zuul.context.RequestContext;
+import com.netflix.zuul.http.HttpServletRequestWrapper;
+import com.netflix.zuul.http.ServletInputStreamWrapper;
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@Slf4j
+public class AuthService {
+
+	@Value("${token.white.list}")
+	private String listString;
+	
+	
+	@Value("${handler.encry.key}")
+	private String encryKey;
+
+	@Autowired
+	private RedisService redis;
+	
+	@Value("${login.token.timeout}")
+	private String minutes;
+	
+	@Value("${handler.auth.md5.key}")
+	private String md5Key;
+	
+	@Value("${auth.isOn.takeOn}")
+    private String isOn;	
+	
+	@Value("${xyf.api.version}")
+	private String apiVersion;
+	
+	/**
+	 *	前置过滤逻辑
+	 * @return
+	 */
+	public Object preFilter(RequestContext context) {
+	     HttpServletRequest request = context.getRequest();
+	     context.getResponse().setCharacterEncoding("UTF-8");
+        if(!"start".equals(isOn)) {// 不加密的写法
+            noEncry(context);
+        	return null;
+        }	
+        String url = request.getRequestURI();
+        log.info("==============================================访问的url:"+url);
+        try {
+        	if(!inWhitelist(url)) {  //  不在免验签白名单
+        		String token = request.getHeader("token");
+        		log.info("不在token白名单中，获取的token：{} ",token);
+        		String userNo = JwtUtils.getUserNoByToken(token);
+        		checkToken(token,userNo);   //  验证不通过会直接报错throw exception
+        		context.addZuulRequestHeader("currentUserId", userNo);
+        	}
+        	
+            if("post".equalsIgnoreCase(request.getMethod())) {  // post请求才会有body
+            		ServletInputStream sis = request.getInputStream();
+            		String body = StreamUtils.copyToString(sis, Charset.forName("UTF-8"));
+            		log.info("request body:{}",body);
+            		JSONObject json = JSONObject.parseObject(body);
+            		String data = json.getString("data");  //   业务加密报文
+            		String sign = json.getString("sign");  //   签名报文
+            		JSONObject obj = requestDecry(data);   //   解密业务报文
+            		log.info("=============decry requestBody:"+obj);
+            		if(null==obj||obj.isEmpty()) {         //   业务报文为null
+            			throw new Exception("缺少必填参数");
+            		}
+            		if(!signCheck(sign, obj)) {
+            			throw new Exception("签名验证不通过");	 
+            		}
+            		reSetRequestBody(context, obj, request);//重置 requestBody
+             }
+        	
+		}catch (Exception e) {
+			log.info("e:==="+e);
+			context.setSendZuulResponse(false);// 设置不转发
+        	context.setResponseStatusCode(200);
+        	context.setResponseBody(new ResponseInfo<>("00001",e.getMessage(),e.getMessage(),apiVersion).toString());
+        	context.set("isSuccess", false);  
+		}
+		return null;
+	}
+
+	
+	
+
+
+	/**
+	 *	 返回的处理过滤器逻辑
+	 * @return
+	 * @throws IOException 
+	 */
+	public Object postFilter(RequestContext context)  {
+		String body;
+		try {
+			body = StreamUtils.copyToString(context.getResponseDataStream(), Charset.forName("UTF-8"));
+			log.info("response body ===="+body);
+	        JSONObject json = JSONObject.parseObject(body);
+	        String sign = MD5Utils.md5(new StringBuilder(MD5Utils.md5(md5Key)).append(body).toString());
+	        json.put("sign", sign);
+	        json.put("apiVersion", apiVersion);
+	        log.info("post filter body:"+json.toJSONString());
+	        context.setResponseBody(json.toJSONString());
+		} catch (Exception e) {
+			e.printStackTrace();
+			context.setResponseBody(new ResponseInfo<>("00001",e.getMessage(),e.getMessage(),apiVersion).toString());
+		}
+        return null;
+	}
+	
+	
+	/**
+	 * 	报文解密请求解密
+	 * @param str
+	 * @return
+	 */
+	public JSONObject requestDecry(String str) throws Exception{
+		String decryStr = RSAEncrypt.decryptString(str, encryKey);
+		
+		log.info("decryStr===="+decryStr);
+		return JSONObject.parseObject(decryStr);
+	}
+
+	/**
+	 *	签名验证
+	 * @param body
+	 * @param sign
+	 * @param userNo
+	 * @return
+	 * @throws Exception 
+	 */
+	public boolean signCheck(String sign,JSONObject obj) throws Exception {
+		String str = MD5Utils.md5(new StringBuilder(MD5Utils.md5(md5Key)).append(obj.toJSONString()).toString());
+		return sign!=null && sign.equals(str);
+	}
+
+
+	
+	
+	/**
+	 * 	是否在白名单检查
+	 * @param url
+	 * @return
+	 */
+	public boolean inWhitelist(String url) {
+	    String [] ss = listString.split(","); 
+	    for(String s : ss) {
+	    	if(url.startsWith(s)) {
+	    		return true;
+	    	}
+	    }
+		return false;
+	}
+	
+	
+
+	/**
+	 * token有效性验证
+	 * @param token
+	 * @return
+	 */
+	public boolean checkToken(String token,String userNo) throws BusinessException{
+		log.info("zuulfilter get token:"+token);
+		log.info("encryVersion:"+apiVersion);
+        if(StringUtils.isEmpty(token)) {
+        	throw new BusinessException("请重新登录");
+        }
+        
+        if(!JwtUtils.checkToken(token, apiVersion)) {
+        	throw new BusinessException("操作不受信任，请重新登录");
+        }
+        
+        if(!token.equals(redis.get(userNo))) {
+        	throw new BusinessException("请重新登录");
+        }
+		return true;
+	}
+	
+	
+	/**
+	 *	重新设置访问的requestBody
+	 * @param rc
+	 * @param obj
+	 * @param request
+	 */
+	public void reSetRequestBody(RequestContext rc,JSONObject obj,HttpServletRequest request) {
+		byte[] bytes = obj.toJSONString().getBytes();
+		rc.setRequest(new HttpServletRequestWrapper(request) {
+            @Override
+            public ServletInputStream getInputStream() throws IOException {
+                return new ServletInputStreamWrapper(bytes);
+            }
+            @Override
+            public int getContentLength() {
+                return bytes.length;
+            }
+            @Override
+            public long getContentLengthLong() {
+                return bytes.length;
+            }
+        });
+	}
+	
+	
+	
+	
+	
+	
+	public void noEncry(RequestContext context) {
+		try {
+			HttpServletRequest request = context.getRequest();
+    		ServletInputStream sis = request.getInputStream();
+    		String body = StreamUtils.copyToString(sis, Charset.forName("UTF-8"));
+    		log.info("request body:{}",body);
+    		JSONObject json = JSONObject.parseObject(body);
+    		String data = json.getString("data");  
+    		reSetRequestBody(context, JSONObject.parseObject(data), request);//重置 requestBody
+		} catch (IOException e) {
+			e.printStackTrace();
+			log.info("e:==="+e);
+			context.setSendZuulResponse(false);// 设置不转发
+        	context.setResponseStatusCode(200);
+        	context.setResponseBody(new ResponseInfo<>("00001",e.getMessage(),e.getMessage(),apiVersion).toString());
+        	context.set("isSuccess", false);  
+		}
+	}
+}

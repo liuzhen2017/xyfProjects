@@ -1,0 +1,13 @@
+package com.microservice.service;
+
+import com.alibaba.fastjson.JSONObject;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+public class AppCustomerService {public JSONObject getUserById(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

@@ -1,0 +1,18 @@
+package com.example.utils;
+
+public class ComparUtils {
+
+	
+	
+	
+	public static void main(String[] args) {
+		TestBean tb1 = new TestBean();
+		TestBean tb2 = new TestBean();
+		TestBean tb3 = new TestBean();
+		TestBean tb4 = new TestBean();
+		tb1.setId(50).setName("a");
+		tb2.setId(50).setName("b");
+		tb3.setId(50).setName("c");
+		tb4.setId(50).setName("d");
+	}
+}

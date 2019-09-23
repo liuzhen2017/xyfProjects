@@ -1,0 +1,71 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.1.101:8761/eureka,http://192.168.1.101:8762/eureka,http://192.168.1.101:8763/eureka
+jasypt:
+  encryptor:
+    password: EbfYkitulv73I2p0mXI50JMXoaxZTKJ7
+server:
+  port: 8083
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: ENC(1zL5dTMpDjpQn37RDXke44GTzmCZPqpA)
+    url: jdbc:mysql://127.0.0.1:3306/InfoCenter?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+  redis:
+    database: 0
+    host: 120.79.247.111
+    password: ENC(gmyc0w5G9juDFphYmJc/1F1DTg//s+dA)
+    port: 6379
+    sentinel:
+      nodes: 120.79.247.111:26379,119.23.31.3:26379
+  rabbitmq:
+    #非集群模式下，填写MQ服务器的地址和端口
+    addresses: 120.79.247.111:5672,,119.23.31.3:5672
+    connection-timeout: 15000
+    listener:
+      simple:
+        acknowledge-mode: manual
+        concurrency: 1
+        max-concurrency: 5
+        prefetch: 1
+    # rabbitmq的用户名和密码
+    username: admin
+    password: ENC(s96SQqGVBurvS+tvPIKleVYmDUpwCtGm)
+    publisher-confirms: true
+    publisher-returns: true
+    template:
+      mandatory: true
+logging:
+  level:
+    com:
+      xinyunfu: DEBUG
+    sun:
+      net:
+        www:
+          protocol: DEBUG
+  path: "D:\\logs\\infoCenter"
+
+send-message:
+  base-url: http://api.sms.yx18g.cn
+  merchant-no: XYF166668888
+  merchant-no-Key: 354c35183e7c4e85bdf88fdfb079be2b
+  baseUrlApp: http://api.msg.yx18g.cn
+
+info-center:
+  push:
+    # 短信模板
+    short-message: 18e7ed080a0d0081acb9b4e2bd913c25
+    # 个推模板
+    push-message: 6f08ccd66fcfbf828814962055b190fc
+    # 微信模板
+    wechat-message: 38ad8d3c312c9ff343dd4d84c3324ff5
+    # 商户号
+    merchant-no: ${send-message.merchant-no}
+    # 密钥
+    merchant-no-Key: ${send-message.merchant-no-Key}
+    # 请求地址
+    push-url: http://api.msg.yx18g.cn/send/index?MerchantNo={MerchantNo}&Data={Data}&Sign={Sign}
+    # 自定义短信内容
+    message-custom: http://api.sms.yx18g.cn/sms/Send?MerchantNo={MerchantNo}&Data={Data}&Sign={Sign}

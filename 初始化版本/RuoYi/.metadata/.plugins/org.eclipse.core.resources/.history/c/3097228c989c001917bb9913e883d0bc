@@ -1,0 +1,12 @@
+package com.rnmg.jace.entities;
+
+public class BaseEntity {
+
+	private String updatedBy;
+	
+	private String createdBy;
+	
+	private Date createdDate;
+	
+	private Date updatedDate;
+}

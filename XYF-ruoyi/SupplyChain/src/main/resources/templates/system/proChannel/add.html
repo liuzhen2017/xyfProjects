@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增类目')" />
+	<link rel="stylesheet" href="../../../layui/css/layui.css"  media="all">
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-proChannel-add" autocomplete="off">
+
+			<div class="form-group">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>栏目名称：</label>
+				<div class="col-sm-8">
+					<input id="channelName" name="channelName" class="form-control" type="text" required placeholder="请输入栏目名称">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>上级栏目：</label>
+				<div class="col-sm-8">
+					<div class="input-group">
+						<input name="fatherName" onclick="selectChannelTree(0)" id="treeName0" type="text" placeholder="请选择上级栏目" class="form-control" required>
+						<input name="fatherId" type="hidden" id="treeId0">
+						<span class="input-group-addon"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">栏目类型：</label>
+				<div class="col-sm-8">
+					<select id="channelType" name="channelTypeId" class="form-control" required>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">栏目跳转的方式：</label>
+				<div class="col-sm-8">
+					<select id="forwardType" name="forwardType" class="form-control" required>
+						<option value="0">无操作</option>
+						<option value="1">跳转链接</option>
+						<option value="2">活动分类</option>
+						<option value="3">商品分类</option>
+						<option value="4">商品详情</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group" id="forwardType1">
+				<label class="col-sm-3 control-label">栏目跳转的路径：</label>
+				<div class="col-sm-8">
+					<input id="linkUrl" name="linkUrl" class="form-control linkUrl1" type="text"  placeholder="请输入栏目跳转的路径">
+				</div>
+			</div>
+			<div class="form-group" id="forwardType2">
+				<label class="col-sm-3 control-label">选择活动分类：</label>
+				<div class="col-sm-8">
+					<div class="input-group">
+						<input  onclick="selectChannelTreeNew(1,2)" id="treeName1" type="text" placeholder="请选择活动分类" class="form-control" required>
+						<input  type="hidden" id="treeId1" class="linkUrl2">
+						<span class="input-group-addon"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+			</div>
+			<div class="form-group" id="forwardType3">
+				<label class="col-sm-3 control-label">选择商品分类：</label>
+				<div class="col-sm-8">
+					<div class="input-group">
+						<input  onclick="selectChannelTreeNew(2,0)" id="treeName2" type="text" placeholder="请选择商品分类" class="form-control" required>
+						<input  type="hidden" id="treeId2" class="linkUrl3">
+						<span class="input-group-addon"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+			</div>
+			<div class="form-group" id="forwardType4">
+				<label class="col-sm-3 control-label">选择商品：</label>
+				<div class="col-sm-8">
+					<div class="input-group">
+						<input id="proNames" onclick="$.modal.open('选择商品', '/system/proChannel/selectGoods', 900, 650)"  type="text" placeholder="请选择一款商品" class="form-control" required>
+						<input id="proIds"  type="hidden" class="linkUrl4">
+						<span class="input-group-addon"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">栏目展示的图片：</label>
+				<div class="col-sm-8">
+					<input  name="imageUrl" id="imageUrl"  class="form-control" type="hidden" >
+					<div class="layui-upload-drag" id="upImg">
+						<i class="layui-icon"></i>
+						<p>点击上传，或将文件拖拽到此处</p>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">背景颜色：</label>
+				<div class="col-sm-8">
+					<input  name="color" class="form-control" type="text" placeholder="请输入背景色">
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">是否可用：</label>
+				<div class="col-sm-9">
+					<label class="radio-box">
+						<div class="checked"><input type="radio" checked="" value="0" name="status" /></div>可用</label>
+					<label class="radio-box">
+						<div><input type="radio" value="1"  name="status" /></div>禁用</label>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<input id="remarks" name="remarks" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+	<script type="text/javascript" src="../../../util.js"></script>
+	<script src="../../../layui/layui.js" charset="utf-8"></script>
+
+	<script type="text/javascript">
+		var prefix = ctx + "system/proChannel"
+		$("#form-proChannel-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		//==============================初始化
+        $.getJSON(prefix+"/findAll",(data)=>{
+            let arr = [];
+            $.each(data.data,(v,i)=>{
+                arr.push(`<option value="`+(i.channelTypeId+";"+i.channelTypeName)+`">`+i.channelTypeName+`</option>`)
+            })
+            $("#channelType").empty().append(arr.join());
+
+            layui.use(['upload','colorpicker'], function(){
+                var $ = layui.jquery,upload = layui.upload,colorpicker = layui.colorpicker;
+                //==================上传图片
+                upload.render({
+                    elem: '#upImg',
+                    url: getRootPath() + "/../common/uploadToOSS",
+					data:{
+                        fileType: 'jpg',
+                        updateType: 1
+					},
+                    done: function(res){
+                        if (res.code == web_status.SUCCESS) {
+                            $("#imageUrl").val(res.msg); //赋值
+							$('#upImg').css({
+								backgroundImage:"url("+res.msg+")",
+                                backgroundSize: "100% 100%"
+							}).children().css({opacity:'0'});
+                        } else {
+                            $.modal.alertError(result.msg);
+                        }
+                    }
+                });
+                //=======================颜色选择
+                colorpicker.render({
+                    elem: '#test-form'
+                    ,color: '#1c97f5'
+                    ,done: function(color){
+                        $('#test-form-input').val(color);
+                    }
+                });
+            });
+        })
+		//============================================ 表单提交
+        function submitHandler() {
+            if ($.validate.form()) {
+                let no = $("#forwardType").val()
+                if(no == 2 || no == 3 || no == 4){
+                    $("#linkUrl").val($(".linkUrl"+no).val());
+                }
+                $.operate.save(prefix + "/add", $('#form-proChannel-add').serialize());
+            }
+        }
+
+
+        selectShow(0);
+
+        /**
+         * 跳转类型选择事件
+         */
+        $("#forwardType").on("change",(e)=>{
+            let no = e.target.value;
+            selectShow(no);
+		});
+
+        /**
+		 * 展示指定的 编号
+         * @param no
+         */
+        function selectShow(no){
+            for (let i = 1; i <= 4; i++) {
+                $("#forwardType"+i).hide();
+            }
+            if(no != "0") $("#forwardType"+no).show();
+		}
+
+
+
+	</script>
+</body>
+</html>

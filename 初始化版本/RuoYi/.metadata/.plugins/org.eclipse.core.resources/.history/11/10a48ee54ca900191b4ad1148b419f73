@@ -1,0 +1,41 @@
+package com.example.aop;
+
+import lombok.Data;
+
+@Data
+public class SystemLogStrategy {
+	
+	    private static String  logString = "线程ID:[1], cost: [2 ms], ClassName: [3], method name: {4}, 调用参数: 5, return: 6" ;
+	
+	    private String threadId;
+	
+	    private String location;
+	
+	    private String description;
+	
+	    private String className;
+	
+	    private String methodName;
+	
+	    private String arguments;
+	
+	    private String result;
+	
+	    private Long elapsedTime;
+	
+	
+	    public Object[] args() {
+	        return new Object[]{this.threadId, this.elapsedTime+"ms",this.location, this.description, this.className, this.methodName, this.arguments, this.result};
+	    }
+	    
+	    public String print() {
+	    	String temp = logString;
+	    	Object[] args = args();
+	    	for(int i=0;i<args.length;i++) {
+	    		temp = temp.replace(""+i, args[i].toString());
+	    	}
+	    	return temp;
+	    }
+	
+}
+

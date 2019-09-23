@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('商品同步列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								描述：<input type="text" id ="description" name="description"/>
+							</li>
+
+							<li>
+								开始时间：<input type="text" id = "startTime" name="startTime"/>
+							</li>
+
+							<li>
+								结束时间：<input type="text" id ="endTime" name="endTime"/>
+							</li>
+
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="syncJDProduct()" shiro:hasPermission="system:goodsSynclog:add">
+					<i class="fa fa-plus"></i> 同步京东商品
+				</a>
+				<!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="ruoyi:goodsSynclog:edit">-->
+					<!--<i class="fa fa-edit"></i> 修改-->
+				<!--</a>-->
+				<!--<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="ruoyi:goodsSynclog:remove">-->
+					<!--<i class="fa fa-remove"></i> 删除-->
+				<!--</a>-->
+				<!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="ruoyi:goodsSynclog:export">-->
+						<!--<i class="fa fa-download"></i> 导出-->
+				 <!--</a>-->
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:goodsSynclog:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:goodsSynclog:remove')}]];
+        var prefix = ctx + "system/goodsSynclog";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "商品同步",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : '序号',
+					visible: false
+				},
+				{
+					field : 'description', 
+					title : '描述',
+					sortable: true
+				},
+				{
+					field : 'startTime', 
+					title : '开始时间',
+					sortable: true
+				},
+				{
+					field : 'endTime', 
+					title : '结束时间',
+					sortable: true
+				},
+				{
+					field : 'runTime', 
+					title : '运行时间，以分为单位',
+					sortable: true
+				}
+
+		        ]
+            };
+            $.table.init(options);
+        });
+
+
+
+
+        //同步商品
+        function syncJDProduct() {
+
+            $.ajax({
+                type: "GET",
+                url: prefix+ "/sync",
+                success: function (result) {
+                    if (result.code == web_status.SUCCESS) {
+
+
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                }
+
+            });
+        }
+    </script>
+</body>
+</html>

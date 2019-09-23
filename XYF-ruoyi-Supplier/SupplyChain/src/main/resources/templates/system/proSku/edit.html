@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改sku——商品库存量单位')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-proSku-edit" th:object="${proSku}">
+            <input id="skuId" name="skuId" th:field="*{skuId}"  type="hidden">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">sku唯一编码：</label>
+				<div class="col-sm-8">
+					<input id="skuNo" name="skuNo" th:field="*{skuNo}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">分组编码：</label>
+				<div class="col-sm-8">
+					<input id="groupNo" name="groupNo" th:field="*{groupNo}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">商品编号：</label>
+				<div class="col-sm-8">
+					<input id="proId" name="proId" th:field="*{proId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">当前库存：</label>
+				<div class="col-sm-8">
+					<input id="stock" name="stock" th:field="*{stock}" class="form-control" type="text">
+				</div>
+			</div>
+
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">sku图片：</label>
+				<div class="col-sm-8">
+					<input id="imgUrl" name="imgUrl" th:field="*{imgUrl}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">出售价格（单位：元）：</label>
+				<div class="col-sm-8">
+					<input id="price" name="price" th:field="*{price}" class="form-control" type="text">
+				</div>
+			</div>
+			<!--<div class="form-group">	-->
+				<!--<label class="col-sm-3 control-label">抵扣积分：</label>-->
+				<!--<div class="col-sm-8">-->
+					<!--<input id="integralPrice" name="integralPrice" th:field="*{integralPrice}" class="form-control" type="text">-->
+				<!--</div>-->
+			<!--</div>-->
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">市场价格，单位：元：</label>
+				<div class="col-sm-8">
+					<input id="marketPrice" name="marketPrice" th:field="*{marketPrice}" class="form-control" type="text">
+				</div>
+			</div>
+
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">成本价格，单位：元：</label>
+				<div class="col-sm-8">
+					<input id="costPrice" name="costPrice" th:field="*{costPrice}" class="form-control" type="text">
+				</div>
+			</div>
+			<!--<div class="form-group">	-->
+				<!--<label class="col-sm-3 control-label">状态：</label>-->
+				<!--<div class="col-sm-8">-->
+					<!--<input id="status" name="status" th:field="*{status}" class="form-control" type="text">-->
+				<!--</div>-->
+			<!--</div>-->
+			<!--<div class="form-group">	-->
+				<!--<label class="col-sm-3 control-label">数据版本，采用时间戳：</label>-->
+				<!--<div class="col-sm-8">-->
+					<!--<input id="dataVersion" name="dataVersion" th:field="*{dataVersion}" class="form-control" type="text">-->
+				<!--</div>-->
+			<!--</div>-->
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<input id="remarks" name="remarks" th:field="*{remarks}" class="form-control" type="text">
+				</div>
+			</div>
+
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/proSku";
+		$("#form-proSku-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-proSku-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

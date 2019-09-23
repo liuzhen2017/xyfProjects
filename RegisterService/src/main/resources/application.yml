@@ -1,0 +1,29 @@
+server:
+  port: 9527
+spring:
+  application:
+    name: RegisterService
+eureka:
+  instance:
+    lease-expiration-duration-in-seconds: 15
+    lease-renewal-interval-in-seconds: 5
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+  client:
+    registry-fetch-interval-seconds: 5
+    service-url:
+      defaultZone: http://119.23.31.3:8761/eureka,http://120.79.247.111:8761/eureka
+#      defaultZone: http://192.168.1.101:8761/eureka,http://192.168.1.101:8762/eureka,http://192.168.1.101:8763/eureka
+feign:
+  hystrix:
+    enabled: false
+  client:
+    config:
+      default:
+        connectTimeout: 3000
+        readTimeout: 3000
+
+##########################      自定义属性         ###################################
+#下载APP的URL
+downloadUrl: https://www.baidu.com
+

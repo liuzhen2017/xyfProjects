@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingyunfu.ebank.mapper.transfer.EbankTransferMergeMapper">
+    <select id="findByEbankOrderNo" parameterType="java.lang.String"
+            resultType="com.xingyunfu.ebank.domain.transfer.EbankTransferMergeDTO">
+        select * from ebank_transfer_merge where ebank_order_no=#{ebankOrderNo}
+    </select>
+    <select id="pageQuery" parameterType="com.xingyunfu.ebank.dto.transfer.TransferMergePageQueryDTO"
+            resultType="com.xingyunfu.ebank.domain.transfer.EbankTransferMergeDTO">
+        select * from ebank_transfer_merge
+            where status = #{status} and unix_timestamp(create_time) between #{startTime} and #{endTime}
+                <if test="accountNo != null">and account_no = #{accountNo}</if>
+                order by id desc limit #{pageNo}, #{pageSize}
+    </select>
+    <select id="pageCount" parameterType="com.xingyunfu.ebank.dto.transfer.TransferMergePageQueryDTO"
+            resultType="java.lang.Long">
+        select count(id) from ebank_transfer_merge
+            where status = #{status} and unix_timestamp(create_time) between #{startTime} and #{endTime}
+                <if test="accountNo != null">and account_no = #{accountNo}</if>
+    </select>
+    <select id="allMerge" parameterType="com.xingyunfu.ebank.dto.transfer.TransferMergeQueryDTO"
+            resultType="com.xingyunfu.ebank.domain.transfer.EbankTransferMergeDTO">
+        select * from ebank_transfer_merge
+            where unix_timestamp(create_time) between #{startTime} and #{endTime}
+                <if test="accountNo != null">and account_no = #{accountNo}</if>
+                <if test="status != null">and status = #{status}</if>
+    </select>
+    <insert id="insert" parameterType="com.xingyunfu.ebank.domain.transfer.EbankTransferMergeDTO">
+        insert into ebank_transfer_merge (id, ebank_order_no, closed, receive_account_no, receive_account_type,
+                amount, status, voucher, create_time, last_modify_time)
+            values (#{id}, #{ebankOrderNo}, #{closed}, #{receiveAccountNo}, #{receiveAccountType},
+                #{amount}, #{status}, #{voucher}, #{createTime}, #{lastModifyTime});
+    </insert>
+    <update id="update" parameterType="com.xingyunfu.ebank.domain.transfer.EbankTransferMergeDTO">
+        update ebank_transfer_merge
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id != null">id = #{id},</if>
+            <if test="ebankOrderNo != null">ebank_order_no = #{ebankOrderNo},</if>
+            <if test="closed != null">closed = #{closed},</if>
+            <if test="receiveAccountNo != null">receive_account_no = #{receiveAccountNo},</if>
+            <if test="receiveAccountType != null">receive_account_type = #{receiveAccountType},</if>
+<!--            <if test="amount != null">amount = #{amount},</if>-->
+            <if test="status != null">status = #{status},</if>
+            <if test="voucher != null">voucher = #{voucher},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="lastModifyTime != null">last_modify_time = #{lastModifyTime},</if>
+        </trim>
+        where ebank_order_no = #{ebankOrderNo}
+    </update>
+</mapper>

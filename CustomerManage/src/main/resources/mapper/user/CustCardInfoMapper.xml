@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyunfu.customer.repository.user.CustCardInfoMapper">
+
+    <select id="findByCardNo" parameterType="java.lang.String" resultType="com.xinyunfu.customer.domain.user.CustCardInfoDTO">
+        select * from cust_card_info where card_no = #{cardNo}
+    </select>
+    <select id="findByUserNo" parameterType="java.lang.Long" resultType="com.xinyunfu.customer.domain.user.CustCardInfoDTO">
+        select * from cust_card_info where card_no =
+            (select card_no from cust_user where user_no = #{userNo})
+    </select>
+    <insert id="insert" parameterType="com.xinyunfu.customer.domain.user.CustCardInfoDTO">
+        insert into cust_card_info (id, name, card_no, birthday, sex, nation,
+                                begin_time, end_time, issuing, status,
+                                province, city, prefecture, address,
+                                front_photo, reverse_photo, remark,
+                                create_time, last_modify_time)
+            values (#{id},#{name},#{cardNo},#{birthday},#{sex},#{nation},
+                #{beginTime},#{endTime},#{issuing},#{status},
+                #{province},#{city},#{prefecture},#{address},
+                #{frontPhoto},#{reversePhoto},#{remark},
+                #{createTime},#{lastModifyTime});
+    </insert>
+    <update id="update" parameterType="com.xinyunfu.customer.domain.user.CustCardInfoDTO">
+        update cust_card_info
+            <trim prefix="set" suffixOverrides=",">
+                <if test="id != null">id = #{id},</if>
+                <if test="name != null">name = #{name},</if>
+                <if test="cardNo != null">card_no = #{cardNo},</if>
+                <if test="birthday != null">birthday = #{birthday},</if>
+                <if test="sex != null">sex = #{sex},</if>
+                <if test="nation != null">nation = #{nation},</if>
+                <if test="beginTime != null">begin_time = #{beginTime},</if>
+                <if test="endTime != null">end_time = #{endTime},</if>
+                <if test="issuing != null">issuing = #{issuing},</if>
+                <if test="status != null">status = #{status},</if>
+                <if test="province != null">province = #{province},</if>
+                <if test="city != null">city = #{city},</if>
+                <if test="prefecture != null">prefecture = #{prefecture},</if>
+                <if test="address != null">address = #{address},</if>
+                <if test="frontPhoto != null">front_photo = #{frontPhoto},</if>
+                <if test="reversePhoto != null">reverse_photo = #{reversePhoto},</if>
+                <if test="remark != null">remark = #{remark},</if>
+                <if test="createTime != null">create_time = #{createTime},</if>
+                <if test="lastModifyTime != null">last_modify_time = #{lastModifyTime},</if>
+            </trim>
+        where id = #{id}
+    </update>
+</mapper>

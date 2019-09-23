@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改商品分类关系')" />
+	<link rel="stylesheet" href="../../../layui/css/layui.css"  media="all">
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-proChannelRelation-edit" th:object="${proChannelRelation}">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>商品id：</label>
+				<div class="col-sm-8">
+					<!--<a href="javascript:;" onclick="showPro()">点击选择商品 </a>-->
+					<input name="proName" id="proName" disabled class="form-control" th:field="*{proName}">
+					<input id="proId" name="proId" type="hidden" class="form-control"  th:field="*{proName}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>分类id：</label>
+				<div class="col-sm-8">
+					<div class="input-group">
+						<input name="channelName" onclick="selectChannelTree()" id="treeName" disabled type="text" placeholder="请选择分类" class="form-control" required   th:field="*{channelName}">
+						<input name="channelId" onclick="selectChannelTree()" type="hidden" id="treeId" th:field="*{channelId}">
+						<span class="input-group-addon"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">商品展示的图片：</label>
+				<div class="col-sm-8">
+					<input  name="imgUrl" id="imgUrl"  class="form-control" type="hidden" th:value="${imgUrl}" >
+					<div class="layui-upload-drag" id="upImg" >
+						<i class="layui-icon"></i>
+						<p>点击上传，或将文件拖拽到此处</p>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">背景颜色：</label>
+				<div class="col-sm-8">
+					<input id="color" name="color" class="form-control" type="text"  th:field="*{color}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">是否可用：</label>
+				<div class="col-sm-9">
+					<label class="radio-box"><div><input type="radio" value="0" name="status" th:field="*{proChannel.status}"/></div>可用</label>
+					<label class="radio-box"><div><input type="radio" value="1" name="status" th:field="*{proChannel.status}"/></div>禁用</label>
+					<label class="radio-box"><div><input type="radio" value="2" name="status" th:field="*{proChannel.status}"/></div>删除</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<input id="remarks" name="remarks" class="form-control" type="text"  th:field="*{remarks}">
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+	<script type="text/javascript" src="../../../util.js"></script>
+	<script src="../../../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript">
+
+        var prefix = ctx + "system/proChannel"
+        $("#form-proChannel-edit").validate({
+            rules:{
+                xxxx:{
+                    required:true,
+                },
+            },
+            focusCleanup: true
+        });
+
+        //==============================初始化
+
+        $.getJSON(prefix+"/findAll",(data)=>{
+            let arr = [];
+            let $type = $('#typeId').val();
+            $.each(data.data,(v,i)=>{
+                arr.push(`<option `+($type == i.channelTypeId ? "selected":"")+` value="`+(i.channelTypeId+";"+i.channelTypeName)+`">`+i.channelTypeName+`</option>`)
+            })
+            $("#channelType").empty().append(arr.join());
+
+
+            layui.use(['upload'], function(){
+                var $ = layui.jquery,upload = layui.upload;
+
+                //==================上传图片
+                upload.render({
+                    elem: '#upImg',
+                    url: getRootPath() + "/../common/uploadToOSS",
+                    data:{
+                        fileType: 'jpg',
+                        updateType: 1
+                    },
+                    done: function(res){
+                        if (res.code == web_status.SUCCESS) {
+                            $("#imgUrl").val(res.msg); //赋值
+                            $('#upImg').css({
+                                backgroundImage:"url("+res.msg+")",
+                                backgroundSize: "100% 100%"
+                            }).children().css({opacity:'0'});
+                        } else {
+                            $.modal.alertError(result.msg);
+                        }
+                    }
+                });
+
+                //====================设置图片回显
+                let img = $('#imgUrl').val();
+                if(img){
+                    $('#upImg').css({
+                        backgroundImage:"url("+img+")",
+                        backgroundSize: "100% 100%"
+                    }).children().css({opacity:'0'});
+                }
+            });
+        })
+
+        //============================================ 表单提交
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-proChannel-edit').serialize());
+            }
+        }
+		// var prefix = ctx + "system/proChannelRelation";
+        // $("#form-proChannelRelation-edit").validate({
+        // 	rules:{
+        // 		xxxx:{
+        // 			required:true,
+        // 		},
+        // 	},
+        // 	focusCleanup: true
+        // });
+        //
+        // function submitHandler() {
+        //     if ($.validate.form()) {
+        //         $.operate.save(prefix + "/edit", $('#form-proChannelRelation-edit').serialize());
+        //     }
+        // }
+        // function showPro(title, url, width, hight) {
+        // 	if (!hight) {
+        // 		width = 700;
+        // 	}
+        // 	if (!hight) {
+        // 		hight = 600;
+        // 	}
+        // 	$.modal.open("选择商品", "/system/product/selectProductAll", width, hight);
+        // }
+
+	</script>
+</body>
+</html>

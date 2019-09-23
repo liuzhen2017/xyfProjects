@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.OrderItemMapper">
+    
+    <resultMap type="OrderItem" id="OrderItemResult">
+        <result property="itemId"    column="item_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="itemNo"    column="item_no"    />
+        <result property="masterNo"    column="master_no"    />
+        <result property="storeId"    column="store_id"    />
+        <result property="storeName"    column="store_name"    />
+        <result property="amount"    column="amount"    />
+        <result property="totalFreight"    column="total_freight"    />
+        <result property="charge"    column="charge"    />
+        <result property="totalDiscount"    column="total_discount"    />
+        <result property="totalCount"    column="total_count"    />
+        <result property="status"    column="status"    />
+        <result property="shippingCompName"    column="shipping_comp_name"    />
+        <result property="shippingSn"    column="shipping_sn"    />
+        <result property="deliveryTime"    column="delivery_time"    />
+        <result property="orderSource"    column="order_source"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="enable"    column="enable"    />
+    </resultMap>
+	
+	<sql id="selectOrderItemVo">
+        select item_id, user_id, item_no, master_no, store_id, store_name, amount, total_freight, charge, total_discount, total_count, status, shipping_comp_name, shipping_sn, delivery_time, order_source, remarks, created_time, created_by, updated_time, updated_by, enable from order_item
+    </sql>
+	
+    <select id="selectOrderItemList" parameterType="OrderItem" resultMap="OrderItemResult">
+        <include refid="selectOrderItemVo"/>
+        <where>  
+            <if test="itemId != null "> and item_id = #{itemId}</if>
+             <if test="userId != null  and userId != '' "> and user_id = #{userId}</if>
+             <if test="itemNo != null  and itemNo != '' "> and item_no = #{itemNo}</if>
+             <if test="masterNo != null  and masterNo != '' "> and master_no = #{masterNo}</if>
+             <if test="storeId != null "> and store_id = #{storeId}</if>
+             <if test="storeName != null  and storeName != '' "> and store_name = #{storeName}</if>
+             <if test="amount != null "> and amount = #{amount}</if>
+             <if test="totalFreight != null "> and total_freight = #{totalFreight}</if>
+             <if test="charge != null "> and charge = #{charge}</if>
+             <if test="totalDiscount != null "> and total_discount = #{totalDiscount}</if>
+             <if test="totalCount != null "> and total_count = #{totalCount}</if>
+             <if test="status != null "> and status = #{status}</if>
+             <if test="shippingCompName != null  and shippingCompName != '' "> and shipping_comp_name = #{shippingCompName}</if>
+             <if test="shippingSn != null  and shippingSn != '' "> and shipping_sn = #{shippingSn}</if>
+             <if test="deliveryTime != null "> and delivery_time = #{deliveryTime}</if>
+             <if test="orderSource != null "> and order_source = #{orderSource}</if>
+             <if test="remarks != null  and remarks != '' "> and remarks = #{remarks}</if>
+             <if test="createdTime != null "> and created_time = #{createdTime}</if>
+             <if test="createdBy != null  and createdBy != '' "> and created_by = #{createdBy}</if>
+             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+             <if test="updatedBy != null  and updatedBy != '' "> and updated_by = #{updatedBy}</if>
+             <if test="enable != null "> and enable = #{enable}</if>
+         </where>
+    </select>
+    
+    <select id="selectOrderItemById" parameterType="Long" resultMap="OrderItemResult">
+        <include refid="selectOrderItemVo"/>
+        where item_id = #{itemId}
+    </select>
+        
+    <insert id="insertOrderItem" parameterType="OrderItem" useGeneratedKeys="true" keyProperty="itemId">
+        insert into order_item
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null  and userId != ''  ">user_id,</if>
+			<if test="itemNo != null  and itemNo != ''  ">item_no,</if>
+			<if test="masterNo != null  and masterNo != ''  ">master_no,</if>
+			<if test="storeId != null  ">store_id,</if>
+			<if test="storeName != null  and storeName != ''  ">store_name,</if>
+			<if test="amount != null  ">amount,</if>
+			<if test="totalFreight != null  ">total_freight,</if>
+			<if test="charge != null  ">charge,</if>
+			<if test="totalDiscount != null  ">total_discount,</if>
+			<if test="totalCount != null  ">total_count,</if>
+			<if test="status != null  ">status,</if>
+			<if test="shippingCompName != null  and shippingCompName != ''  ">shipping_comp_name,</if>
+			<if test="shippingSn != null  and shippingSn != ''  ">shipping_sn,</if>
+			<if test="deliveryTime != null  ">delivery_time,</if>
+			<if test="orderSource != null  ">order_source,</if>
+			<if test="remarks != null  and remarks != ''  ">remarks,</if>
+			<if test="createdTime != null  ">created_time,</if>
+			<if test="createdBy != null  and createdBy != ''  ">created_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">updated_by,</if>
+			<if test="enable != null  ">enable,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null  and userId != ''  ">#{userId},</if>
+			<if test="itemNo != null  and itemNo != ''  ">#{itemNo},</if>
+			<if test="masterNo != null  and masterNo != ''  ">#{masterNo},</if>
+			<if test="storeId != null  ">#{storeId},</if>
+			<if test="storeName != null  and storeName != ''  ">#{storeName},</if>
+			<if test="amount != null  ">#{amount},</if>
+			<if test="totalFreight != null  ">#{totalFreight},</if>
+			<if test="charge != null  ">#{charge},</if>
+			<if test="totalDiscount != null  ">#{totalDiscount},</if>
+			<if test="totalCount != null  ">#{totalCount},</if>
+			<if test="status != null  ">#{status},</if>
+			<if test="shippingCompName != null  and shippingCompName != ''  ">#{shippingCompName},</if>
+			<if test="shippingSn != null  and shippingSn != ''  ">#{shippingSn},</if>
+			<if test="deliveryTime != null  ">#{deliveryTime},</if>
+			<if test="orderSource != null  ">#{orderSource},</if>
+			<if test="remarks != null  and remarks != ''  ">#{remarks},</if>
+			<if test="createdTime != null  ">#{createdTime},</if>
+			<if test="createdBy != null  and createdBy != ''  ">#{createdBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">#{updatedBy},</if>
+			<if test="enable != null  ">#{enable},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateOrderItem" parameterType="OrderItem">
+        update order_item
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null  and userId != ''  ">user_id = #{userId},</if>
+            <if test="itemNo != null  and itemNo != ''  ">item_no = #{itemNo},</if>
+            <if test="masterNo != null  and masterNo != ''  ">master_no = #{masterNo},</if>
+            <if test="storeId != null  ">store_id = #{storeId},</if>
+            <if test="storeName != null  and storeName != ''  ">store_name = #{storeName},</if>
+            <if test="amount != null  ">amount = #{amount},</if>
+            <if test="totalFreight != null  ">total_freight = #{totalFreight},</if>
+            <if test="charge != null  ">charge = #{charge},</if>
+            <if test="totalDiscount != null  ">total_discount = #{totalDiscount},</if>
+            <if test="totalCount != null  ">total_count = #{totalCount},</if>
+            <if test="status != null  ">status = #{status},</if>
+            <if test="shippingCompName != null  and shippingCompName != ''  ">shipping_comp_name = #{shippingCompName},</if>
+            <if test="shippingSn != null  and shippingSn != ''  ">shipping_sn = #{shippingSn},</if>
+            <if test="deliveryTime != null  ">delivery_time = #{deliveryTime},</if>
+            <if test="orderSource != null  ">order_source = #{orderSource},</if>
+            <if test="remarks != null  and remarks != ''  ">remarks = #{remarks},</if>
+            <if test="createdTime != null  ">created_time = #{createdTime},</if>
+            <if test="createdBy != null  and createdBy != ''  ">created_by = #{createdBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="updatedBy != null  and updatedBy != ''  ">updated_by = #{updatedBy},</if>
+            <if test="enable != null  ">enable = #{enable},</if>
+        </trim>
+        where item_id = #{itemId}
+    </update>
+
+	<delete id="deleteOrderItemById" parameterType="Long">
+        delete from order_item where item_id = #{itemId}
+    </delete>
+	
+    <delete id="deleteOrderItemByIds" parameterType="String">
+        delete from order_item where item_id in 
+        <foreach item="itemId" collection="array" open="(" separator="," close=")">
+            #{itemId}
+        </foreach>
+    </delete>
+    
+</mapper>

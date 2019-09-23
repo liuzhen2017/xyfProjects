@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.xinyunfu.mapper.SupplyChainCustMapper">
+    
+    <resultMap type="SupplyChainCust" id="SupplyChainCustResult">
+        <result property="id"    column="id"    />
+        <result property="custName"    column="cust_name"    />
+        <result property="custAdd"    column="cust_add"    />
+        <result property="contactsTel"    column="contacts_tel"    />
+        <result property="contactsName"    column="contacts_name"    />
+        <result property="fax"    column="fax"    />
+        <result property="email"    column="email"    />
+        <result property="settCycle"    column="sett_cycle"    />
+        <result property="busiStatus"    column="busi_status"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="businessLicenseImg"    column="business_license_img"    />
+        <result property="unifyingSocialCredit"    column="unifying_social_credit"    />
+    </resultMap>
+	
+	<sql id="selectSupplyChainCustVo">
+        select id, cust_name, cust_add, contacts_tel, contacts_name, fax, email, sett_cycle, busi_status, created_time, create_by, updated_time, updated_by, business_license_img, unifying_social_credit from supply_chain_cust
+    </sql>
+	
+    <select id="selectSupplyChainCustList" parameterType="SupplyChainCust" resultMap="SupplyChainCustResult">
+        <include refid="selectSupplyChainCustVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="custName != null  and custName != '' "> and cust_name = #{custName}</if>
+             <if test="custAdd != null  and custAdd != '' "> and cust_add = #{custAdd}</if>
+             <if test="contactsTel != null  and contactsTel != '' "> and contacts_tel = #{contactsTel}</if>
+             <if test="contactsName != null  and contactsName != '' "> and contacts_name = #{contactsName}</if>
+             <if test="fax != null  and fax != '' "> and fax = #{fax}</if>
+             <if test="email != null  and email != '' "> and email = #{email}</if>
+             <if test="settCycle != null "> and sett_cycle = #{settCycle}</if>
+             <if test="busiStatus != null  and busiStatus != '' "> and busi_status = #{busiStatus}</if>
+             <if test="createdTime != null "> and created_time = #{createdTime}</if>
+             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
+             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+             <if test="updatedBy != null "> and updated_by = #{updatedBy}</if>
+             <if test="businessLicenseImg != null  and businessLicenseImg != '' "> and business_license_img = #{businessLicenseImg}</if>
+             <if test="unifyingSocialCredit != null  and unifyingSocialCredit != '' "> and unifying_social_credit = #{unifyingSocialCredit}</if>
+         </where>
+    </select>
+    
+    <select id="selectSupplyChainCustById" parameterType="Integer" resultMap="SupplyChainCustResult">
+        <include refid="selectSupplyChainCustVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSupplyChainCust" parameterType="SupplyChainCust" useGeneratedKeys="true" keyProperty="id">
+        insert into supply_chain_cust
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="custName != null  and custName != ''  ">cust_name,</if>
+			<if test="custAdd != null  and custAdd != ''  ">cust_add,</if>
+			<if test="contactsTel != null  and contactsTel != ''  ">contacts_tel,</if>
+			<if test="contactsName != null  and contactsName != ''  ">contacts_name,</if>
+			<if test="fax != null  and fax != ''  ">fax,</if>
+			<if test="email != null  and email != ''  ">email,</if>
+			<if test="settCycle != null  ">sett_cycle,</if>
+			<if test="busiStatus != null  and busiStatus != ''  ">busi_status,</if>
+			<if test="createdTime != null  ">created_time,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+			<if test="updatedBy != null  ">updated_by,</if>
+			<if test="businessLicenseImg != null  and businessLicenseImg != ''  ">business_license_img,</if>
+			<if test="unifyingSocialCredit != null  and unifyingSocialCredit != ''  ">unifying_social_credit,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="custName != null  and custName != ''  ">#{custName},</if>
+			<if test="custAdd != null  and custAdd != ''  ">#{custAdd},</if>
+			<if test="contactsTel != null  and contactsTel != ''  ">#{contactsTel},</if>
+			<if test="contactsName != null  and contactsName != ''  ">#{contactsName},</if>
+			<if test="fax != null  and fax != ''  ">#{fax},</if>
+			<if test="email != null  and email != ''  ">#{email},</if>
+			<if test="settCycle != null  ">#{settCycle},</if>
+			<if test="busiStatus != null  and busiStatus != ''  ">#{busiStatus},</if>
+			<if test="createdTime != null  ">#{createdTime},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+			<if test="updatedBy != null  ">#{updatedBy},</if>
+			<if test="businessLicenseImg != null  and businessLicenseImg != ''  ">#{businessLicenseImg},</if>
+			<if test="unifyingSocialCredit != null  and unifyingSocialCredit != ''  ">#{unifyingSocialCredit},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateSupplyChainCust" parameterType="SupplyChainCust">
+        update supply_chain_cust
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="custName != null  and custName != ''  ">cust_name = #{custName},</if>
+            <if test="custAdd != null  and custAdd != ''  ">cust_add = #{custAdd},</if>
+            <if test="contactsTel != null  and contactsTel != ''  ">contacts_tel = #{contactsTel},</if>
+            <if test="contactsName != null  and contactsName != ''  ">contacts_name = #{contactsName},</if>
+            <if test="fax != null  and fax != ''  ">fax = #{fax},</if>
+            <if test="email != null  and email != ''  ">email = #{email},</if>
+            <if test="settCycle != null  ">sett_cycle = #{settCycle},</if>
+            <if test="busiStatus != null  and busiStatus != ''  ">busi_status = #{busiStatus},</if>
+            <if test="createdTime != null  ">created_time = #{createdTime},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="updatedBy != null  ">updated_by = #{updatedBy},</if>
+            <if test="businessLicenseImg != null  and businessLicenseImg != ''  ">business_license_img = #{businessLicenseImg},</if>
+            <if test="unifyingSocialCredit != null  and unifyingSocialCredit != ''  ">unifying_social_credit = #{unifyingSocialCredit},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteSupplyChainCustById" parameterType="Integer">
+        delete from supply_chain_cust where id = #{id}
+    </delete>
+	
+    <delete id="deleteSupplyChainCustByIds" parameterType="String">
+        delete from supply_chain_cust where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

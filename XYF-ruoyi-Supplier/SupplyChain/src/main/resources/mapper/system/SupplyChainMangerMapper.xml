@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.SupplyChainMangerMapper">
+    
+    <resultMap type="SupplyChainManger" id="SupplyChainMangerResult">
+        <result property="id"    column="id"    />
+        <result property="custName"    column="cust_name"    />
+        <result property="custAdd"    column="cust_add"    />
+        <result property="contactTel"    column="contact_tel"    />
+        <result property="contactName"    column="contact_name"    />
+        <result property="email"    column="email"    />
+        <result property="creditCode"    column="credit_code"    />
+        <result property="businessLicenseImg"    column="business_license_img"    />
+        <result property="fax"    column="fax"    />
+        <result property="settlementCycle"    column="settlement_cycle"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatdBy"    column="updatd_by"    />
+        <result property="updatdDate"    column="updatd_date"    />
+        <result property="busiStatus"    column="busi_status"    />
+        <result property="standbyField1"    column="standby_field1"    />
+        <result property="standbyField2"    column="standby_field2"    />
+    </resultMap>
+	
+	<sql id="selectSupplyChainMangerVo">
+        select id, cust_name, cust_add, contact_tel, contact_name, email, credit_code, business_license_img, fax, settlement_cycle, create_date, created_by, updatd_by, updatd_date, busi_status, standby_field1, standby_field2 from supply_chain_manger
+    </sql>
+	
+    <select id="selectSupplyChainMangerList" parameterType="SupplyChainManger" resultMap="SupplyChainMangerResult">
+        <include refid="selectSupplyChainMangerVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="custName != null  and custName != '' "> and cust_name = #{custName}</if>
+             <if test="custAdd != null  and custAdd != '' "> and cust_add = #{custAdd}</if>
+             <if test="contactTel != null  and contactTel != '' "> and contact_tel = #{contactTel}</if>
+             <if test="contactName != null  and contactName != '' "> and contact_name = #{contactName}</if>
+             <if test="email != null  and email != '' "> and email = #{email}</if>
+             <if test="creditCode != null  and creditCode != '' "> and credit_code = #{creditCode}</if>
+             <if test="businessLicenseImg != null  and businessLicenseImg != '' "> and business_license_img = #{businessLicenseImg}</if>
+             <if test="fax != null  and fax != '' "> and fax = #{fax}</if>
+             <if test="settlementCycle != null "> and settlement_cycle = #{settlementCycle}</if>
+             <if test="createDate != null "> and create_date = #{createDate}</if>
+             <if test="createdBy != null  and createdBy != '' "> and created_by = #{createdBy}</if>
+             <if test="updatdBy != null  and updatdBy != '' "> and updatd_by = #{updatdBy}</if>
+             <if test="updatdDate != null "> and updatd_date = #{updatdDate}</if>
+             <if test="busiStatus != null  and busiStatus != '' "> and busi_status = #{busiStatus}</if>
+             <if test="standbyField1 != null  and standbyField1 != '' "> and standby_field1 = #{standbyField1}</if>
+             <if test="standbyField2 != null  and standbyField2 != '' "> and standby_field2 = #{standbyField2}</if>
+         </where>
+    </select>
+    
+    <select id="selectSupplyChainMangerById" parameterType="Integer" resultMap="SupplyChainMangerResult">
+        <include refid="selectSupplyChainMangerVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSupplyChainManger" parameterType="SupplyChainManger" useGeneratedKeys="true" keyProperty="id">
+        insert into supply_chain_manger
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="custName != null  and custName != ''  ">cust_name,</if>
+			<if test="custAdd != null  and custAdd != ''  ">cust_add,</if>
+			<if test="contactTel != null  and contactTel != ''  ">contact_tel,</if>
+			<if test="contactName != null  and contactName != ''  ">contact_name,</if>
+			<if test="email != null  and email != ''  ">email,</if>
+			<if test="creditCode != null  and creditCode != ''  ">credit_code,</if>
+			<if test="businessLicenseImg != null  and businessLicenseImg != ''  ">business_license_img,</if>
+			<if test="fax != null  and fax != ''  ">fax,</if>
+			<if test="settlementCycle != null  ">settlement_cycle,</if>
+			<if test="createDate != null  ">create_date,</if>
+			<if test="createdBy != null  and createdBy != ''  ">created_by,</if>
+			<if test="updatdBy != null  and updatdBy != ''  ">updatd_by,</if>
+			<if test="updatdDate != null  ">updatd_date,</if>
+			<if test="busiStatus != null  and busiStatus != ''  ">busi_status,</if>
+			<if test="standbyField1 != null  and standbyField1 != ''  ">standby_field1,</if>
+			<if test="standbyField2 != null  and standbyField2 != ''  ">standby_field2,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="custName != null  and custName != ''  ">#{custName},</if>
+			<if test="custAdd != null  and custAdd != ''  ">#{custAdd},</if>
+			<if test="contactTel != null  and contactTel != ''  ">#{contactTel},</if>
+			<if test="contactName != null  and contactName != ''  ">#{contactName},</if>
+			<if test="email != null  and email != ''  ">#{email},</if>
+			<if test="creditCode != null  and creditCode != ''  ">#{creditCode},</if>
+			<if test="businessLicenseImg != null  and businessLicenseImg != ''  ">#{businessLicenseImg},</if>
+			<if test="fax != null  and fax != ''  ">#{fax},</if>
+			<if test="settlementCycle != null  ">#{settlementCycle},</if>
+			<if test="createDate != null  ">#{createDate},</if>
+			<if test="createdBy != null  and createdBy != ''  ">#{createdBy},</if>
+			<if test="updatdBy != null  and updatdBy != ''  ">#{updatdBy},</if>
+			<if test="updatdDate != null  ">#{updatdDate},</if>
+			<if test="busiStatus != null  and busiStatus != ''  ">#{busiStatus},</if>
+			<if test="standbyField1 != null  and standbyField1 != ''  ">#{standbyField1},</if>
+			<if test="standbyField2 != null  and standbyField2 != ''  ">#{standbyField2},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateSupplyChainManger" parameterType="SupplyChainManger">
+        update supply_chain_manger
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="custName != null  and custName != ''  ">cust_name = #{custName},</if>
+            <if test="custAdd != null  and custAdd != ''  ">cust_add = #{custAdd},</if>
+            <if test="contactTel != null  and contactTel != ''  ">contact_tel = #{contactTel},</if>
+            <if test="contactName != null  and contactName != ''  ">contact_name = #{contactName},</if>
+            <if test="email != null  and email != ''  ">email = #{email},</if>
+            <if test="creditCode != null  and creditCode != ''  ">credit_code = #{creditCode},</if>
+            <if test="businessLicenseImg != null  and businessLicenseImg != ''  ">business_license_img = #{businessLicenseImg},</if>
+            <if test="fax != null  and fax != ''  ">fax = #{fax},</if>
+            <if test="settlementCycle != null  ">settlement_cycle = #{settlementCycle},</if>
+            <if test="createDate != null  ">create_date = #{createDate},</if>
+            <if test="createdBy != null  and createdBy != ''  ">created_by = #{createdBy},</if>
+            <if test="updatdBy != null  and updatdBy != ''  ">updatd_by = #{updatdBy},</if>
+            <if test="updatdDate != null  ">updatd_date = #{updatdDate},</if>
+            <if test="busiStatus != null  and busiStatus != ''  ">busi_status = #{busiStatus},</if>
+            <if test="standbyField1 != null  and standbyField1 != ''  ">standby_field1 = #{standbyField1},</if>
+            <if test="standbyField2 != null  and standbyField2 != ''  ">standby_field2 = #{standbyField2},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteSupplyChainMangerById" parameterType="Integer">
+        delete from supply_chain_manger where id = #{id}
+    </delete>
+	
+    <delete id="deleteSupplyChainMangerByIds" parameterType="String">
+        delete from supply_chain_manger where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

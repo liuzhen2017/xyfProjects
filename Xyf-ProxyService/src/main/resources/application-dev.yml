@@ -1,0 +1,56 @@
+eureka:
+  instance:
+    lease-expiration-duration-in-seconds: 15
+    lease-renewal-interval-in-seconds: 5
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipaddress}:${server.port}
+  client:
+    registry-fetch-interval-seconds: 5
+    service-url:
+      defaultZone: http://192.168.1.101:8761/eureka
+            #defaultZone: http://192.168.1.56:8761/eureka,http://192.168.1.56:8762/eureka,http://192.168.1.56:8763/eureka
+#jasypt:
+#    encryptor:
+#        password: EbfYkitulv73I2p0mXI50JMXoaxZTKJ7
+server:
+    port: 8088
+#sftp:
+#    host: 119.23.31.3
+#    password: ENC(0shM4ewRFx4BmRLtrBo/q8B07p6djZQ0)
+#    port: 22
+#    rootPath: /data/sftp/sftp/upload
+#    username: sftp
+spring:
+    datasource:
+         driver-class-name: com.mysql.cj.jdbc.Driver
+         password: ENC(gmyc0w5G9juDFphYmJc/1F1DTg//s+dA)
+         url: jdbc:mysql://192.168.1.24/testproduct?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+         username: root
+#    redis:
+#        database: 0
+#        host: 120.79.247.111
+#        password: ENC(gmyc0w5G9juDFphYmJc/1F1DTg//s+dA)
+#        port: 6379
+#        sentinel:
+#            nodes: 120.79.247.111:26379,119.23.31.3:26379
+
+
+#    rabbitmq:
+#        #非集群模式下，填写MQ服务器的地址和端口
+#        addresses: 120.79.247.111:5672,119.23.31.3:5672
+#        connection-timeout: 15000
+#        listener:
+#            simple:
+#                acknowledge-mode: manual
+#                concurrency: 1
+#                max-concurrency: 5
+#                prefetch: 1
+#        # rabbitmq的用户名和密码
+#        username: admin
+#        password:  ENC(s96SQqGVBurvS+tvPIKleVYmDUpwCtGm)
+#        publisher-confirms: true
+#        publisher-returns: true
+#        template:
+#            mandatory: true
+
+     

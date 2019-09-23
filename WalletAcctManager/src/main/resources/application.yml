@@ -1,0 +1,67 @@
+server:
+  port: 8888
+eureka:
+  instance:
+    lease-expiration-duration-in-seconds: 15
+    lease-renewal-interval-in-seconds: 5
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+  client:
+    registry-fetch-interval-seconds: 5
+    service-url:
+      defaultZone: http://192.168.1.101:8761/eureka,http://192.168.1.101:8762/eureka,http://192.168.1.101:8763/eureka
+#      defaultZone: http://120.79.247.111:8761/eureka,http://120.79.247.111:8762/eureka,http://120.79.247.111:8763/eureka
+spring:
+  application:
+    name: WalletAcctManage
+  redis:
+    sentinel:
+      master: mymaster
+      nodes: 120.79.247.111:26379,119.23.31.3:26379
+    jedis:
+      pool:
+        max-idle: 10
+        min-idle: 0
+        max-active: -1
+        max-wait: -1
+    ssl: false
+    timeout: 600
+    database: 15
+    host: 120.79.247.111
+    password: ENC(gmyc0w5G9juDFphYmJc/1F1DTg//s+dA)
+    port: 6379
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      password: ENC(gmyc0w5G9juDFphYmJc/1F1DTg//s+dA)
+      url: jdbc:mysql://localhost:3306/WalletAcctManage?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+#      url: jdbc:mysql://119.23.31.3:3306/WalletAcctManage?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+      username: root
+      initial-size: 30      #初始化连接数
+      max-active: 300       #最大连接数
+      max-wait: 30          #最大等待时间
+      min-idle: 20           #最小空闲（保底的）
+      test-on-return: true  #归还链接时是否测试 链接正常
+      test-on-borrow: true  #使用链接时是否测试 链接正常 很重要
+jasypt:
+  encryptor:
+    password: EbfYkitulv73I2p0mXI50JMXoaxZTKJ7
+feign:
+  client:
+    config:
+      default:
+        connect-timeout: 5000
+        read-timeout: 5000
+  hystrix:
+    enabled: false
+#mybatis映射文件
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+
+############################## 自定义属性 ################################
+withdraw:
+  supplierMinAmout: 100 #供应商最低提现金额
+
+
+
+

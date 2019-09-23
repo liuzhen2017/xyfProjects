@@ -1,0 +1,31 @@
+package com.xinyunfu.jace.utils;
+
+
+public class LogPrinter {
+	
+	
+	public static void printRequest() {
+		printRepeat("*", 40);
+		System.out.print("request param");
+		printRepeat("*", 40);
+	    System.out.println();
+	}
+	
+	
+	public static void printResponse() {
+		printRepeat("*", 40);
+		System.out.print("return result");
+		printRepeat("*", 40);
+	    System.out.println();
+	}
+	
+	public static void printRepeat(String repeatString,int count) {
+		if(0 == count||count < 0)return ;
+		for(int i = 0 ;i < count ; i ++) {
+			System.out.print(repeatString);
+		}
+	}
+	
+	
+	
+}

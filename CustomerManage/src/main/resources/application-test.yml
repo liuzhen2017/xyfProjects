@@ -1,0 +1,74 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://119.23.31.3:8761/eureka,http://120.79.247.111:8761/eureka
+jasypt:
+  encryptor:
+    password: EbfYkitulv73I2p0mXI50JMXoaxZTKJ7
+server:
+  port: 8088
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: ENC(gmyc0w5G9juDFphYmJc/1F1DTg//s+dA)
+    url: jdbc:mysql://120.79.247.111:3306/dev_test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+  redis:
+    database: 0
+    host: 120.79.247.111
+    password: ENC(gmyc0w5G9juDFphYmJc/1F1DTg//s+dA)
+    port: 6379
+    sentinel:
+      master: mymaster
+      nodes: 120.79.247.111:26379,119.23.31.3:26379
+  rabbitmq:
+    #非集群模式下，填写MQ服务器的地址和端口
+    addresses: 120.79.247.111:5672,119.23.31.3:5672
+    connection-timeout: 15000
+    listener:
+      simple:
+        acknowledge-mode: manual
+        concurrency: 1
+        max-concurrency: 5
+        prefetch: 1
+    # rabbitmq的用户名和密码
+    username: admin
+    password:  ENC(s96SQqGVBurvS+tvPIKleVYmDUpwCtGm)
+    publisher-confirms: true
+    publisher-returns: true
+    template:
+      mandatory: true
+customer:
+  # 验证码类型
+  verify-code:
+    # 会员注册
+    register: 78d281b57529e76803bc685e86797ccb
+    # 重置登陆密码
+    reset-password: 2F8DD4EBE71F4F2B831E894BC5B790E9
+    # 修改支付密码
+    reset-pay-password: E894BC5B790E92F8DD4EBE71F4F2B831
+    # 绑定手机号
+    bind-phone: 1782eedab9234d81a6b6a9f94c61769e
+    # 解绑手机号
+    unbind-phone: 1CAB1641F4B047FE8D6625D0E75456B5
+    # 验证码登陆
+    login: 0d5146cb3a12426da4aa77bf8b3208ba
+    # 是否启用验证码发送
+    send: false
+    # 默认的推荐码
+    default-code: XYF823
+  baidu-image:
+    client-id: x9fLQGH8GHPUrFQBZDTWgZif
+    client-secret: cxcRD9241hm1r4sCk90ov3jCH7jCOk8M
+    host: http://172.18.213.244:8460
+  auth-card:
+    app-key: 203728629
+    app-secret: 5pqbrq29d12hylsnq5end39qsl0bx26w 
+    app-code: 368a6975901c44a79a3d62278cb17ac5
+    host: http://172.18.213.244:8624
+logging:
+  level:
+    com:
+      xinyunfu:
+        customer: DEBUG
+  path: "/logs/customer"

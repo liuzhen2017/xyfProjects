@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyunfu.mapper.OrderItemMapper">
+
+
+    <select id="getItemNos" resultType="com.xinyunfu.model.OrderItem">
+        select * from order_commodity
+        where created_by = #{currentUserId} and `enable` = 1
+        group by item_no
+        having item_no like '${key}%' or goods_name like '${key}%'
+    </select>
+
+    <select id="getUserPageCount"  resultType="String">
+        select sum(item.total_count) from order_item item,order_master mas
+        where item.master_no = mas.order_no and mas.order_Type = "01" and item.pay_status = 1 and item.user_id = #{no}
+    </select>
+
+    <select id="findOrderItemByChainId" resultType="com.xinyunfu.dto.back.BackOrderDTO">
+        select
+            item.item_id As itemId,
+            item.user_id As userId,
+            item.item_no As itemNo,
+            item.store_id As storeId,
+            item.store_name As storeName,
+            item.total_amount As totalAmount,
+            item.pay_amount As payAmount,
+            item.total_freight As totalFregiht,
+            item.total_count As totalCount,
+            item.`status` As `status`,
+            item.remarks As remarks,
+            com.goods_id As goodsId,
+            com.goods_name As goodsName,
+            item.cost_amount As costAmount,
+            item.created_date As createdDate,
+            con.consignee_name As consigneeName,
+            con.phone As phone,
+            con.post_code As postCode,
+            com.sku_remarks As skuDesc,
+            concat(con.province,con.city,con.region,con.address) As address
+        from order_item item,order_consignee con,order_commodity com
+        where item.item_no = con.order_no and item.item_no = com.item_no
+        <if test='vo.storeId != null and vo.storeId != ""'> and item.store_id = #{vo.storeId}</if>
+        <if test='vo.status != null and vo.status != -1'> and item.`status` =  #{vo.status}</if>
+        <if test='vo.itemNo != null and vo.itemNo != ""'> and item.item_no = #{vo.itemNo}</if>
+        <if test='vo.consigneeName != null and vo.consigneeName != ""'> and con.consignee_name =  #{vo.consigneeName}</if>
+        <if test='vo.phone != null and vo.phone != ""'> and con.phone =  #{vo.phone}</if>
+        <if test='vo.goodsId != null and vo.goodsId != ""'> and com.goods_id =  #{vo.goodsId}</if>
+        <if test='vo.goodsName != null and vo.goodsName != ""'> and com.goods_Name =  #{vo.goodsName}</if>
+        <if test='vo.orderSource != null and vo.orderSource != -1'> and item.order_source =  #{vo.orderSource}</if>
+        <if test='vo.startDate != null and vo.startDate != ""'> and item.created_date &gt;= #{vo.startDate}</if>
+        <if test='vo.endDate != null and vo.endDate != ""'>and item.created_date &lt;= #{vo.endDate}</if>
+    </select>
+
+
+
+</mapper>

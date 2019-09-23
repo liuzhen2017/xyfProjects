@@ -1,0 +1,35 @@
+package com.gateway.api;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.alibaba.fastjson.JSONObject;
+import com.gateway.service.CallApiService;
+import com.gateway.utils.ResponseInfo;
+
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * @author jace
+ *
+ */
+@RestController
+@Slf4j
+public class WebApi {
+
+
+	
+	@Autowired
+	private CallApiService service;
+	
+	@PostMapping("/api/login")
+	public ResponseInfo<String> login(@RequestBody JSONObject json) {
+		log.info("login===={}",json,loginType);
+		return service.login(json, loginType);
+	}
+	
+	
+}

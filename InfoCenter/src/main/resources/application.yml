@@ -1,0 +1,68 @@
+spring:
+  application:
+    name: InfoCenter
+  profiles:
+    active: dev
+  cloud: 
+    inetutils: 
+      preferredNetworks: 
+        -192.168.1.*  
+  redis:
+    sentinel:
+      master: mymaster
+    jedis:
+      pool:
+        max-idle: 10
+        min-idle: 0
+        max-active: -1
+        max-wait: -1
+    ssl: false
+    timeout: 600
+eureka:
+  instance:
+    lease-expiration-duration-in-seconds: 15
+    lease-renewal-interval-in-seconds: 5
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipaddress}:${server.port}
+  client:
+    registry-fetch-interval-seconds: 5
+feign:
+  hystrix:
+    enabled: true
+logging:
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %level - %thread - %logger{50}.%M - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %level - %thread - %logger{50}.%M - %msg%n"
+  file:
+    max-history: 30
+    max-size: 100MB
+  level:
+    root: INFO
+
+send_message: 
+  # 发送消息主题
+  sendSMS: InfoCenter_sendSMS
+  # 会员注册
+  registVipTpl: 78d281b57529e76803bc685e86797ccb
+  # 重置登录密码
+  resetPwdTpl: 2F8DD4EBE71F4F2B831E894BC5B790E9
+  # 修改支付密码
+  updatePayPwdTpl: E894BC5B790E92F8DD4EBE71F4F2B831
+  # 绑定手机号
+  bingPhonTpl: 1782eedab9234d81a6b6a9f94c61769e
+  # 解绑手机号
+  unbingPhonTpl: 1CAB1641F4B047FE8D6625D0E75456B5
+  # 验证码登录
+  vaildCodeLoginTpl: 0d5146cb3a12426da4aa77bf8b3208ba
+  # 推送APP模板
+  pushAppTpl: F5980685E03348DCA497DEF807303AF2
+  #发送验证码
+  sendCodeUrl: /sms/SendValidateCode
+  #校验验证码
+  vaildCodeUrl: /sms/ValidateCode
+  #发送短信
+  smsSendUrl: /sms/Send 
+  #发送短信
+  appBindUrl: /Register/Bind
+  appPushUrl: /Notification/Push
+  

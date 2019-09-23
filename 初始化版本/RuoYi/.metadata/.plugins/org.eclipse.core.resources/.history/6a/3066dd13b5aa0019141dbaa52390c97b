@@ -1,0 +1,18 @@
+package com.example.utils;
+
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+@Data
+@Accessors(chain=true)
+public class TestBean {
+
+	
+	
+	public int id;
+	
+	
+	public String name;
+	
+	
+}

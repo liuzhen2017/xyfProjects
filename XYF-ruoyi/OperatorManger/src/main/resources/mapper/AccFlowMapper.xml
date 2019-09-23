@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.xinyunfu.mapper.AccFlowMapper">
+    
+    <resultMap type="AccFlow" id="AccFlowResult">
+        <result property="id"    column="id"    />
+        <result property="superOrderNumber"    column="super_order_number"    />
+        <result property="orderNumber"    column="order_number"    />
+        <result property="userNo"    column="user_no"    />
+        <result property="payNumber"    column="pay_number"    />
+        <result property="payAccNo"    column="pay_acc_no"    />
+        <result property="payAccName"    column="pay_acc_name"    />
+        <result property="receAccNo"    column="rece_acc_no"    />
+        <result property="receAccName"    column="rece_acc_name"    />
+        <result property="payAmount"    column="pay_amount"    />
+        <result property="tranDate"    column="tran_date"    />
+        <result property="tranType"    column="tran_type"    />
+        <result property="busiStatus"    column="busi_status"    />
+        <result property="enable"    column="enable"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="channel"    column="channel"    />
+        <result property="subject"    column="subject"    />
+    </resultMap>
+	
+	<sql id="selectAccFlowVo">
+        select id, super_order_number, order_number, user_no, pay_number, pay_acc_no, pay_acc_name, rece_acc_no, rece_acc_name, pay_amount, tran_date, tran_type, busi_status, enable, created_time, created_by, updated_time, updated_by, channel, subject from acc_flow
+    </sql>
+	
+    <select id="selectAccFlowList" parameterType="AccFlow" resultMap="AccFlowResult">
+        <include refid="selectAccFlowVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="superOrderNumber != null  and superOrderNumber != '' "> and super_order_number = #{superOrderNumber}</if>
+             <if test="orderNumber != null  and orderNumber != '' "> and order_number = #{orderNumber}</if>
+             <if test="userNo != null  and userNo != '' "> and user_no = #{userNo}</if>
+             <if test="payNumber != null  and payNumber != '' "> and pay_number = #{payNumber}</if>
+             <if test="payAccNo != null  and payAccNo != '' "> and pay_acc_no = #{payAccNo}</if>
+             <if test="payAccName != null  and payAccName != '' "> and pay_acc_name = #{payAccName}</if>
+             <if test="receAccNo != null  and receAccNo != '' "> and rece_acc_no = #{receAccNo}</if>
+             <if test="receAccName != null  and receAccName != '' "> and rece_acc_name = #{receAccName}</if>
+             <if test="payAmount != null "> and pay_amount = #{payAmount}</if>
+             <if test="tranDate != null "> and tran_date = #{tranDate}</if>
+             <if test="tranType != null  and tranType != '' "> and tran_type = #{tranType}</if>
+             <if test="busiStatus != null  and busiStatus != '' "> and busi_status = #{busiStatus}</if>
+             <if test="enable != null "> and enable = #{enable}</if>
+             <if test="createdTime != null "> and created_time = #{createdTime}</if>
+             <if test="createdBy != null  and createdBy != '' "> and created_by = #{createdBy}</if>
+             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+             <if test="updatedBy != null  and updatedBy != '' "> and updated_by = #{updatedBy}</if>
+             <if test="channel != null  and channel != '' "> and channel = #{channel}</if>
+             <if test="subject != null  and subject != '' "> and subject = #{subject}</if>
+         </where>
+    </select>
+    
+    <select id="selectAccFlowById" parameterType="Integer" resultMap="AccFlowResult">
+        <include refid="selectAccFlowVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAccFlow" parameterType="AccFlow" useGeneratedKeys="true" keyProperty="id">
+        insert into acc_flow
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="superOrderNumber != null  and superOrderNumber != ''  ">super_order_number,</if>
+			<if test="orderNumber != null  and orderNumber != ''  ">order_number,</if>
+			<if test="userNo != null  and userNo != ''  ">user_no,</if>
+			<if test="payNumber != null  and payNumber != ''  ">pay_number,</if>
+			<if test="payAccNo != null  and payAccNo != ''  ">pay_acc_no,</if>
+			<if test="payAccName != null  and payAccName != ''  ">pay_acc_name,</if>
+			<if test="receAccNo != null  and receAccNo != ''  ">rece_acc_no,</if>
+			<if test="receAccName != null  and receAccName != ''  ">rece_acc_name,</if>
+			<if test="payAmount != null  ">pay_amount,</if>
+			<if test="tranDate != null  ">tran_date,</if>
+			<if test="tranType != null  and tranType != ''  ">tran_type,</if>
+			<if test="busiStatus != null  and busiStatus != ''  ">busi_status,</if>
+			<if test="enable != null  ">enable,</if>
+			<if test="createdTime != null  ">created_time,</if>
+			<if test="createdBy != null  and createdBy != ''  ">created_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">updated_by,</if>
+			<if test="channel != null  and channel != ''  ">channel,</if>
+			<if test="subject != null  and subject != ''  ">subject,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="superOrderNumber != null  and superOrderNumber != ''  ">#{superOrderNumber},</if>
+			<if test="orderNumber != null  and orderNumber != ''  ">#{orderNumber},</if>
+			<if test="userNo != null  and userNo != ''  ">#{userNo},</if>
+			<if test="payNumber != null  and payNumber != ''  ">#{payNumber},</if>
+			<if test="payAccNo != null  and payAccNo != ''  ">#{payAccNo},</if>
+			<if test="payAccName != null  and payAccName != ''  ">#{payAccName},</if>
+			<if test="receAccNo != null  and receAccNo != ''  ">#{receAccNo},</if>
+			<if test="receAccName != null  and receAccName != ''  ">#{receAccName},</if>
+			<if test="payAmount != null  ">#{payAmount},</if>
+			<if test="tranDate != null  ">#{tranDate},</if>
+			<if test="tranType != null  and tranType != ''  ">#{tranType},</if>
+			<if test="busiStatus != null  and busiStatus != ''  ">#{busiStatus},</if>
+			<if test="enable != null  ">#{enable},</if>
+			<if test="createdTime != null  ">#{createdTime},</if>
+			<if test="createdBy != null  and createdBy != ''  ">#{createdBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">#{updatedBy},</if>
+			<if test="channel != null  and channel != ''  ">#{channel},</if>
+			<if test="subject != null  and subject != ''  ">#{subject},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateAccFlow" parameterType="AccFlow">
+        update acc_flow
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="superOrderNumber != null  and superOrderNumber != ''  ">super_order_number = #{superOrderNumber},</if>
+            <if test="orderNumber != null  and orderNumber != ''  ">order_number = #{orderNumber},</if>
+            <if test="userNo != null  and userNo != ''  ">user_no = #{userNo},</if>
+            <if test="payNumber != null  and payNumber != ''  ">pay_number = #{payNumber},</if>
+            <if test="payAccNo != null  and payAccNo != ''  ">pay_acc_no = #{payAccNo},</if>
+            <if test="payAccName != null  and payAccName != ''  ">pay_acc_name = #{payAccName},</if>
+            <if test="receAccNo != null  and receAccNo != ''  ">rece_acc_no = #{receAccNo},</if>
+            <if test="receAccName != null  and receAccName != ''  ">rece_acc_name = #{receAccName},</if>
+            <if test="payAmount != null  ">pay_amount = #{payAmount},</if>
+            <if test="tranDate != null  ">tran_date = #{tranDate},</if>
+            <if test="tranType != null  and tranType != ''  ">tran_type = #{tranType},</if>
+            <if test="busiStatus != null  and busiStatus != ''  ">busi_status = #{busiStatus},</if>
+            <if test="enable != null  ">enable = #{enable},</if>
+            <if test="createdTime != null  ">created_time = #{createdTime},</if>
+            <if test="createdBy != null  and createdBy != ''  ">created_by = #{createdBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="updatedBy != null  and updatedBy != ''  ">updated_by = #{updatedBy},</if>
+            <if test="channel != null  and channel != ''  ">channel = #{channel},</if>
+            <if test="subject != null  and subject != ''  ">subject = #{subject},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteAccFlowById" parameterType="Integer">
+        delete from acc_flow where id = #{id}
+    </delete>
+	
+    <delete id="deleteAccFlowByIds" parameterType="String">
+        delete from acc_flow where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

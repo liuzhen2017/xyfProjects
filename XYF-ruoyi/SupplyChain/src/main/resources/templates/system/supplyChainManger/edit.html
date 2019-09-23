@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改供应链')" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+	<form class="form-horizontal m" id="form-supplyChainManger-edit" th:object="${supplyChainManger}">
+	<input id="id" name="id" th:field="*{id}"  type="hidden">
+		<div class="form-group">
+		<label class="col-sm-3 control-label"><span style="color: red; ">*</span>企业名称：</label>
+		<div class="col-sm-8">
+			<input id="custName" name="custName" th:field="*{custName}" required class="form-control" type="text" minlength="4"  placeholder="请输入企业名称">
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>企业地址：</label>
+			<div class="col-sm-8">
+				<input id="custAdd" name="custAdd" th:field="*{custAdd}"  class="form-control" type="text" required placeholder="请输入企业地址">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>联&nbsp; 系&nbsp;&nbsp; 人：</label>
+			<div class="col-sm-8">
+				<input id="contactName" name="contactName" th:field="*{contactName}"  class="form-control" type="text" required placeholder="请输入企业联系人">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>联系电话：</label>
+			<div class="col-sm-8">
+				<input id="contactTel" name="contactTel"  th:field="*{contactTel}" class="form-control" type="text" required placeholder="请输入联系电话">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>信用代码：</label>
+			<div class="col-sm-8">
+				<input id="creditCode" name="creditCode" th:field="*{creditCode}"  class="form-control" type="text" required placeholder="请输入信用代码">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>结算周期：(天)</label>
+			<div class="col-sm-8">
+				<input id="settlementCycle" th:field="*{settlementCycle}"  name="settlementCycle" class="form-control" type="number" required placeholder="请输入结算周期" value="0" min="0">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">营业执照：</label>
+			<div class="col-sm-8">
+				<input id="file" name="file" class="form-control" type="file">
+				<input id="businessLicenseImg" name="businessLicenseImg" th:field="*{businessLicenseImg}" type="hidden">
+				<a href="javascript:void(0)" onclick='openImg(document.getElementById("businessLicenseImg").value)'>查看圖片 </a>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 箱：</label>
+			<div class="col-sm-8">
+				<input id="email" name="email" th:field="*{email}"  class="form-control" type="email"  placeholder="请输入邮箱">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">传&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   真：</label>
+			<div class="col-sm-8">
+				<input id="fax" name="fax"  th:field="*{fax}"  class="form-control"  type="text" required placeholder="请输入企业传真">
+			</div>
+		</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   态：</label>
+				<div class="col-sm-8">
+					<select name="busiStatus" th:field="*{busiStatus}" >
+						<option value="00">正常</option>
+						<option value="01">停用</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript" src="../../../util.js"></script>
+<script type="text/javascript">
+
+	var prefix = ctx + "system/supplyChainManger";
+	$("#form-supplyChainManger-edit").validate({
+		rules:{
+			xxxx:{
+				required:true,
+			},
+		},
+		focusCleanup: true
+	});
+
+	function submitHandler() {
+		var file =$("#file").val();
+		var url;
+		if(file){
+			//如果有文件,则上传
+			url =uploadFile();
+			//如果上传文件失败,返回文件
+			if(!url){
+				return false;
+			}
+			$("#businessLicenseImg").val(url);
+		}
+		if ($.validate.form()) {
+			$.operate.save(prefix + "/edit", $('#form-supplyChainManger-edit').serialize());
+		}
+	}
+</script>
+</body>
+</html>

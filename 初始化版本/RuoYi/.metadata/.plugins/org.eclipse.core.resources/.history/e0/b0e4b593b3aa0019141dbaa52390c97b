@@ -1,0 +1,13 @@
+package com.example.utils;
+
+public class TestBean {
+
+	
+	
+	public int id;
+	
+	
+	public int name;
+	
+	
+}

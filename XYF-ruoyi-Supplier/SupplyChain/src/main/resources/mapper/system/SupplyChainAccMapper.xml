@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.SupplyChainAccMapper">
+    
+    <resultMap type="SupplyChainAcc" id="SupplyChainAccResult">
+        <result property="id"    column="id"    />
+        <result property="custId"    column="cust_id"    />
+        <result property="accNo"    column="acc_no"    />
+        <result property="accName"    column="acc_name"    />
+        <result property="bankName"    column="bank_name"    />
+        <result property="bankNo"    column="bank_no"    />
+        <result property="balance"    column="balance"    />
+        <result property="accType"    column="acc_type"    />
+        <result property="busiStatus"    column="busi_status"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="enable"    column="enable"    />
+        <result property="idCardNo"    column="id_card_no"    />
+        <result property="branchName"    column="branch_name"    />
+        <result property="branchNo"    column="branch_no"    />
+        <result property="provinceName"    column="province_name"    />
+        <result property="cityName"    column="city_name"    />
+        <result property="userName"    column="user_name"    />
+    </resultMap>
+	
+	<sql id="selectSupplyChainAccVo">
+        select id, cust_id, acc_no, acc_name, bank_name, bank_no, balance, acc_type, busi_status, created_time, created_by, updated_time, updated_by, enable, id_card_no, branch_name, branch_no, province_name, city_name, user_name from supply_chain_acc
+    </sql>
+	
+    <select id="selectSupplyChainAccList" parameterType="SupplyChainAcc" resultMap="SupplyChainAccResult">
+        <include refid="selectSupplyChainAccVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="custId != null "> and cust_id = #{custId}</if>
+             <if test="accNo != null  and accNo != '' "> and acc_no = #{accNo}</if>
+             <if test="accName != null  and accName != '' "> and acc_name = #{accName}</if>
+             <if test="bankName != null  and bankName != '' "> and bank_name = #{bankName}</if>
+             <if test="bankNo != null  and bankNo != '' "> and bank_no = #{bankNo}</if>
+             <if test="balance != null "> and balance = #{balance}</if>
+             <if test="accType != null  and accType != '' "> and acc_type = #{accType}</if>
+             <if test="busiStatus != null  and busiStatus != '' "> and busi_status = #{busiStatus}</if>
+             <if test="createdTime != null "> and created_time = #{createdTime}</if>
+             <if test="createdBy != null  and createdBy != '' "> and created_by = #{createdBy}</if>
+             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+             <if test="updatedBy != null  and updatedBy != '' "> and updated_by = #{updatedBy}</if>
+             <if test="enable != null "> and enable = #{enable}</if>
+             <if test="idCardNo != null  and idCardNo != '' "> and id_card_no = #{idCardNo}</if>
+             <if test="branchName != null  and branchName != '' "> and branch_name = #{branchName}</if>
+             <if test="branchNo != null  and branchNo != '' "> and branch_no = #{branchNo}</if>
+             <if test="provinceName != null  and provinceName != '' "> and province_name = #{provinceName}</if>
+             <if test="cityName != null  and cityName != '' "> and city_name = #{cityName}</if>
+             <if test="userName != null  and userName != '' "> and user_name = #{userName}</if>
+         </where>
+    </select>
+    
+    <select id="selectSupplyChainAccById" parameterType="Integer" resultMap="SupplyChainAccResult">
+        <include refid="selectSupplyChainAccVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSupplyChainAcc" parameterType="SupplyChainAcc" useGeneratedKeys="true" keyProperty="id">
+        insert into supply_chain_acc
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="custId != null  ">cust_id,</if>
+			<if test="accNo != null  and accNo != ''  ">acc_no,</if>
+			<if test="accName != null  and accName != ''  ">acc_name,</if>
+			<if test="bankName != null  and bankName != ''  ">bank_name,</if>
+			<if test="bankNo != null  and bankNo != ''  ">bank_no,</if>
+			<if test="balance != null  ">balance,</if>
+			<if test="accType != null  and accType != ''  ">acc_type,</if>
+			<if test="busiStatus != null  and busiStatus != ''  ">busi_status,</if>
+			<if test="createdTime != null  ">created_time,</if>
+			<if test="createdBy != null  and createdBy != ''  ">created_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">updated_by,</if>
+			<if test="enable != null  ">enable,</if>
+			<if test="idCardNo != null  and idCardNo != ''  ">id_card_no,</if>
+			<if test="branchName != null  and branchName != ''  ">branch_name,</if>
+			<if test="branchNo != null  and branchNo != ''  ">branch_no,</if>
+			<if test="provinceName != null  and provinceName != ''  ">province_name,</if>
+			<if test="cityName != null  and cityName != ''  ">city_name,</if>
+			<if test="userName != null  and userName != ''  ">user_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="custId != null  ">#{custId},</if>
+			<if test="accNo != null  and accNo != ''  ">#{accNo},</if>
+			<if test="accName != null  and accName != ''  ">#{accName},</if>
+			<if test="bankName != null  and bankName != ''  ">#{bankName},</if>
+			<if test="bankNo != null  and bankNo != ''  ">#{bankNo},</if>
+			<if test="balance != null  ">#{balance},</if>
+			<if test="accType != null  and accType != ''  ">#{accType},</if>
+			<if test="busiStatus != null  and busiStatus != ''  ">#{busiStatus},</if>
+			<if test="createdTime != null  ">#{createdTime},</if>
+			<if test="createdBy != null  and createdBy != ''  ">#{createdBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">#{updatedBy},</if>
+			<if test="enable != null  ">#{enable},</if>
+			<if test="idCardNo != null  and idCardNo != ''  ">#{idCardNo},</if>
+			<if test="branchName != null  and branchName != ''  ">#{branchName},</if>
+			<if test="branchNo != null  and branchNo != ''  ">#{branchNo},</if>
+			<if test="provinceName != null  and provinceName != ''  ">#{provinceName},</if>
+			<if test="cityName != null  and cityName != ''  ">#{cityName},</if>
+			<if test="userName != null  and userName != ''  ">#{userName},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateSupplyChainAcc" parameterType="SupplyChainAcc">
+        update supply_chain_acc
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="custId != null  ">cust_id = #{custId},</if>
+            <if test="accNo != null  and accNo != ''  ">acc_no = #{accNo},</if>
+            <if test="accName != null  and accName != ''  ">acc_name = #{accName},</if>
+            <if test="bankName != null  and bankName != ''  ">bank_name = #{bankName},</if>
+            <if test="bankNo != null  and bankNo != ''  ">bank_no = #{bankNo},</if>
+            <if test="balance != null  ">balance = #{balance},</if>
+            <if test="accType != null  and accType != ''  ">acc_type = #{accType},</if>
+            <if test="busiStatus != null  and busiStatus != ''  ">busi_status = #{busiStatus},</if>
+            <if test="createdTime != null  ">created_time = #{createdTime},</if>
+            <if test="createdBy != null  and createdBy != ''  ">created_by = #{createdBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="updatedBy != null  and updatedBy != ''  ">updated_by = #{updatedBy},</if>
+            <if test="enable != null  ">enable = #{enable},</if>
+            <if test="idCardNo != null  and idCardNo != ''  ">id_card_no = #{idCardNo},</if>
+            <if test="branchName != null  and branchName != ''  ">branch_name = #{branchName},</if>
+            <if test="branchNo != null  and branchNo != ''  ">branch_no = #{branchNo},</if>
+            <if test="provinceName != null  and provinceName != ''  ">province_name = #{provinceName},</if>
+            <if test="cityName != null  and cityName != ''  ">city_name = #{cityName},</if>
+            <if test="userName != null  and userName != ''  ">user_name = #{userName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteSupplyChainAccById" parameterType="Integer">
+        delete from supply_chain_acc where id = #{id}
+    </delete>
+	
+    <delete id="deleteSupplyChainAccByIds" parameterType="String">
+        delete from supply_chain_acc where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

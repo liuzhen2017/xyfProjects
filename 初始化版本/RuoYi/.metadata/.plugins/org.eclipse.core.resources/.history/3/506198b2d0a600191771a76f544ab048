@@ -1,0 +1,41 @@
+spring.application.name: Gateway
+server:
+  port: 8080
+  
+eureka.instance.lease-expiration-duration-in-seconds: 15
+eureka.instance.lease-renewal-interval-in-seconds: 5  
+
+eureka:
+  client:
+    registry-fetch-interval-seconds: 5
+    service-url.defaultZone: http://eureka1.jace.com:8761/eureka,http://eureka2.jace.com:8762/eureka,http://eureka3.jace.com:8763/eureka
+    # http://119.23.31.3:8761/eureka,http://120.79.247.111:8761/eureka
+    # http://eureka1.jace.com:8761/eureka,http://eureka2.jace.com:8762/eureka,http://eureka3.jace.com:8763/eureka
+
+zuul:
+  ignored-services: E-Bank,OrderTree
+  host:
+    connect-timeout-millis: 10000 #HTTP连接超时要比Hystrix的大
+    socket-timeout-millis: 30000   #socket超时
+  routes:
+     AppUser: /AppUser/**
+
+
+#login of token timeout,second
+login.token.timeout: 72
+login.encry.version: en_1.0.0
+handler.encry.key: MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAJBDWIPaOUu0UVgeHChPWdcE0LoejY3kpFI6RYjrYFBGCyFiYmkhxOpm4m2t5mHjDvU8bjcrL0y41bpEnzoQwLH86L8wFiSnO5VlcZ4IA8S/u1PU6bT53AzNww/j2eZFiWGeGy3rzKXzcbMF1ZWpC83rH4XFZZ6SzMbU8sAdfRm1AgMBAAECgYANT5l4OQd2W8Hxrn2Mnp28gD4+HhmTkRg0WhoWYxl07rGSOAC6kJoZwrp7wkLynz+/Ev9caciofJmD4VcLxYXyAtwXVK57tcKwC7xrKF/fJrQtZKJUngbj6KkpJKT7cCGR0t+PNY5rh63l8C87xrqZrKRUsjPpoFxMQ5EZ5eyWIQJBAMEcqC0GewrD5nT4tme7SeXRgWdkARsTPzzXktHU/As7Ro9dYozkErVVa91K8JHp4nEFXfz5U/c5ZGuCtSqafu0CQQC/PkJqPVNScvM1NGlDx6HRQ1tDPcPF6Yfb+ho575MY8dwLVp7UUbtUZyR7gtCHF74KjJKdLFSWVFI0CaguF2TpAkAFkC3IHketJ7eb5w5aLqsSU9bGg7sEbKmFtzAjm18nc620s5wDMw7W6n8RAPetPG+pkd4DS6t/k8ew0TMm5wyBAkBQ7LOF6TVc6i9oECmK+OrMdkgkB/rTwKIwv4Bhi7MfFxkZ4ymKhptSd+LEMPK0d6N/K0TPJXcVtdCjHIMCHfwhAkBHosjFbPw+CMr7rWCScHV+tfFyd1Qcc2MdhBeL4wRv4aMwLWoF8A1a5+zaPEbZ1Ic5y7fz24nkrLgzAMDCzgup
+handler.auth.md5.key: 18xyf
+auth.isOn.takeOn: start
+# 验证白名单
+Auth.white.list: /AppUser/api/
+#redis 哨兵模式配置
+spring.redis.host: 120.79.247.111
+# 启用SSL支持。
+spring.redis.port: 6379
+spring.redis.password: root321!
+spring.redis.database: 0
+                          
+ 
+
+       

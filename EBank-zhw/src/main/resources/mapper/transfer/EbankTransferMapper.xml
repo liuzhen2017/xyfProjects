@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingyunfu.ebank.mapper.transfer.EbankTransferMapper">
+    <select id="findByOrderNo" parameterType="java.lang.String" resultType="com.xingyunfu.ebank.domain.transfer.EbankTransferDTO">
+        select * from ebank_transfer where order_no=#{orderNo}
+    </select>
+    <update id="lockAllOrder" parameterType="java.util.Map">
+        update ebank_transfer set ebank_order_no = #{ebankOrderNo}
+            where receive_account_no = #{receiveAccountNo} and ebank_order_no is null
+                and unix_timestamp(create_time) &lt;= #{endTime}
+    </update>
+    <update id="lockOrder" parameterType="java.util.Map">
+        update ebank_transfer set ebank_order_no = #{ebankOrderNo}
+            where receive_account_no = #{receiveAccountNo} and ebank_order_no is null
+                and unix_timestamp(create_time) between #{startTime} and #{endTime}
+    </update>
+    <update id="closeOrder" parameterType="java.util.Map">
+        update ebank_transfer set closed=#{closed}
+            where ebank_order_no = #{ebankOrderNo}
+    </update>
+    <select id="findOrderNoByEbankOrderNo" parameterType="java.lang.String" resultType="java.lang.String">
+        select order_no from ebank_transfer where ebank_order_no = #{ebankOrderNo}
+    </select>
+    <select id="findTenNeedTransferUser" resultType="java.lang.String" parameterType="java.util.Map">
+        select distinct(receive_account_no) from ebank_transfer
+            where ebank_order_no is null
+                <if test="receiveAccountType != null">and receive_account_type = #{receiveAccountType}</if>
+                and unix_timestamp(create_time) &lt;= #{endTime}
+                <if test="forbidList != null and forbidList.size()>0">
+                    and receive_account_no not in
+                    <foreach collection="forbidList" item="forbid" open="(" close=")" separator=",">#{forbid}</foreach>
+                </if>
+                limit 0, 10;
+    </select>
+    <select id="findAllNeedTransferUser" parameterType="java.util.Map"
+            resultType="com.xingyunfu.ebank.domain.account.EbankAccountDTO">
+        select * from ebank_account where account_no in
+            (select distinct(receive_account_no) from ebank_transfer
+                where ebank_order_no is null <if test="accountType != 'all'">and receive_account_type = #{accountType}</if>
+                and unix_timestamp(create_time) between #{startTime} and #{endTime})
+    </select>
+    <select id="totalAmount" parameterType="java.lang.String" resultType="java.math.BigDecimal">
+        select sum(amount) from ebank_transfer where ebank_order_no = #{ebankOrderNo}
+    </select>
+    <insert id="insert" parameterType="com.xingyunfu.ebank.domain.transfer.EbankTransferDTO">
+        insert into ebank_transfer (id, order_no, ebank_order_no, source_account_no, source_account_type,
+                    receive_account_no, receive_account_type, person_account_no, person_account_type,
+                    amount, closed, server_name, create_time, last_modify_time)
+        values (#{id}, #{orderNo}, #{ebankOrderNo}, #{sourceAccountNo}, #{sourceAccountType},
+            #{receiveAccountNo}, #{receiveAccountType}, #{personAccountNo}, #{personAccountType},
+            #{amount}, #{closed}, #{serverName}, #{createTime}, #{lastModifyTime});
+    </insert>
+    <select id="pageQuery" parameterType="com.xingyunfu.ebank.dto.transfer.TransferPageQueryData"
+            resultType="com.xingyunfu.ebank.domain.transfer.EbankTransferDTO">
+        select * from ebank_transfer where unix_timestamp(create_time) between #{startTime} and #{endTime}
+        <if test="closed != null">
+            and closed = #{closed}
+        </if>
+        <if test="accountNo != null">
+            and receive_account_no = #{accountNo}
+        </if>
+        order by id desc limit #{pageNo}, #{pageSize}
+    </select>
+    <select id="pageQueryCount" parameterType="com.xingyunfu.ebank.dto.transfer.TransferPageQueryData"
+            resultType="java.lang.Long">
+        select count(id) from ebank_transfer where unix_timestamp(create_time) between #{startTime} and #{endTime}
+        <if test="closed != null">
+            and closed = #{closed}
+        </if>
+        <if test="accountNo != null">
+            and receive_account_no = #{accountNo}
+        </if>
+    </select>
+    <select id="transferAccount" parameterType="com.xingyunfu.ebank.dto.transfer.TransferAccountPageQueryDTO"
+            resultType="com.xingyunfu.ebank.domain.account.EbankAccountDTO">
+        select * from ebank_account where account_no in
+            (select x.y from
+                (select t.s as y from
+                    (select distinct(receive_account_no) as s from ebank_transfer
+                        where unix_timestamp(create_time) between #{startTime} and #{endTime} and closed is false order by id desc)
+                as t limit #{pageNo}, #{pageSize}) as x)
+    </select>
+    <select id="transferAccountCount" parameterType="com.xingyunfu.ebank.dto.transfer.TransferAccountPageQueryDTO"
+            resultType="java.lang.Long">
+        select count(distinct(receive_account_no)) from ebank_transfer
+                where unix_timestamp(create_time) between #{startTime} and #{endTime} and closed is false
+    </select>
+</mapper>

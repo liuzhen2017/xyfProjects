@@ -1,0 +1,61 @@
+package com.example.aop;
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
+
+import com.example.utils.ThreadUtils;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Component
+@Aspect
+@Slf4j
+public class SpringAopConfig {
+
+	SpringAopConfig(){System.out.println("============================SpringAopConfig==============================");}
+	
+	
+	@Pointcut("execution(* com.example.api.*.*(..))")
+	public void weblog() {}
+	
+	@Around("weblog()")
+	public Object around(ProceedingJoinPoint pjp) throws Throwable {
+		
+		long start = System.currentTimeMillis();
+		String threadId = ThreadUtils.getThreadId();
+		printRequest(pjp);
+		Object res = pjp.proceed();
+        long end = System.currentTimeMillis();
+        long elapsedTime = end - start;
+        SystemLogStrategy ss = getSystemLogStrategy(pjp, elapsedTime, threadId, res.toString());
+		log.info(ss.toString());
+        return res;
+	}
+	
+	
+	
+	private SystemLogStrategy getSystemLogStrategy(ProceedingJoinPoint pjp,long elapsedTime,String threadId,String result) {
+		SystemLogStrategy ss = new SystemLogStrategy();
+		Signature s = pjp.getSignature();
+		String className = s.getDeclaringTypeName();
+		String methodName = s.getName();
+		ss.setClassName(className);
+		ss.setMethodName(methodName);
+		ss.setElapsedTime(elapsedTime);
+		ss.setThreadId(threadId);
+		ss.setResult(result);
+		return ss;
+	}
+	
+	
+	private void printRequest(ProceedingJoinPoint pjp) {
+		RequestBean rb = new RequestBean();
+		rb.setObj(pjp.getArgs());
+		
+	}
+	
+}

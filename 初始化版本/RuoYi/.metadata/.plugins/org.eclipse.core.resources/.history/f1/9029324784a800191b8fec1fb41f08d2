@@ -1,0 +1,21 @@
+package com.xinyunfu.sao;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.alibaba.fastjson.JSONObject;
+
+@FeignClient(value="CustomerManage2")
+public interface CustomerManageSao {
+
+	
+	/**
+	 * 获取推荐关系表
+	 * @param json
+	 * @return
+	 */
+	@PostMapping("")
+	public String getPushLinked(@RequestBody JSONObject json) ;
+	
+}

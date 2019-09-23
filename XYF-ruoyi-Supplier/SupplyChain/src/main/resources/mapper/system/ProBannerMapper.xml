@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.ProBannerMapper">
+    
+    <resultMap type="ProBanner" id="ProBannerResult">
+        <result property="bannerId"    column="banner_id"    />
+        <result property="bannerName"    column="banner_name"    />
+        <result property="imgUrl"    column="img_url"    />
+        <result property="linkUrl"    column="link_url"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="sortNumber"    column="sort_number"    />
+        <result property="status"    column="status"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+    </resultMap>
+	
+	<sql id="selectProBannerVo">
+        select banner_id, banner_name, img_url, link_url, start_date, end_date, sort_number, status, remarks, created_time, created_by, updated_time, updated_by from pro_banner
+    </sql>
+	
+    <select id="selectProBannerList" parameterType="ProBanner" resultMap="ProBannerResult">
+        <include refid="selectProBannerVo"/>
+        <where>  
+            <if test="bannerId != null "> and banner_id = #{bannerId}</if>
+             <if test="bannerName != null  and bannerName != '' "> and banner_name = #{bannerName}</if>
+             <if test="imgUrl != null  and imgUrl != '' "> and img_url = #{imgUrl}</if>
+             <if test="linkUrl != null  and linkUrl != '' "> and link_url = #{linkUrl}</if>
+             <if test="startDate != null "> and start_date = #{startDate}</if>
+             <if test="endDate != null "> and end_date = #{endDate}</if>
+             <if test="sortNumber != null "> and sort_number = #{sortNumber}</if>
+             <if test="status != null "> and status = #{status}</if>
+             <if test="remarks != null  and remarks != '' "> and remarks = #{remarks}</if>
+             <if test="createdTime!= null "> and created_time = #{createdTime}</if>
+             <if test="createdBy != null  and createdBy != '' "> and created_by = #{createdBy}</if>
+             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+             <if test="updatedBy != null  and updatedBy != '' "> and updated_by = #{updatedBy}</if>
+         </where>
+    </select>
+    
+    <select id="selectProBannerById" parameterType="Long" resultMap="ProBannerResult">
+        <include refid="selectProBannerVo"/>
+        where banner_id = #{bannerId}
+    </select>
+        
+    <insert id="insertProBanner" parameterType="ProBanner" useGeneratedKeys="true" keyProperty="bannerId">
+        insert into pro_banner
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="bannerName != null  and bannerName != ''  ">banner_name,</if>
+			<if test="imgUrl != null  and imgUrl != ''  ">img_url,</if>
+			<if test="linkUrl != null  and linkUrl != ''  ">link_url,</if>
+			<if test="startDate != null  ">start_date,</if>
+			<if test="endDate != null  ">end_date,</if>
+			<if test="sortNumber != null  ">sort_number,</if>
+			<if test="status != null  ">status,</if>
+			<if test="remarks != null  and remarks != ''  ">remarks,</if>
+			<if test="createdTime!= null  ">created_time,</if>
+			<if test="createdBy != null  and createdBy != ''  ">created_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">updated_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="bannerName != null  and bannerName != ''  ">#{bannerName},</if>
+			<if test="imgUrl != null  and imgUrl != ''  ">#{imgUrl},</if>
+			<if test="linkUrl != null  and linkUrl != ''  ">#{linkUrl},</if>
+			<if test="startDate != null  ">#{startDate},</if>
+			<if test="endDate != null  ">#{endDate},</if>
+			<if test="sortNumber != null  ">#{sortNumber},</if>
+			<if test="status != null  ">#{status},</if>
+			<if test="remarks != null  and remarks != ''  ">#{remarks},</if>
+			<if test="createdTime!= null  ">#{createdTime},</if>
+			<if test="createdBy != null  and createdBy != ''  ">#{createdBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">#{updatedBy},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateProBanner" parameterType="ProBanner">
+        update pro_banner
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bannerName != null  and bannerName != ''  ">banner_name = #{bannerName},</if>
+            <if test="imgUrl != null  and imgUrl != ''  ">img_url = #{imgUrl},</if>
+            <if test="linkUrl != null  and linkUrl != ''  ">link_url = #{linkUrl},</if>
+            <if test="startDate != null  ">start_date = #{startDate},</if>
+            <if test="endDate != null  ">end_date = #{endDate},</if>
+            <if test="sortNumber != null  ">sort_number = #{sortNumber},</if>
+            <if test="status != null  ">status = #{status},</if>
+            <if test="remarks != null  and remarks != ''  ">remarks = #{remarks},</if>
+            <if test="createdTime!= null  ">created_time = #{createdTime},</if>
+            <if test="createdBy != null  and createdBy != ''  ">created_by = #{createdBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="updatedBy != null  and updatedBy != ''  ">updated_by = #{updatedBy},</if>
+        </trim>
+        where banner_id = #{bannerId}
+    </update>
+
+	<update id="deleteProBannerById" parameterType="Long">
+        update pro_banner set status = 1 where banner_id = #{bannerId}
+    </update>
+	
+    <update id="deleteProBannerByIds" parameterType="String">
+        update pro_banner set status = 1 where banner_id in
+        <foreach item="bannerId" collection="array" open="(" separator="," close=")">
+            #{bannerId}
+        </foreach>
+    </update>
+    
+</mapper>

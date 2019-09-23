@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增每笔转账的转入转出记录，不包括合并转账')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-ebankFlow-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">ebank支付订单编号：</label>
+				<div class="col-sm-8">
+					<input id="ebankOrderNo" name="ebankOrderNo" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">支付中心订单号：</label>
+				<div class="col-sm-8">
+					<input id="sysOrderNo" name="sysOrderNo" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">账号，系统生成：</label>
+				<div class="col-sm-8">
+					<input id="accountNo" name="accountNo" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">账户类型：</label>
+				<div class="col-sm-8">
+					<input id="accountType" name="accountType" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">流水类型，in转入，out转出：</label>
+				<div class="col-sm-8">
+					<input id="flowType" name="flowType" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">流水来源，商品/套餐购买 product, 用户转账 transfer：</label>
+				<div class="col-sm-8">
+					<input id="flowSource" name="flowSource" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">流水金额：</label>
+				<div class="col-sm-8">
+					<input id="amount" name="amount" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">流水状态,wait等待支付，success支付成功，failed支付失败：</label>
+				<div class="col-sm-8">
+					<input id="status" name="status" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">创建时间：</label>
+				<div class="col-sm-8">
+					<input id="createTime" name="createTime" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">最后修改时间：</label>
+				<div class="col-sm-8">
+					<input id="lastModifyTime" name="lastModifyTime" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "ruoyi/ebankFlow"
+		$("#form-ebankFlow-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-ebankFlow-add').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

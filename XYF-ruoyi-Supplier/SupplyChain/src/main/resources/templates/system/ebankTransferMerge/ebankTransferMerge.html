@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('合并后向用户转账列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+	<div class="row">
+		<div class="col-sm-12 search-collapse">
+			<form id="formId">
+				<div class="select-list">
+					<ul>
+						<li>开始时间：<input id="startDate" type="text" name="startDate"/></li>
+						<li>结束时间：<input id="endDate" type="text" name="endDate"/></li>
+						<li>
+							合并订单状态：<select type="text" name="status">
+							<option value="applying">申请支付中</option>
+							<option value="apply_filed">申请支付失败</option>
+							<option value="success">支付成功</option>
+							<option value="wait_handle">等待人工处理</option>
+							<option value="handle_success">手工处理完成</option>
+						</select>
+						</li>
+
+						<li>
+							<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+									class="fa fa-search"></i>&nbsp;搜索</a>
+							<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+									class="fa fa-refresh"></i>&nbsp;重置</a>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+
+		<div class="btn-group-sm" id="toolbar" role="group">
+			<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:ebankTransferMerge:add">
+				<i class="fa fa-plus"></i> 添加
+			</a>
+			<a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+			   shiro:hasPermission="system:ebankTransferMerge:edit">
+				<i class="fa fa-edit"></i> 修改
+			</a>
+			<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+			   shiro:hasPermission="system:ebankTransferMerge:remove">
+				<i class="fa fa-remove"></i> 删除
+			</a>
+			<a class="btn btn-warning" onclick="$.table.exportExcel()"
+			   shiro:hasPermission="system:ebankTransferMerge:export">
+				<i class="fa fa-download"></i> 导出
+			</a>
+		</div>
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table" data-mobile-responsive="true"></table>
+		</div>
+	</div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:ebankTransferMerge:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:ebankTransferMerge:remove')}]];
+    var prefix = ctx + "system/ebankTransferMerge";
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "合并后向用户转账",
+            showExport: true,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'ebankOrderNo',
+                    title: 'ebank合并订单号',
+                    sortable: true
+                },
+                {
+                    field: 'receiveAccountNo',
+                    title: '收款人ebank账户',
+                    sortable: true
+                },
+                {
+                    field: 'receiveAccountType',
+                    title: '收款人账户类型',
+                    sortable: true
+                },
+                {
+                    field: 'amount',
+                    title: '付款金额',
+                    sortable: true
+                },
+                {
+                    field: 'closed',
+                    title: '是否已关闭',
+                    sortable: true
+                },
+                {
+                    field: 'status',
+                    title: '合并订单状态',
+                    sortable: true
+                },
+                {
+                    field: 'userName',
+                    title: '用户姓名',
+                    sortable: true
+                },
+                {
+                    field: 'phone',
+                    title: '银行卡绑定的手机号',
+                    sortable: true
+                },
+                {
+                    field: 'idCardNo',
+                    title: '身份证编号',
+                    sortable: true
+                },
+                {
+                    field: 'bankCardNo',
+                    title: '银行卡号',
+                    sortable: true
+                },
+                {
+                    field: 'bankName',
+                    title: '银行名称',
+                    sortable: true
+                },
+                {
+                    field: 'bankNo',
+                    title: '银行编号',
+                    sortable: true
+                },
+                {
+                    field: 'branchName',
+                    title: '分行名称',
+                    sortable: true
+                },
+                {
+                    field: 'branchNo',
+                    title: '分行行号',
+                    sortable: true
+                },
+                {
+                    field: 'provinceName',
+                    title: '省份',
+                    sortable: true
+                },
+                {
+                    field: 'cityName',
+                    title: '城市',
+                    sortable: true
+                },
+                // {
+                //     field: 'createTime',
+                //     title: '创建时间',
+                //     sortable: true
+                // },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
+        var startDate = laydate.render({
+            elem: '#startDate',
+            theme: 'molv',
+            trigger: 'click',
+            type : 'datetime',
+            done: function(value, date) {
+                // 结束时间大于开始时间
+                if (value !== '') {
+                    endDate.config.min.year = date.year;
+                    endDate.config.min.month = date.month - 1;
+                    endDate.config.min.date = date.date;
+                } else {
+                    endDate.config.min.year = '';
+                    endDate.config.min.month = '';
+                    endDate.config.min.date = '';
+                }
+            }
+        });
+        var endDate = laydate.render({
+            elem: '#endDate',
+            min: $('#startDate').val(),
+            theme: 'molv',
+            trigger: 'click',
+            type : 'datetime',
+            done: function(value, date) {
+                // 开始时间小于结束时间
+                if (value !== '') {
+                    startDate.config.max.year = date.year;
+                    startDate.config.max.month = date.month - 1;
+                    startDate.config.max.date = date.date;
+                } else {
+                    startDate.config.max.year = '';
+                    startDate.config.max.month = '';
+                    startDate.config.max.date = '';
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

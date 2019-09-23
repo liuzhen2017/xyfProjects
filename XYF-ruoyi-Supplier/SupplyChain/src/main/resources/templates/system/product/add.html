@@ -1,0 +1,443 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head>
+	<th:block th:include="include :: header('新增商品')"/>
+</head>
+
+<link th:href="@{/ajax/libs/summernote/summernote.css}" rel="stylesheet"/>
+<link th:href="@{/ajax/libs/summernote/summernote-bs3.css}" rel="stylesheet"/>
+<link th:href="@{/layui/css/layui.css}" rel="stylesheet"/>
+
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+	<form class="form-horizontal m" id="form-product-add">
+		<!--商品信息-->
+		<h4 class="form-header h4">基本信息</h4>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>商品编码：</label>
+			<div class="col-sm-8">
+				<input name="proNo" placeholder="请输入商品编码" class="form-control" type="text" maxlength="250"
+					   required>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>商品名称：</label>
+			<div class="col-sm-8">
+				<input name="proName" placeholder="请输入商品名称" class="form-control" type="text" maxlength="250"
+					   required>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>商品标题：</label>
+			<div class="col-sm-8">
+				<input id="proTitle" name="proTitle"  class="form-control" type="text" maxlength="150"
+					   required>
+			</div>
+		</div>
+		<!--商品分类-->
+		<!--<div class="form-group">-->
+			<!--<label class="col-sm-3 control-label"><span style="color: red; ">*</span>活动类型：</label>-->
+			<!--<div class="col-sm-8">-->
+				<!--<select name="proType" onclick="typeChange()" id="proType">-->
+					<!--<option th:value="0">普通商品</option>-->
+					<!--<option th:value="1">秒杀商品</option>-->
+					<!--<option th:value="2">套餐商品</option>-->
+				<!--</select>-->
+			<!--</div>-->
+		<!--</div>-->
+		<!--可使用优惠券-->
+		<!--<div class="form-group">-->
+			<!--<label class="col-sm-3 control-label"><span style="color: red; ">*</span>可支持优惠券：</label>-->
+			<!--<div class="col-sm-8">-->
+				<!--<a href="javascript:;" onclick="showPro()">点击选择优惠券 </a>-->
+				<!--<input name="couponTypeName"  id="couponTypeName">-->
+				<!--<input name="couponType" type="hidden" id="couponType">-->
+			<!--</div>-->
+		<!--</div>-->
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>商品单位：</label>
+			<div class="col-sm-8">
+				<input id="unit" name="unit" class="form-control" type="text" required>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>重量(千克)：</label>
+			<div class="col-sm-8">
+				<input id="weight" name="weight" class="form-control" type="number" required>
+			</div>
+		</div>
+		<!--<div class="form-group">-->
+			<!--<label class="col-sm-3 control-label"><span style="color: red; ">*</span>支付方式：</label>-->
+			<!--<div class="col-sm-8">-->
+				<!--支付宝<input type="checkbox" name="payType" value="16">&nbsp;&nbsp;&nbsp;-->
+				<!--微信<input type="checkbox" name="payType" value="32">-->
+				<!--微信他人代付<input type="checkbox" name="payType" value="256">-->
+				<!--钱包支付<input type="checkbox" name="payType" value="512">-->
+				<!--支付宝他人代付<input type="checkbox" name="payType" value="550">-->
+			<!--</div>-->
+		<!--</div>-->
+
+		<!--<div id="tcDiv" hidden="hidden">-->
+			<!--<div class="form-group" >-->
+				<!--<label class="col-sm-3 control-label"><span style="color: red; ">*</span>套餐价钱：</label>-->
+				<!--<div class="col-sm-8">-->
+					<!--<input id="tcPice" name="tcPrice" class="form-control" type="number" >-->
+				<!--</div>-->
+			<!--</div>-->
+			<!--<div class="form-group">-->
+				<!--<label class="col-sm-3 control-label"><span style="color: red; ">*</span>套餐名称：</label>-->
+				<!--<div class="col-sm-8">-->
+					<!--<input id="tcName" name="tcName" class="form-control" type="text" required>-->
+				<!--</div>-->
+			<!--</div>-->
+		<!--</div>-->
+		<!--商品信息end-->
+
+		<!--商品分类-->
+		<h4 class="form-header h4">商品分类</h4>
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>分类id：</label>
+			<div class="col-sm-8">
+				<div class="input-group">
+					<input name="channelName" onclick="selectChannelTree(0)" id="treeName0" type="text" placeholder="请选择分类" class="form-control" required>
+					<input name="channelId" onclick="selectChannelTree(0)" type="hidden" id="treeId0">
+					<span class="input-group-addon"><i class="fa fa-search"></i></span>
+				</div>
+			</div>
+		</div>
+
+
+		<!--商品分类结束-->
+<!--		<div class="form-group">-->
+<!--			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>商品规格：</label>-->
+<!--			<div class="col-sm-8">-->
+<!--				<input id="specs" name="specs" placeholder="请输入商品规格" class="form-control"  type="hidden">-->
+<!--				<div class="summernote" id="specsText">请输入商品规格</div>-->
+<!--			</div>-->
+<!--		</div>-->
+		<div class="form-group">
+			<label class="col-sm-3 control-label"><span style="color: red; ">*</span>商品详情：</label>
+			<div class="col-sm-8">
+				<input id="details" name="details" placeholder="请输入商品详情" class="form-control"
+					   type="hidden">
+				<div class="summernote" id="detailsText"></div>
+			</div>
+		</div>
+		<!--商品详情end-->
+		<!--商品图片begin-->
+		<h4 class="form-header h4">添加图片信息</h4>
+		<a href="javascript:;" th:onclick="addPicRow()">添加图片列</a>
+		<a href="javascript:;"  th:onclick="delPicRow()">删除图片列</a>
+		<div id="picDiv">
+			<input  name="imgUrl" id="imgUrl"  class="form-control" type="hidden" >
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>图片上传：</label>
+				<div class="col-sm-8">
+					<input  name="file" class="form-control" type="file"  placeholder="请上传图片">
+				</div>
+			</div>
+		</div>
+
+		<!--商品图片-->
+		<!--商品属性begin-->
+		<h4 class="form-header h4">商品属性</h4>
+		<a href="javascript:;" th:onclick="addrow()">添加属性</a>
+		<a href="javascript:;"  th:onclick="delRow()">删除属性</a>
+		<div id="propertyDiv">
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>属性名称：</label>
+				<div class="col-sm-8">
+					<input  name="propertyName" placeholder="请输入属性名称"class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>属性值：</label>
+				<div class="col-sm-8">
+					<input  name="propertyValue" placeholder="请输入属性值,多个值请用;;号代替" class="form-control" type="text">
+				</div>
+			</div>
+		</div>
+		<!--商品属性end-->
+		<!--商品SKU begin-->
+		<a href="javascript:;"  th:onclick="loadSkU()">点击加载sku属性</a>
+		<h4 class="form-header h4">商品SKU</h4>
+		<div id="bootstrap-table" class="form-group">
+
+
+		</div>
+		<input type="hidden" id="skuImgFiles" name="skuImgFiles">
+	</form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript" src="../../../util.js"></script>
+<script th:src="@{/Table.js}"></script>
+<script th:src="@{/layui/laui.js}"></script>
+<script th:src="@{/ajax/libs/summernote/summernote.min.js}"></script>
+<script th:src="@{/ajax/libs/summernote/summernote-zh-CN.js}"></script>
+
+<script type="text/javascript">
+    function typeChange() {
+        var objS = document.getElementById("proType");
+        var proType = objS.options[objS.selectedIndex].value;
+
+        if(proType ==2){
+            $("#tcDiv").show();
+        }else{
+            $("#tcDiv").hide();
+        }
+
+    }
+
+    $('.summernote').summernote({
+        height : '220px',
+        lang : 'zh-CN',
+        callbacks: {
+			onImageUpload: function(files, editor, welEditable) {
+                var fileFormat =files[0].name;
+                if (!/.(gif|jpg|jpeg|png|GIF|JPG|png)$/.test(fileFormat)) {
+                    $.modal.alertError("圖片必須是.gif,jpeg,jpg,png格式..");
+                    return false;
+                }
+                var url =uploadFileByFile(files[0],fileFormat,8);
+                if(!url){
+                    return false;
+                }
+				$(this).summernote('editor.insertImage', url);
+
+            }
+        },toolbar: [
+            // [groupName, [list of button]]
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ] , // popover
+        popover: {
+            image: [
+                ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
+                ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                ['remove', ['removeMedia']]
+            ],
+            link: [
+                ['link', ['linkDialogShow', 'unlink']]
+            ],
+            air: [
+                ['color', ['color']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['para', ['ul', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture']]
+            ]
+        },
+    });
+
+
+
+
+    var prefix = ctx + "system/product"
+    $("#form-product-add").validate({
+        rules: {
+            xxxx: {
+                required: true,
+            },
+        },
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            //获取富文本
+            var sHTML = $('#detailsText').summernote('code');
+            $("#details").val(encodeURIComponent(sHTML));
+            var sHTML = $('#specsText').summernote('code');
+            $("#specs").val(encodeURIComponent(sHTML));
+            //上传图片
+            var fileUrl="";
+            $("input[name='file']").each(function(){
+                if(this.value){
+                    fileUrl+=uploadFileByFile(this.files[0],this.value.substring(this.value.lastIndexOf(".")).toLowerCase()+";",1)+";"
+                }
+            });
+
+            var i=0;
+            var skuImgFile="";
+            $("input[name='skuImgFile']").each(function(){
+                if(this.value){
+                    skuImgFile+=uploadFileByFile(this.files[0],this.value.substring(this.value.lastIndexOf(".")).toLowerCase()+";",9)+";"
+                }
+                i++;
+            });
+            $("#skuImgFiles").val(skuImgFile);
+            $("#imgUrl").val(fileUrl);
+
+            $.operate.save(prefix + "/add", $('#form-product-add').serialize());
+        }
+    }
+    //增加
+    function addrow(){
+        var str="";
+
+        var tables = $('#propertyDiv');
+        var addtr = $('<div class="form-group"> ' +
+            '<label class="col-sm-3 control-label"><span style="color: red; ">*</span>属性名称：</label>' +
+            '<div class="col-sm-8">' +
+            '<input  name="propertyName" placeholder="请输入属性名称"class="form-control" type="text">' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-group">' +
+            '<label class="col-sm-3 control-label"><span style="color: red; ">*</span>属性值：</label>' +
+            '<div class="col-sm-8">' +
+            '<input i name="propertyValue" placeholder="请输入属性值,多个值请用;;号代替" class="form-control" type="text">' +
+            '</div>' +
+            '</div>');
+
+        addtr.appendTo(tables);
+
+    }
+
+    function delRow(){
+        var divList =$("#propertyDiv").children("div");
+        if(divList.length <=2){
+            $.modal.alertError("至少保留一个");
+            return false;
+        }
+        //删除最后一个
+        $("#propertyDiv>div:last").remove();
+        //删除最后一个
+        $("#propertyDiv>div:last").remove();
+        //
+
+
+    }
+    function addPicRow(){
+        var tables = $('#picDiv');
+        var addtr = $('<div class="form-group"> '
+            +' <label class="col-sm-3 control-label"><span style="color: red; ">*</span>图片上传：</label> '
+            +'<div class="col-sm-8"> '
+            +'<input  name="file" class="form-control" type="file"  placeholder="请上传图片">'
+            +'</div> '
+            +'</div>');
+        addtr.appendTo(tables);
+    }
+    function delPicRow(){
+        var divList =$("#picDiv").children("div");
+        if(divList.length <=1){
+            $.modal.alertError("至少保留一个");
+            return false;
+        }
+        //删除最后一个
+        $("#picDiv>div:last").remove();
+    }
+
+    function loadSkU(){
+        var valuelist =new Array();
+        var index=0;
+        $("input[name='propertyValue']").each(function(){
+            proper=$(this).val();
+            valuelist[index]=proper;
+            index++;
+        });
+        var value;
+        index =0;
+        var strBuff='';
+        var str;
+        $("#skuGoupsProDiv").html(strBuff);
+        loadSKUMSG();
+
+    }
+    function loadSKUMSG() {
+        var index=0;
+        var proper;
+        var valuelist=[];
+        $("input[name='propertyValue']").each(function(){
+            proper=$(this).val();
+            valuelist.push(proper)
+            index++;
+        });
+        var propertyNameValue =[];
+        $("input[name='propertyName']").each(function(){
+            proper=$(this).val();
+            propertyNameValue.push(proper)
+        });
+        var lists=[];
+        lists[0] =valuelist;
+        var datas ={};
+        $.ajax({
+            url:"/system/product/getSetting",
+            data:{"list":JSON.stringify(valuelist)},
+            async:false,
+            type:"post",
+            success:function(data){
+                datas=data;
+            }
+
+        })
+        if(!datas){
+            return;
+        }
+        var propertyValueList=[];
+        var propertyValue=[];
+        var str="";
+        var list ="";
+        for(var i=0; i< datas.length; i++){
+            str =datas[i];
+            propertyValue =[];
+            if(str){
+                list = str.split("_");
+                for(var j=0;j<list.length; j++){
+                    propertyValue.push("<input type='text'  readonly='readonly' name='pro' value='"+list[j]+"'>");
+                }
+                // propertyValue.push("<input type='number' min='0' required placeholder='请输入出售价格' value='0' name='price'>");
+                propertyValue.push("<input type='number' min='0' required placeholder='请输入市场价格' value='0' name='marketPrice'>");
+                propertyValue.push("<input type='number' min='0' required placeholder='请输入供货价格' value='0' name='costPrice'>");
+                propertyValue.push("<input type='number' min='0' required placeholder='请输入库存' value='0' name='stock'>");
+                // if($("#proType").val() ==1){
+                //     propertyValue.push("<input type='number' min='0' required placeholder='请输入秒杀价格' value='0' name='killPrice'>");
+                //     propertyValue.push("<input type='number' min='0' required placeholder='请输入库存' value='0' name='killStock'>");
+                // }
+                // if($("#proType").val() ==0){
+                //     propertyValue.push("<input type='number' min='0' required placeholder='请输入券后价格' value='0' name='minSellPrice'>");
+                // }
+
+                propertyValue.push("<input  name='skuImgFile' class='form-control' type='file' placeholder='请上传图片' id='skuImgFile"+i+"'>");
+            }
+            propertyValueList.push(propertyValue);
+        }
+        // propertyNameValue.push("出售价格");
+        propertyNameValue.push("市场价格");
+        propertyNameValue.push("供货价格");
+        propertyNameValue.push("库存");
+        // if($("#proType").val() ==1){
+        //     propertyNameValue.push("秒杀价格");
+        //     propertyNameValue.push("秒杀库存");
+        // }
+        // if ($("#proType").val() ==0) {
+        //     propertyNameValue.push("券后价格");
+		// }
+        propertyNameValue.push("SKU图片");
+
+        Table().init({
+            id:'bootstrap-table',
+            header:propertyNameValue,
+            data:propertyValueList,
+            size:"12px"
+        });
+
+    }
+	// function showPro(title, url, width, hight) {
+	// 	if (!hight) {
+	// 		width = 700;
+	// 	}
+	// 	if (!hight) {
+	// 		hight = 600;
+	// 	}
+	// 	$.modal.open("选择优惠券", "/system/couponManger/selectCouponManger", width, hight);
+	// }
+</script>
+</body>
+</html>

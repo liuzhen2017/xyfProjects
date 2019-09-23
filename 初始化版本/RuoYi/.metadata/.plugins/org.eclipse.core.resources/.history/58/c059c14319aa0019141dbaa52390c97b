@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: EurekaServer-1
+    
+server: 
+  port: 8761
+
+
+eureka:
+  instance: 
+    hostname: EurekaServer-1
+  client: 
+    fetch-registry: false            # 是否主动拉取信息
+    service-url:
+      defaultZone: http://localhost:8762/eureka,http://localhost:8763/eureka
+      

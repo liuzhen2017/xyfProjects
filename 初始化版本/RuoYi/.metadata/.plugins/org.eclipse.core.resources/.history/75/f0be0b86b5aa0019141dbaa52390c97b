@@ -1,0 +1,59 @@
+package com.example.utils;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+
+public class ComparUtils {
+
+	
+	
+	
+	public static void main(String[] args) {
+		ArrayList<TestBean> list = new ArrayList<>();
+		TestBean tb1 = new TestBean();
+		TestBean tb2 = new TestBean();
+		TestBean tb3 = new TestBean();
+		TestBean tb4 = new TestBean();
+		tb1.setId(new BigDecimal("50")).setName("a");
+		tb2.setId(new BigDecimal("21")).setName("b");
+		tb3.setId(new BigDecimal("43")).setName("c");
+		tb4.setId(new BigDecimal("99")).setName("d");
+		list.add(tb1);
+		list.add(tb2);
+		list.add(tb3);
+		list.add(tb4);
+        System.out.println("默认：=>"+list);
+        System.out.println("降序：=>"+desc(list));
+		
+	}
+	
+	
+	/**
+	 * 升序
+	 * @param list
+	 * @return
+	 */
+	public static ArrayList<TestBean> sort(ArrayList<TestBean> list){
+		return list;
+	}
+	
+	/**
+	 * 降序
+	 * @param list
+	 * @return
+	 */
+	public static ArrayList<TestBean> desc(ArrayList<TestBean> list){
+		Collections.sort(list, new Comparator<TestBean>() {
+			
+			@Override
+            public int compare(TestBean tb1, TestBean tb2) {
+                //return  tb1.getId()- tb2.getId();  //升序
+               return tb2.getId().compareTo(tb1.getId()) ;  //降序
+            }
+		});
+		return list;
+	}
+}

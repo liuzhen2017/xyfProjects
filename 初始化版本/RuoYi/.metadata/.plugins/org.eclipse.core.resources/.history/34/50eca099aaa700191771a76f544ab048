@@ -1,0 +1,43 @@
+package com.microservice.controller;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import com.alibaba.fastjson.JSONObject;
+import com.microservice.model.AppUser;
+import com.microservice.service.AppCustomerService;
+import com.microservice.service.impl.AppUserServiceImpl;
+import com.rnmg.jace.utils.ResponseInfo;
+
+/**
+ * <p>
+ *  前端控制器
+ * </p>
+ *
+ * @author jqiang-jace
+ * @since 2019-06-26
+ */
+@RestController
+@Slf4j
+public class AppUserController {
+
+	
+	@Autowired
+	private AppCustomerService service;
+	
+	
+	
+	@GetMapping("/api/getUser/{id}")
+	public JSONObject getUser(@PathVariable("id")Integer id) {
+		return null;
+	}
+	
+	
+}

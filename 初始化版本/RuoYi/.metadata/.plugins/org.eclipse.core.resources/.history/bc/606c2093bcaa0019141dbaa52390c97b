@@ -1,0 +1,21 @@
+package com.xinyunfu.sao;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.xinyunfu.jace.utils.ResponseInfo;
+
+@FeignClient(value="CustomerManage")
+public interface CustomerManageSao {
+
+	
+	/**
+	 * 获取推荐关系表
+	 * @param json
+	 * @return
+	 */
+    @GetMapping("/customer/inner/user/referral")
+	public ResponseInfo<List> getPushLinked(@RequestParam("userNo")long userNo) ;
+	
+}

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改广告')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-proBanner-edit" th:object="${proBanner}">
+            <input id="bannerId" name="bannerId" th:field="*{bannerId}"  type="hidden">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">广告名称：</label>
+				<div class="col-sm-8">
+					<input id="bannerName" name="bannerName" th:field="*{bannerName}" class="form-control" required type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">跳转类型：</label>
+				<div class="col-sm-8">
+					<select name="forwardType" th:value="*{imgUrl}" >
+						<option value="1">第三方路径</option>
+						<option value="2">专题页</option>
+						<option value="3">分类页</option>
+						<option value="4">商品页</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">选择图片：</label>
+				<div class="col-sm-8">
+					<input id="imgUrl" name="imgUrl" th:value="*{imgUrl}" class="form-control"  type="hidden">
+					<img  id="tmpImg" width="80%" th:src="*{imgUrl}" />
+					<input id="file" name="file" class="form-control" type="file"  placeholder="选择图片:">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">广告链接：</label>
+				<div class="col-sm-8">
+					<input id="linkUrl" name="linkUrl" th:field="*{linkUrl}" class="form-control" required type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">开始时间：</label>
+				<div class="col-sm-8">
+					<input id="startDate" name="startDate" th:value="*{endDate}" class="form-control" required type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">结束时间：</label>
+				<div class="col-sm-8">
+					<input id="endDate" name="endDate" th:value="*{endDate}" class="form-control" required type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">排序号：</label>
+				<div class="col-sm-8">
+					<input id="sortNumber" name="sortNumber" th:field="*{sortNumber}" class="form-control" required type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">状态：</label>
+				<div class="col-sm-8">
+					<select name="status" th:field="*{status}" >
+						<option value="0">启用</option>
+						<option value="1">禁用</option>
+						<option value="2">删除</option>
+						<option value="3">待审核</option>
+
+					</select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<input id="remarks" name="remarks" th:field="*{remarks}" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+	<script type="text/javascript" src="../../../util.js"></script>
+    <script type="text/javascript">
+		var prefix = ctx + "system/proBanner";
+
+		$("#form-proBanner-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+        layui.use('laydate', function() {
+            var laydate = layui.laydate;
+            var startDate = laydate.render({
+                elem: '#startDate',
+                theme: 'molv',
+                trigger: 'click',
+                type : 'date',
+                done: function(value, date) {
+                    // 结束时间大于开始时间
+                    if (value !== '') {
+                        endDate.config.min.year = date.year;
+                        endDate.config.min.month = date.month - 1;
+                        endDate.config.min.date = date.date;
+                    } else {
+                        endDate.config.min.year = '';
+                        endDate.config.min.month = '';
+                        endDate.config.min.date = '';
+                    }
+                }
+            });
+            var endDate = laydate.render({
+                elem: '#endDate',
+                min: $('#startDate').val(),
+                theme: 'molv',
+                trigger: 'click',
+                type : 'date',
+                done: function(value, date) {
+                    // 开始时间小于结束时间
+                    if (value !== '') {
+                        startDate.config.max.year = date.year;
+                        startDate.config.max.month = date.month - 1;
+                        startDate.config.max.date = date.date;
+                    } else {
+                        startDate.config.max.year = '';
+                        startDate.config.max.month = '';
+                        startDate.config.max.date = '';
+                    }
+                }
+            });
+        });
+		function submitHandler() {
+            var file =$("#file").val();
+            var url;
+            if(file){
+                //如果有文件,则上传
+                url =uploadFile();
+                //如果上传文件失败,返回文件
+                if(!url){
+                    return false;
+                }
+                $("#imgUrl").val(url);
+            }
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-proBanner-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

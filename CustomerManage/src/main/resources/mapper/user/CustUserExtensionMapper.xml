@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyunfu.customer.repository.user.CustUserExtensionMapper">
+    <select id="selectReferrerMeal" parameterType="java.lang.Long" resultType="com.xinyunfu.customer.dto.user.UserReferrerInfoDTO">
+        select sum(meal_nu) as totalMealNu, count(user_no) totalMealUser from cust_user_extension
+            where user_no in (select user_no from cust_user where referrer_no=#{userNo}) and meal_nu != 0;
+    </select>
+
+    <select id="selectTotalCardCount" parameterType="java.lang.Long" resultType="int">
+        SELECT count(0) totalCardCount FROM cust_user c
+        JOIN cust_user u on c.user_no=u.referrer_no
+        where u.auth_status=1 and u.referrer_no=#{userNo}
+    </select>
+
+    <select id="selectTotalBankCount" parameterType="java.lang.Long" resultType="int">
+        SELECT count(0) totalBankCount FROM cust_user c
+        JOIN cust_user u on c.user_no=u.referrer_no
+        JOIN cust_bank_account d on c.user_no=d.user_no
+        where d.status=2
+    </select>
+
+    <select id="findByUserNo" parameterType="java.lang.Long" resultType="com.xinyunfu.customer.domain.user.CustUserExtensionDTO">
+        select * from cust_user_extension where user_no=#{userNo}
+    </select>
+    <update id="update" parameterType="com.xinyunfu.customer.domain.user.CustUserExtensionDTO">
+        update cust_user_extension
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id != null">id = #{id},</if>
+            <if test="userNo != null">user_no = #{userNo},</if>
+            <if test="mealNu != null">meal_nu = #{mealNu},</if>
+            <if test="superUserNo != null">super_user_no = #{superUserNo},</if>
+        </trim>
+        where user_no = #{userNo}
+    </update>
+    <insert id="insert" parameterType="com.xinyunfu.customer.domain.user.CustUserExtensionDTO">
+        insert into cust_user_extension (id, user_no, meal_nu, super_user_no)
+            values (#{id}, #{userNo}, #{mealNu}, #{superUserNo})
+    </insert>
+</mapper>

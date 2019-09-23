@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: EBank
+  cloud:
+    inetutils:
+      preferredNetworks:
+        -192.168.1.*
+  profiles:
+    active: dev
+  redis:
+    sentinel:
+      master: mymaster
+    jedis:
+      pool:
+        max-idle: 10
+        min-idle: 0
+        max-active: -1
+        max-wait: -1
+    ssl: false
+    timeout: 600
+eureka:
+  instance:
+    lease-expiration-duration-in-seconds: 15
+    lease-renewal-interval-in-seconds: 5
+    preferIpAddress: true
+    instance-id: 192.168.1.77:8081
+
+  client:
+    registry-fetch-interval-seconds: 5
+feign:
+  hystrix:
+    enabled: true
+
+
+#微服务调用
+order-mange:
+  name: OrderManage
+order-three:
+  name: OrderTree
+customer-manage:
+  name: CustomerManage
+#定时任务配置
+
+taks:
+  corePoolSize: 10
+  maxPoolSize: 200
+  queueCapacity: 10
+
+#mybatis-plush配置
+logging:
+  level:
+    com.EBank.mapper: DEBUG

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.ProChannelMapper">
+    
+    <resultMap type="ProChannel" id="ProChannelResult">
+        <result property="channelId"    column="channel_id"    />
+        <result property="channelName"    column="channel_name"    />
+        <result property="channelTypeId"    column="channel_type_id"    />
+        <result property="fatherId"    column="father_id"    />
+        <result property="sortNumber"    column="sort_number"    />
+        <result property="bannerId"    column="banner_id"    />
+        <result property="imageUrl"    column="image_url"    />
+        <result property="status"    column="status"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+    </resultMap>
+	
+	<sql id="selectProChannelVo">
+        select channel_id, channel_name, channel_type_id, father_id, sort_number, banner_id, image_url, status, remarks, created_time, created_by, updated_time, updated_by from pro_channel
+    </sql>
+	
+    <select id="selectProChannelList" parameterType="ProChannel" resultMap="ProChannelResult">
+        <include refid="selectProChannelVo"/>
+        <where>
+            <if test="channelId != null "> and channel_id = #{channelId}</if>
+             <if test="channelName != null  and channelName != '' "> and channel_name = #{channelName}</if>
+             <if test="channelTypeId != null "> and channel_type_id = #{channelTypeId}</if>
+             <if test="fatherId != null "> and father_id = #{fatherId}</if>
+             <if test="sortNumber != null "> and sort_number = #{sortNumber}</if>
+             <if test="bannerId != null "> and banner_id = #{bannerId}</if>
+             <if test="imageUrl != null  and imageUrl != '' "> and image_url = #{imageUrl}</if>
+             <if test="status != null "> and status = #{status}</if>
+             <if test="remarks != null  and remarks != '' "> and remarks = #{remarks}</if>
+             <if test="createdTime!= null "> and created_time = #{createdTime}</if>
+             <if test="createdBy != null  and createdBy != '' "> and created_by = #{createdBy}</if>
+             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+             <if test="updatedBy != null  and updatedBy != '' "> and updated_by = #{updatedBy}</if>
+         </where>
+    </select>
+    
+    <select id="selectProChannelById" parameterType="Long" resultMap="ProChannelResult">
+        <include refid="selectProChannelVo"/>
+        where channel_id = #{channelId}
+    </select>
+        
+    <insert id="insertProChannel" parameterType="ProChannel" useGeneratedKeys="true" keyProperty="channelId">
+        insert into pro_channel
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="channelName != null  and channelName != ''  ">channel_name,</if>
+			<if test="channelTypeId != null  ">channel_type_id,</if>
+			<if test="fatherId != null  ">father_id,</if>
+			<if test="sortNumber != null  ">sort_number,</if>
+			<if test="bannerId != null  ">banner_id,</if>
+			<if test="imageUrl != null  and imageUrl != ''  ">image_url,</if>
+			<if test="status != null  ">status,</if>
+			<if test="remarks != null  and remarks != ''  ">remarks,</if>
+			<if test="createdTime!= null  ">created_time,</if>
+			<if test="createdBy != null  and createdBy != ''  ">created_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">updated_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="channelName != null  and channelName != ''  ">#{channelName},</if>
+			<if test="channelTypeId != null  ">#{channelTypeId},</if>
+			<if test="fatherId != null  ">#{fatherId},</if>
+			<if test="sortNumber != null  ">#{sortNumber},</if>
+			<if test="bannerId != null  ">#{bannerId},</if>
+			<if test="imageUrl != null  and imageUrl != ''  ">#{imageUrl},</if>
+			<if test="status != null  ">#{status},</if>
+			<if test="remarks != null  and remarks != ''  ">#{remarks},</if>
+			<if test="createdTime!= null  ">#{createdTime},</if>
+			<if test="createdBy != null  and createdBy != ''  ">#{createdBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+			<if test="updatedBy != null  and updatedBy != ''  ">#{updatedBy},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateProChannel" parameterType="ProChannel">
+        update pro_channel
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="channelName != null  and channelName != ''  ">channel_name = #{channelName},</if>
+            <if test="channelTypeId != null  ">channel_type_id = #{channelTypeId},</if>
+            <if test="fatherId != null  ">father_id = #{fatherId},</if>
+            <if test="sortNumber != null  ">sort_number = #{sortNumber},</if>
+            <if test="bannerId != null  ">banner_id = #{bannerId},</if>
+            <if test="imageUrl != null  and imageUrl != ''  ">image_url = #{imageUrl},</if>
+            <if test="status != null  ">status = #{status},</if>
+            <if test="remarks != null  and remarks != ''  ">remarks = #{remarks},</if>
+            <if test="createdTime!= null  ">created_time = #{createdTime},</if>
+            <if test="createdBy != null  and createdBy != ''  ">created_by = #{createdBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="updatedBy != null  and updatedBy != ''  ">updated_by = #{updatedBy},</if>
+        </trim>
+        where channel_id = #{channelId}
+    </update>
+
+	<delete id="deleteProChannelById" parameterType="Long">
+        delete from pro_channel where channel_id = #{channelId}
+    </delete>
+	
+    <delete id="deleteProChannelByIds" parameterType="String">
+        delete from pro_channel where channel_id in
+        <foreach item="channelId" collection="array" open="(" separator="," close=")">
+            #{channelId}
+        </foreach>
+    </delete>
+    
+</mapper>

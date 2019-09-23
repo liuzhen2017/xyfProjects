@@ -1,0 +1,45 @@
+#公共配置
+spring:
+  application:
+    name: VolumeMarket
+  profiles:
+    active: dev
+  cloud: 
+    inetutils: 
+      preferredNetworks: 
+        -192.168.1.*
+  jackson:
+    date-format: yyyy-MM-dd
+    time-zone: GMT+8
+eureka:
+  instance:
+    preferIpAddress: true
+    instance-id: 192.168.1.77:8085
+    
+mybatis:
+  mapperLocations: classpath*:mapper/*Mapper.xml  
+feign:
+  hystrix:
+    enabled: true
+#系统赠送优惠券数量
+sys-coupon:
+  giveNum: 18
+  amount: 50
+  rules:   使用范围:全平台通用,可无限叠加
+  title: 50元无门槛金券
+  #是否有奖励
+  isReward: true
+  #奖励金额
+  rewardAmount: 1
+  #奖励类型
+  rewardType: 推荐两个好友奖励
+  #手续费金额
+  serviceChargeAmount: 1
+
+#mybatis-plush配置
+logging:
+  level:
+    com.xinyunfu.mapper: DEBUG  
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+    org.springframework: INFO
+    

@@ -1,0 +1,29 @@
+package com.xinyunfu.constants;
+
+public class VIP {
+
+	
+	
+	/**
+	 * 普通套餐用户
+	 */
+	public static final String COMMON_VIP="common";
+	
+	
+	/**
+	 * 推广大使用户
+	 */
+	public static final String SUPER_VIP = "1";
+	
+	
+	/**
+	 * 平台用户（唯一）
+	 */
+	public static final String ADMIN_VIP = "amdin";
+	
+	
+	/**
+	 * 平台节点编号
+	 */
+	public static final String ADMIN_NODE_NO = "root";
+}
